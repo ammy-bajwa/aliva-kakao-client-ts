@@ -12,7 +12,13 @@ const Login = () => {
     ) as HTMLInputElement;
 
     const password = passwordElem.value;
-    await tryLoginApi(email, password);
+    const deviceName = localStorage.getItem("deviceName") || "";
+    const deviceId = localStorage.getItem("deviceId") || "";
+    if (!deviceName || !deviceId) {
+      alert("Please register device first");
+    } else {
+      await tryLoginApi(email, password, deviceName, deviceId);
+    }
   };
 
   return (
@@ -39,6 +45,7 @@ const Login = () => {
         <input
           type="password"
           className="form-control"
+          autoComplete="true"
           required
           id="userPassword"
         />
