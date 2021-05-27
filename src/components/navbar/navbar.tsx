@@ -1,7 +1,9 @@
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import PrivateNavItems from "./privateNavItems/privateNavItems";
+import PublicNavItems from "./publicNavItems/publicNavItems";
 
-const Navbar = () => {
+const Navbar = ({ token }: any) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
@@ -21,7 +23,7 @@ const Navbar = () => {
             AlivaTech
           </Link>
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <PrivateNavItems />
+            {token ? <PrivateNavItems /> : <PublicNavItems />}
           </ul>
         </div>
       </div>
@@ -29,4 +31,10 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+const mapStateToProps = (state: any) => {
+  return {
+    token: state.user.accessToken,
+  };
+};
+
+export default connect(mapStateToProps)(Navbar);

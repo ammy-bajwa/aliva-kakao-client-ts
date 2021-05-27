@@ -4,6 +4,8 @@ import Login from "../pages/login/login";
 import RegisterDevice from "../pages/registerDevice/registerDevice";
 import Home from "../pages/home/home";
 import Navbar from "../components/navbar/navbar";
+import Public from "./public/public";
+import Private from "./private/private";
 
 const Router = () => {
   return (
@@ -11,15 +13,9 @@ const Router = () => {
       <BrowserRouter>
         <Navbar />
         <Switch>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/register">
-            <RegisterDevice />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
+          <Public path="/login" component={Login} />
+          <Private path="/register" component={RegisterDevice} />
+          <Private path="/" component={Home} />
         </Switch>
       </BrowserRouter>
     </div>
