@@ -1,7 +1,10 @@
-import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
 import { tryLoginApi } from "../../api/user";
+import { loginUser } from "../../redux/action/user";
 
-const Login = () => {
+const Login = (props: any) => {
+  let history = useHistory();
   const loginFormHandler = async (event: any) => {
     event.preventDefault();
     const emailElem = document.getElementById("userEmail") as HTMLInputElement;
@@ -17,7 +20,10 @@ const Login = () => {
     if (!deviceName || !deviceId) {
       alert("Please register device first");
     } else {
-      await tryLoginApi(email, password, deviceName, deviceId);
+      const user = await tryLoginApi(email, password, deviceName, deviceId);
+      console.log("user: ", user);
+      props.dispatch(loginUser(user));
+      history.push("/");
     }
   };
 
@@ -62,4 +68,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default connect()(Login);

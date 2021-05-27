@@ -1,15 +1,20 @@
 const initialState = {
-  user: null,
+  user: {
+    email: "",
+    chatList: [],
+    accessToken: "",
+  },
 };
 
 export const userReducer = function (state: any = initialState, action: any) {
   switch (action.type) {
     case "LOGIN":
+      console.log(action);
       state = { ...state, user: action.payload };
-      return;
+      return state;
     case "LOGOUT":
       state = { ...state, user: null };
-      return;
+      return state;
     default:
       return state;
   }
