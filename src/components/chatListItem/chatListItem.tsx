@@ -4,15 +4,13 @@ import "./chatListItem.css";
 
 const ChatListItem = ({ name, profileImage }: any) => {
   return (
-    <div className="card profileWidth w-10 m-2 p-2">
+    <div className="border d-flex flex-row w-10 m-2 p-2">
       <img
         src={profileImage ? profileImage : profile}
-        className="card-img-top"
+        className="rounded-circle profileWidth"
         alt="profileImage"
       />
-      <div className="card-body text-center">
-        <h3>{name}</h3>
-      </div>
+      <h3 className="d-inline contactName">{name}</h3>
     </div>
   );
 };

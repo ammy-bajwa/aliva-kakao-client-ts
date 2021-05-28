@@ -1,3 +1,8 @@
 .profileWidth {
-  width: 10rem;
+  height: 3rem;
+  width: 3rem;
+}
+
+.contactName{
+  margin-left: 1rem;
 }

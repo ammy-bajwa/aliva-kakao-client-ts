@@ -1,4 +1,4 @@
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch } from "react-router-dom";
 
 import Login from "../pages/login/login";
 import RegisterDevice from "../pages/registerDevice/registerDevice";
@@ -15,7 +15,7 @@ const Router = () => {
         <Switch>
           <Public path="/login" component={Login} />
           <Private path="/register" component={RegisterDevice} />
-          <Private path="/" component={Home} />
+          <Public path="/" component={Home} />
         </Switch>
       </BrowserRouter>
     </div>

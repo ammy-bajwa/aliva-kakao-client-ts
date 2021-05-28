@@ -1,0 +1,10 @@
+#homeMainContainer {
+  height: 95vh;
+}
+#homeMainContainer .chatListContainer {
+  flex-grow: 1;
+  width: 4rem;
+}
+.messageContainer {
+  flex-grow: 9;
+}
