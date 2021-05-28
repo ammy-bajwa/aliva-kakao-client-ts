@@ -4,7 +4,7 @@ import "./chatListItem.css";
 
 const ChatListItem = ({ name, profileImage }: any) => {
   return (
-    <div className="border d-flex flex-row w-10 m-2 p-2">
+    <div className="chatListItemContainer border d-flex flex-row w-10 m-2 p-2">
       <img
         src={profileImage ? profileImage : profile}
         className="rounded-circle profileWidth"
