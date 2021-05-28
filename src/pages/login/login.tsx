@@ -22,6 +22,14 @@ const Login = (props: any) => {
     } else {
       const user = await tryLoginApi(email, password, deviceName, deviceId);
       console.log("user: ", user);
+      const socket = new WebSocket("ws://localhost:5000");
+      socket.onopen = () => {
+        console.log("Socket is open");
+        socket.send(JSON.stringify({ key: "setEmail", value: email }));
+      };
+      socket.onmessage = (event) => {
+        console.log("We have a message: ", event.data);
+      };
       props.dispatch(loginUser(user));
       history.push("/");
     }
