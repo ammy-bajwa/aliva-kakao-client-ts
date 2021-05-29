@@ -1,48 +1,35 @@
+import { connect } from "react-redux";
 import "./chatWindow.css";
 
-const ChatWindow = () => {
-  const data = [
-    {
-      text: "hello",
-      received: true,
-    },
-    {
-      text: "hello",
-      received: false,
-    },
-    {
-      text: "hello",
-      received: true,
-    },
-    {
-      text: "hello",
-      received: false,
-    },
-    {
-      text: "hello",
-      received: true,
-    },
-  ];
+const ChatWindow = (props: any) => {
   return (
     <div className="ChatWindowContainer">
-      {data.map(({ text, received }, index) => (
-        <div
-          key={index}
-          className={received ? "d-flex" : "d-flex flex-row-reverse"}
-        >
-          <span
-            className={
-              received
-                ? "receiverMessage border m-2 p-2 d-inline-block"
-                : "senderMessage border m-2 p-2 d-inline-block"
-            }
-          >
-            {text}
-          </span>
-        </div>
-      ))}
+      {props.chat
+        ? props.chat.map(({ text, received }: any, index: number) => (
+            <div
+              key={index}
+              className={received ? "d-flex" : "d-flex flex-row-reverse"}
+            >
+              <span
+                className={
+                  received
+                    ? "receiverMessage border m-2 p-2 d-inline-block"
+                    : "senderMessage border m-2 p-2 d-inline-block"
+                }
+              >
+                {text}
+              </span>
+            </div>
+          ))
+        : ""}
     </div>
   );
 };
 
-export default ChatWindow;
+const mapStateToProps = (state: any) => {
+  return {
+    chat: state.chat,
+  };
+};
+
+export default connect(mapStateToProps)(ChatWindow);

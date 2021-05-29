@@ -4,6 +4,7 @@ const initialState = {
     chatList: {},
     accessToken: "",
   },
+  chat: [],
 };
 
 export const userReducer = function (state: any = initialState, action: any) {
@@ -14,6 +15,9 @@ export const userReducer = function (state: any = initialState, action: any) {
       return state;
     case "LOGOUT":
       state = { ...state, user: null };
+      return state;
+    case "LOAD_CHAT":
+      state = { ...state, chat: state.user.chatList[action.payload].messages };
       return state;
     case "NEW_MESSAGE":
       const { receiverUserName, message } = action.payload;

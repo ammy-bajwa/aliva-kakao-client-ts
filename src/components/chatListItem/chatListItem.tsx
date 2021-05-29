@@ -2,9 +2,12 @@ import profile from "../../assets/images/profile.png";
 
 import "./chatListItem.css";
 
-const ChatListItem = ({ name, profileImage }: any) => {
+const ChatListItem = ({ name, profileImage, onClickHandler }: any) => {
   return (
-    <div className="chatListItemContainer border d-flex flex-row w-10 m-2 p-2">
+    <div
+      className="chatListItemContainer border d-flex flex-row w-10 m-2 p-2"
+      onClick={onClickHandler}
+    >
       <img
         src={profileImage ? profileImage : profile}
         className="rounded-circle profileWidth"

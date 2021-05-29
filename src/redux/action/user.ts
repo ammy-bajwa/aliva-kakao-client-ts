@@ -11,3 +11,8 @@ export const newMessage = (data: any) => ({
   type: "NEW_MESSAGE",
   payload: data,
 });
+
+export const loadChat = (name: string) => ({
+  type: "LOAD_CHAT",
+  payload: name,
+});
