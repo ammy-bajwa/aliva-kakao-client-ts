@@ -1,7 +1,7 @@
 const initialState = {
   user: {
     email: "",
-    chatList: [],
+    chatList: {},
     accessToken: "",
   },
 };

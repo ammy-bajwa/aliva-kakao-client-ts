@@ -6,3 +6,8 @@ export const loginUser = (user: any) => ({
 export const logoutUser = () => ({
   type: "LOGOUT",
 });
+
+export const newMessage = (messageData: any) => ({
+  type: "NEW_MESSAGE",
+  payload: messageData,
+});

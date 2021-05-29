@@ -6,6 +6,26 @@ import Messages from "../../components/messages/messages";
 import "./home.css";
 
 const Home = (props: any) => {
+  const getChatListItems = () => {
+    const items = [];
+    let index = 0;
+    const chatList = props.user.chatList;
+    for (const key in chatList) {
+      if (Object.prototype.hasOwnProperty.call(chatList, key)) {
+        const item = chatList[key];
+        items.push(
+          <ChatListItem
+            profileImage={item.displayUserList[0].profileURL}
+            name={item.displayUserList[0].nickname}
+            key={index}
+          />
+        );
+        index++;
+      }
+    }
+
+    return items;
+  };
   return (
     <div className="d-flex" id="homeMainContainer">
       <div className="chatListContainer border d-flex flex-column flex-wrap m-2 justify-content-center">
@@ -17,15 +37,7 @@ const Home = (props: any) => {
           profileImage="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
           name="ali"
         />
-        {props.user.chatList
-          ? props.user.chatList.map((item: any, index: number) => (
-              <ChatListItem
-                profileImage={item.displayUserList[0].profileURL}
-                name={item.displayUserList[0].nickname}
-                key={index}
-              />
-            ))
-          : ""}
+        {props.user.chatList ? getChatListItems() : ""}
       </div>
       <div className="border m-2 messageContainer">
         <Messages />
