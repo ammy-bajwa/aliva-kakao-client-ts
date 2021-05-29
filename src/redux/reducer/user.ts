@@ -15,6 +15,15 @@ export const userReducer = function (state: any = initialState, action: any) {
     case "LOGOUT":
       state = { ...state, user: null };
       return state;
+    case "NEW_MESSAGE":
+      const { receiverUserName, message } = action.payload;
+      const chatList = state.user.chatList;
+      chatList[receiverUserName].messages.push(message);
+      const newState = {
+        ...state,
+        user: { ...state.user, chatList },
+      };
+      return newState;
     default:
       return state;
   }

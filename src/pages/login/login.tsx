@@ -34,10 +34,17 @@ const Login = (props: any) => {
           if (key === "newMesssage") {
             const { text, sender, receiverUser, sendAt } = data;
             const messageObj = { text, sender, receiverUser, sendAt };
-            props.dispatch(newMessage(receiverUser));
             console.log("We have a message: ", messageObj);
+            const receiverUserName = Object.keys(receiverUser)[0];
+            props.dispatch(
+              newMessage({
+                receiverUserName,
+                message: { text, received: true },
+              })
+            );
           }
         } catch (error) {
+          console.log(error);
           console.log("We have a message: ", event.data);
         }
       };
@@ -87,4 +94,9 @@ const Login = (props: any) => {
   );
 };
 
-export default connect()(Login);
+const mapStateToProps = (state: any) => {
+  return {
+    chatList: state.user.chatList,
+  };
+};
+export default connect(mapStateToProps)(Login);

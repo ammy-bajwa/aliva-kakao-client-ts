@@ -7,7 +7,7 @@ export const logoutUser = () => ({
   type: "LOGOUT",
 });
 
-export const newMessage = (messageData: any) => ({
+export const newMessage = (data: any) => ({
   type: "NEW_MESSAGE",
-  payload: messageData,
+  payload: data,
 });
