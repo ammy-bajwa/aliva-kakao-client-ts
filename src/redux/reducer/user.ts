@@ -23,11 +23,11 @@ export const userReducer = function (state: any = initialState, action: any) {
       const { receiverUserName, message } = action.payload;
       const chatList = state.user.chatList;
       chatList[receiverUserName].messages.push(message);
-      const newState = {
+      state = Object.assign(state, {
         ...state,
         user: { ...state.user, chatList },
-      };
-      return newState;
+      });
+      return state;
     default:
       return state;
   }

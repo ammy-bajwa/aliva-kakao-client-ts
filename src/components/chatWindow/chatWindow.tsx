@@ -1,35 +1,35 @@
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
+
 import "./chatWindow.css";
 
 const ChatWindow = (props: any) => {
+  const chat = useSelector((state: any) => {
+    console.log("useSelector");
+    return state.chat;
+  });
+
   return (
     <div className="ChatWindowContainer">
-      {props.chat
-        ? props.chat.map(({ text, received }: any, index: number) => (
-            <div
-              key={index}
-              className={received ? "d-flex" : "d-flex flex-row-reverse"}
-            >
-              <span
-                className={
-                  received
-                    ? "receiverMessage border m-2 p-2 d-inline-block"
-                    : "senderMessage border m-2 p-2 d-inline-block"
-                }
-              >
-                {text}
-              </span>
-            </div>
-          ))
-        : ""}
+      {console.log("props: ", props)}
+      <h1>Chat Window</h1>
+      {chat.map(({ text, received }: any, index: number) => (
+        <div
+          key={index}
+          className={received ? "d-flex" : "d-flex flex-row-reverse"}
+        >
+          <span
+            className={
+              received
+                ? "receiverMessage border m-2 p-2 d-inline-block"
+                : "senderMessage border m-2 p-2 d-inline-block"
+            }
+          >
+            {text}
+          </span>
+        </div>
+      ))}
     </div>
   );
 };
 
-const mapStateToProps = (state: any) => {
-  return {
-    chat: state.chat,
-  };
-};
-
-export default connect(mapStateToProps)(ChatWindow);
+export default ChatWindow;
