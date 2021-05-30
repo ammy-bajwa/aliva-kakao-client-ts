@@ -12,7 +12,7 @@ const ChatWindow = (props: any) => {
     <div className="ChatWindowContainer">
       {console.log("props: ", props)}
       <h1>Chat Window</h1>
-      {chat.map(({ text, received }: any, index: number) => (
+      {chat.map(({ text, received, receiverUserName }: any, index: number) => (
         <div
           key={index}
           className={received ? "d-flex" : "d-flex flex-row-reverse"}
@@ -26,6 +26,7 @@ const ChatWindow = (props: any) => {
           >
             {text}
           </span>
+          <b>To: {receiverUserName}</b>
         </div>
       ))}
     </div>
