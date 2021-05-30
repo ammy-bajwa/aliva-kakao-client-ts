@@ -14,7 +14,7 @@ const Router = () => {
         <Navbar />
         <Switch>
           <Public path="/login" component={Login} />
-          <Private path="/register" component={RegisterDevice} />
+          <Public path="/register" component={RegisterDevice} />
           <Public path="/" component={Home} />
         </Switch>
       </BrowserRouter>
