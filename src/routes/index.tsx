@@ -5,7 +5,7 @@ import RegisterDevice from "../pages/registerDevice/registerDevice";
 import Home from "../pages/home/home";
 import Navbar from "../components/navbar/navbar";
 import Public from "./public/public";
-import Private from "./private/private";
+// import Private from "./private/private";
 
 const Router = () => {
   return (

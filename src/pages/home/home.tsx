@@ -2,13 +2,14 @@ import { connect } from "react-redux";
 
 import ChatListItem from "../../components/chatListItem/chatListItem";
 import Messages from "../../components/messages/messages";
+import { setFocusUser } from "../../redux/action/user";
 // import { loadChat } from "../../redux/action/user";
 
 import "./home.css";
 
 const Home = (props: any) => {
   const onClickHandler = (name: string) => {
-    // props.dispatch(loadChat(name));
+    props.dispatch(setFocusUser(name));
   };
 
   const getChatListItems = () => {
