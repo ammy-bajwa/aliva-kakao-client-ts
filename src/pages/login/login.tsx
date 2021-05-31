@@ -24,7 +24,9 @@ const Login = (props: any) => {
       startLoading();
       const user = await tryLoginApi(email, password, deviceName, deviceId);
       console.log("user: ", user);
-      const socket = new WebSocket("ws://localhost:3000");
+      // const socket = new WebSocket("ws://localhost:3000");
+      var HOST = window.location.origin.replace(/^http/, "ws");
+      const socket = new WebSocket(HOST);
       socket.onopen = () => {
         console.log("Socket is open");
         socket.send(JSON.stringify({ key: "setEmail", value: email }));
@@ -49,6 +51,7 @@ const Login = (props: any) => {
           }
         } catch (error) {
           console.log(error);
+          stopLoading();
           console.log("We have a message: ", event.data);
         }
       };

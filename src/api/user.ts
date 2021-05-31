@@ -14,7 +14,8 @@ export const tryLoginApi = async (
         body: JSON.stringify({ email, password, deviceName, deviceId }),
       };
       let result: any = await fetch(
-        "http://localhost:3000/login",
+        "/login",
+        // "http://localhost:3000/login",
         requestOptions
       );
       result = await result.json();
