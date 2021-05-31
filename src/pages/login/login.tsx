@@ -2,6 +2,7 @@ import { connect } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { tryLoginApi } from "../../api/user";
 import { loginUser, newMessage, setWs } from "../../redux/action/user";
+import { startLoading, stopLoading } from "../../utils/loading";
 
 const Login = (props: any) => {
   let history = useHistory();
@@ -20,6 +21,7 @@ const Login = (props: any) => {
     if (!deviceName || !deviceId) {
       alert("Please register device first");
     } else {
+      startLoading();
       const user = await tryLoginApi(email, password, deviceName, deviceId);
       console.log("user: ", user);
       const socket = new WebSocket("ws://localhost:6001");
@@ -52,6 +54,7 @@ const Login = (props: any) => {
       };
       props.dispatch(loginUser(user));
       history.push("/");
+      stopLoading();
     }
   };
 

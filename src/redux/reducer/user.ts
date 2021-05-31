@@ -7,6 +7,7 @@ const initialState = {
   chat: [],
   currentFocus: "",
   ws: null,
+  loading: false,
 };
 
 export const userReducer = function (state: any = initialState, action: any) {
@@ -20,6 +21,12 @@ export const userReducer = function (state: any = initialState, action: any) {
       return state;
     case "LOAD_CHAT":
       state = { ...state, chat: state.user.chatList[action.payload].messages };
+      return state;
+    case "START_LOADING":
+      state = { ...state, loading: true };
+      return state;
+    case "STOP_LOADING":
+      state = { ...state, loading: false };
       return state;
     case "SET_FOCUSED_USER":
       state = { ...state, currentFocus: action.payload };

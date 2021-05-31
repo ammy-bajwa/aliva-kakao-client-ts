@@ -26,3 +26,11 @@ export const loadChat = (name: string) => ({
   type: "LOAD_CHAT",
   payload: name,
 });
+
+export const setStartLoading = () => ({
+  type: "START_LOADING",
+});
+
+export const setStopLoading = () => ({
+  type: "STOP_LOADING",
+});
