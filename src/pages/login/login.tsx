@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { tryLoginApi } from "../../api/user";
-import { loginUser, newMessage } from "../../redux/action/user";
+import { loginUser, newMessage, setWs } from "../../redux/action/user";
 
 const Login = (props: any) => {
   let history = useHistory();
@@ -26,6 +26,7 @@ const Login = (props: any) => {
       socket.onopen = () => {
         console.log("Socket is open");
         socket.send(JSON.stringify({ key: "setEmail", value: email }));
+        props.dispatch(setWs(socket));
       };
       socket.onmessage = (event) => {
         try {

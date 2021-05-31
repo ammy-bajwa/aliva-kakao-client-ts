@@ -6,6 +6,7 @@ const initialState = {
   },
   chat: [],
   currentFocus: "",
+  ws: null,
 };
 
 export const userReducer = function (state: any = initialState, action: any) {
@@ -22,6 +23,9 @@ export const userReducer = function (state: any = initialState, action: any) {
       return state;
     case "SET_FOCUSED_USER":
       state = { ...state, currentFocus: action.payload };
+      return state;
+    case "SET_WS":
+      state = { ...state, ws: action.payload };
       return state;
     case "NEW_MESSAGE":
       const { receiverUserName, message, senderName } = action.payload;

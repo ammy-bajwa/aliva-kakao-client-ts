@@ -12,6 +12,11 @@ export const setFocusUser = (name: string) => ({
   payload: name,
 });
 
+export const setWs = (ws: any) => ({
+  type: "SET_WS",
+  payload: ws,
+});
+
 export const newMessage = (data: any) => ({
   type: "NEW_MESSAGE",
   payload: data,
