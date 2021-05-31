@@ -20,7 +20,7 @@ export const userReducer = function (state: any = initialState, action: any) {
       state = { ...state, chat: state.user.chatList[action.payload].messages };
       return state;
     case "NEW_MESSAGE":
-      const { receiverUserName, message } = action.payload;
+      const { receiverUserName, message, senderName } = action.payload;
       // const userMessages = state.messages[receiverUserName];
       // if (!userMessages) {
       //   state.messages[receiverUserName] = [message];
@@ -33,7 +33,7 @@ export const userReducer = function (state: any = initialState, action: any) {
       // });
       state = {
         ...state,
-        chat: [...state.chat, { receiverUserName, ...message }],
+        chat: [...state.chat, { receiverUserName, ...message, senderName }],
       };
       return state;
     default:

@@ -40,6 +40,7 @@ const Login = (props: any) => {
               newMessage({
                 receiverUserName,
                 message: { text, received: true },
+                senderName: sender.nickname,
               })
             );
           }

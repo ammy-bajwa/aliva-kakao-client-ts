@@ -9,26 +9,37 @@ const ChatWindow = (props: any) => {
   });
 
   return (
-    <div className="ChatWindowContainer">
+    <div className="ChatWindowContainer m-2">
       {console.log("props: ", props)}
       <h1>Chat Window</h1>
-      {chat.map(({ text, received, receiverUserName }: any, index: number) => (
-        <div
-          key={index}
-          className={received ? "d-flex" : "d-flex flex-row-reverse"}
-        >
-          <span
+      {chat.map(
+        (
+          { text, received, receiverUserName, senderName }: any,
+          index: number
+        ) => (
+          <div
+            key={index}
             className={
-              received
-                ? "receiverMessage border m-2 p-2 d-inline-block"
-                : "senderMessage border m-2 p-2 d-inline-block"
+              received ? "d-flex border-bottom m-2" : "d-flex flex-row-reverse"
             }
           >
-            {text}
-          </span>
-          <b>To: {receiverUserName}</b>
-        </div>
-      ))}
+            <span
+              className={
+                received
+                  ? "receiverMessage m-2 p-2 d-block w-100"
+                  : "senderMessage m-2 p-2 d-block"
+              }
+            >
+              <b>text: </b>
+              {text}
+              <b> from: </b>
+              {senderName}
+              <b> to: </b>
+              {receiverUserName}
+            </span>
+          </div>
+        )
+      )}
     </div>
   );
 };
