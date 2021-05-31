@@ -1,5 +1,4 @@
 import { errors } from "../helpers/errorCodes";
-import { useHistory } from "react-router-dom";
 
 export const trySendDeviceRegisterApi = async (
   deviceName: string,
@@ -33,28 +32,32 @@ export const trySetDeviceRegisterApi = async (
   email: string,
   password: string
 ) => {
-  const requestOptions = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ code, email, password }),
-  };
-  let result: any = await fetch(
-    "/device/setCode",
-    // "http://localhost:3000/device/setCode",
-    requestOptions
-  );
-  result = await result.json();
-  if (result.error) {
-    let history = useHistory();
-
-    let errorMessage = errors[`${result.error}`];
-    if (!errorMessage) {
-      errorMessage = result.message;
+  const setCodePromise = new Promise(async (resolve, reject) => {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code, email, password }),
+    };
+    let result: any = await fetch(
+      "/device/setCode",
+      // "http://localhost:3000/device/setCode",
+      requestOptions
+    );
+    result = await result.json();
+    if (result.error) {
+      let errorMessage = errors[`${result.error}`];
+      if (!errorMessage) {
+        errorMessage = result.message;
+      }
+      alert(errorMessage);
+      console.log("result: ", result);
+      console.log("errorMessage: ", errorMessage);
+      reject(errorMessage);
+    } else {
+      resolve(result.message);
+      console.log(result);
     }
-    console.log("result: ", result);
-    console.log("errorMessage: ", errorMessage);
-    history.push("/login");
-  } else {
-    console.log(result);
-  }
+  });
+
+  return await setCodePromise;
 };

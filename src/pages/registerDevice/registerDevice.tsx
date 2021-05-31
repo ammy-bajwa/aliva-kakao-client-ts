@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { v4 as randomId } from "uuid";
 import {
   trySendDeviceRegisterApi,
@@ -6,6 +6,8 @@ import {
 } from "../../api/device";
 
 const RegisterDevice = () => {
+  const history = useHistory();
+  
   const registerFormHandler = async (event: any) => {
     event.preventDefault();
     const emailElem = document.getElementById("userEmail") as HTMLInputElement;
@@ -22,11 +24,16 @@ const RegisterDevice = () => {
     let deviceId = randomId();
     deviceId = deviceId.split("-").join("");
     console.log("deviceId: ", deviceId);
-    await trySendDeviceRegisterApi(deviceName, deviceId, email, password);
-    localStorage.setItem("deviceName", deviceName);
-    localStorage.setItem("deviceId", deviceId);
-    console.log("deviceName: ", deviceName);
-    console.log("deviceId: ", deviceId);
+    try {
+      await trySendDeviceRegisterApi(deviceName, deviceId, email, password);
+      localStorage.setItem("deviceName", deviceName);
+      localStorage.setItem("deviceId", deviceId);
+      console.log("deviceName: ", deviceName);
+      console.log("deviceId: ", deviceId);
+      history.push("/login");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const registerCodeFormHandler = async (event: any) => {
