@@ -7,7 +7,7 @@ import {
 
 const RegisterDevice = () => {
   const history = useHistory();
-  
+
   const registerFormHandler = async (event: any) => {
     event.preventDefault();
     const emailElem = document.getElementById("userEmail") as HTMLInputElement;
@@ -30,7 +30,6 @@ const RegisterDevice = () => {
       localStorage.setItem("deviceId", deviceId);
       console.log("deviceName: ", deviceName);
       console.log("deviceId: ", deviceId);
-      history.push("/login");
     } catch (error) {
       console.error(error);
     }
@@ -49,7 +48,12 @@ const RegisterDevice = () => {
       "registerCode"
     ) as HTMLInputElement;
     const registerCode = registerCodeElem.value;
-    await trySetDeviceRegisterApi(registerCode, email, password);
+    try {
+      await trySetDeviceRegisterApi(registerCode, email, password);
+      history.push("/login");
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <div>

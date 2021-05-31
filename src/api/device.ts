@@ -55,6 +55,7 @@ export const trySetDeviceRegisterApi = async (
       reject(errorMessage);
     } else {
       resolve(result.message);
+      alert(result.message);
       console.log(result);
     }
   });

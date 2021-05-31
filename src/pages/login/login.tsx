@@ -21,43 +21,48 @@ const Login = (props: any) => {
     if (!deviceName || !deviceId) {
       alert("Please register device first");
     } else {
-      startLoading();
-      const user = await tryLoginApi(email, password, deviceName, deviceId);
-      console.log("user: ", user);
-      // const socket = new WebSocket("ws://localhost:3000");
-      var HOST = window.location.origin.replace(/^http/, "ws");
-      const socket = new WebSocket(HOST);
-      socket.onopen = () => {
-        console.log("Socket is open");
-        socket.send(JSON.stringify({ key: "setEmail", value: email }));
-        props.dispatch(setWs(socket));
-      };
-      socket.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          const { key } = data;
-          if (key === "newMesssage") {
-            const { text, sender, receiverUser, sendAt } = data;
-            const messageObj = { text, sender, receiverUser, sendAt };
-            console.log("We have a message: ", messageObj);
-            const receiverUserName = Object.keys(receiverUser)[0];
-            props.dispatch(
-              newMessage({
-                receiverUserName,
-                message: { text, received: true },
-                senderName: sender.nickname,
-              })
-            );
+      try {
+        startLoading();
+        const user = await tryLoginApi(email, password, deviceName, deviceId);
+        console.log("user: ", user);
+        // const socket = new WebSocket("ws://localhost:3000");
+        var HOST = window.location.origin.replace(/^http/, "ws");
+        const socket = new WebSocket(HOST);
+        socket.onopen = () => {
+          console.log("Socket is open");
+          socket.send(JSON.stringify({ key: "setEmail", value: email }));
+          props.dispatch(setWs(socket));
+        };
+        socket.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            const { key } = data;
+            if (key === "newMesssage") {
+              const { text, sender, receiverUser, sendAt } = data;
+              const messageObj = { text, sender, receiverUser, sendAt };
+              console.log("We have a message: ", messageObj);
+              const receiverUserName = Object.keys(receiverUser)[0];
+              props.dispatch(
+                newMessage({
+                  receiverUserName,
+                  message: { text, received: true },
+                  senderName: sender.nickname,
+                })
+              );
+            }
+          } catch (error) {
+            console.log(error);
+            stopLoading();
+            console.log("We have a message: ", event.data);
           }
-        } catch (error) {
-          console.log(error);
-          stopLoading();
-          console.log("We have a message: ", event.data);
-        }
-      };
-      props.dispatch(loginUser(user));
-      history.push("/");
-      stopLoading();
+        };
+        props.dispatch(loginUser(user));
+        history.push("/");
+        stopLoading();
+      } catch (error) {
+        stopLoading();
+        console.error(error);
+      }
     }
   };
 

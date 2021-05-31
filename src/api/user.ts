@@ -24,6 +24,7 @@ export const tryLoginApi = async (
         if (!errorMessage) {
           errorMessage = result.message;
         }
+        alert(errorMessage);
         console.log("result errorMessage: ", errorMessage);
         reject(errorMessage);
       } else {
