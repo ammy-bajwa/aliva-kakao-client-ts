@@ -2,6 +2,8 @@
   box-shadow: rgb(75, 75, 75) 3px 4px;
   cursor: pointer;
   transition: 0.5s;
+  overflow: scroll;
+  width: auto;
 }
 
 .profileWidth {
