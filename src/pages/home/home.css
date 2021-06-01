@@ -3,8 +3,11 @@
 }
 #homeMainContainer .chatListContainer {
   flex-grow: 1;
-  width: 8vw;
+  overflow: scroll;
+  width: auto;
 }
 .messageContainer {
   flex-grow: 9;
+  overflow: scroll;
+  width: auto;
 }
