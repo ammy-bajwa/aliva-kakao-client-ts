@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { tryLoginApi } from "../../api/user";
+import { port } from "../../helpers/config";
 import { loginUser, newMessage, setWs } from "../../redux/action/user";
 import { startLoading, stopLoading } from "../../utils/loading";
 
@@ -25,9 +26,15 @@ const Login = (props: any) => {
         startLoading();
         const user = await tryLoginApi(email, password, deviceName, deviceId);
         console.log("user: ", user);
-        // const socket = new WebSocket("ws://localhost:3000");
-        var HOST = window.location.origin.replace(/^http/, "ws");
-        const socket = new WebSocket(HOST);
+        let wsEndPoint = "";
+        if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+          // dev code
+          wsEndPoint = `ws://localhost:${port}`;
+        } else {
+          // production code
+          wsEndPoint = window.location.origin.replace(/^http/, "ws");
+        }
+        const socket = new WebSocket(wsEndPoint);
         socket.onopen = () => {
           console.log("Socket is open");
           socket.send(JSON.stringify({ key: "setEmail", value: email }));

@@ -9,7 +9,7 @@ const ChatWindow = (props: any) => {
   });
 
   return (
-    <div className="ChatWindowContainer m-2">
+    <div className="chatWindowContainer m-2">
       {console.log("props: ", props)}
       <h1>Chat Window</h1>
       {chat.map(
