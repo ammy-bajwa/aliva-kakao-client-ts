@@ -26,8 +26,7 @@ const RegisterDevice = () => {
     console.log("deviceId: ", deviceId);
     try {
       await trySendDeviceRegisterApi(deviceName, deviceId, email, password);
-      localStorage.setItem("deviceName", deviceName);
-      localStorage.setItem("deviceId", deviceId);
+      localStorage.setItem(email, JSON.stringify({ deviceName, deviceId }));
       console.log("deviceName: ", deviceName);
       console.log("deviceId: ", deviceId);
     } catch (error) {

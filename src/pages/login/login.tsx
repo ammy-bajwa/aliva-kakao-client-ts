@@ -17,13 +17,13 @@ const Login = (props: any) => {
     ) as HTMLInputElement;
 
     const password = passwordElem.value;
-    const deviceName = localStorage.getItem("deviceName") || "";
-    const deviceId = localStorage.getItem("deviceId") || "";
-    if (!deviceName || !deviceId) {
+    const deviceData = localStorage.getItem(email);
+    if (!deviceData) {
       alert("Please register device first");
     } else {
       try {
         startLoading();
+        const { deviceName, deviceId } = JSON.parse(deviceData);
         const user = await tryLoginApi(email, password, deviceName, deviceId);
         console.log("user: ", user);
         let wsEndPoint = "";
@@ -62,6 +62,12 @@ const Login = (props: any) => {
             stopLoading();
             console.log("We have a message: ", event.data);
           }
+        };
+        socket.onerror = () => {
+          alert("Socket has error");
+        };
+        socket.onclose = () => {
+          alert("Socket is closed");
         };
         props.dispatch(loginUser(user));
         history.push("/");
