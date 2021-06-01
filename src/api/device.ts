@@ -1,3 +1,4 @@
+import { port } from "../helpers/config";
 import { errors } from "../helpers/errorCodes";
 
 export const trySendDeviceRegisterApi = async (
@@ -11,11 +12,15 @@ export const trySendDeviceRegisterApi = async (
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ deviceName, deviceId, email, password }),
   };
-  let result: any = await fetch(
-    "/device/sendCode",
-    // "http://localhost:3000/device/sendCode",
-    requestOptions
-  );
+  let apiEndPoint = "";
+  if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+    // dev code
+    apiEndPoint = `http://localhost:${port}/device/sendCode`;
+  } else {
+    // production code
+    apiEndPoint = "/device/sendCode";
+  }
+  let result: any = await fetch(apiEndPoint, requestOptions);
   result = await result.json();
   if (result.error) {
     const errorMessage = result.message;
@@ -38,11 +43,15 @@ export const trySetDeviceRegisterApi = async (
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ code, email, password }),
     };
-    let result: any = await fetch(
-      "/device/setCode",
-      // "http://localhost:3000/device/setCode",
-      requestOptions
-    );
+    let apiEndPoint = "";
+    if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+      // dev code
+      apiEndPoint = `http://localhost:${port}/device/setCode`;
+    } else {
+      // production code
+      apiEndPoint = "/device/setCode";
+    }
+    let result: any = await fetch(apiEndPoint, requestOptions);
     result = await result.json();
     if (result.error) {
       let errorMessage = errors[`${result.error}`];

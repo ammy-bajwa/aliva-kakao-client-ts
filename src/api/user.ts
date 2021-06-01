@@ -1,3 +1,4 @@
+import { port } from "../helpers/config";
 import { errors } from "../helpers/errorCodes";
 
 export const tryLoginApi = async (
@@ -13,11 +14,15 @@ export const tryLoginApi = async (
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, deviceName, deviceId }),
       };
-      let result: any = await fetch(
-        "/login",
-        // "http://localhost:3000/login",
-        requestOptions
-      );
+      let apiEndPoint = "";
+      if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+        // dev code
+        apiEndPoint = `http://localhost:${port}/login`;
+      } else {
+        // production code
+        apiEndPoint = "/login";
+      }
+      let result: any = await fetch(apiEndPoint, requestOptions);
       result = await result.json();
       if (result.error) {
         let errorMessage = errors[`${result.error}`];
