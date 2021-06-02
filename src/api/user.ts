@@ -12,7 +12,12 @@ export const tryLoginApi = async (
       const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, deviceName, deviceId }),
+        body: JSON.stringify({
+          email,
+          password,
+          deviceName,
+          deviceId,
+        }),
       };
       let apiEndPoint = "";
       if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {

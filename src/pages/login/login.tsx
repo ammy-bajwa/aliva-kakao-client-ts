@@ -2,7 +2,12 @@ import { connect } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { tryLoginApi } from "../../api/user";
 import { port } from "../../helpers/config";
-import { loginUser, newMessage, setWs } from "../../redux/action/user";
+import {
+  loginUser,
+  logoutUser,
+  newMessage,
+  setWs,
+} from "../../redux/action/user";
 import { startLoading, stopLoading } from "../../utils/loading";
 
 const Login = (props: any) => {
@@ -24,7 +29,12 @@ const Login = (props: any) => {
       try {
         startLoading();
         const { deviceName, deviceId } = JSON.parse(deviceData);
-        const user = await tryLoginApi(email, password, deviceName, deviceId);
+        const user: any = await tryLoginApi(
+          email,
+          password,
+          deviceName,
+          deviceId
+        );
         console.log("user: ", user);
         let wsEndPoint = "";
         if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
@@ -68,8 +78,17 @@ const Login = (props: any) => {
         };
         socket.onclose = () => {
           alert("Socket is closed");
+          props.dispatch(logoutUser());
+          history.push("/login");
         };
         props.dispatch(loginUser(user));
+        localStorage.setItem(
+          `${email}_token`,
+          JSON.stringify({
+            accessToken: user.accessToken,
+            refreshToken: user.accessToken,
+          })
+        );
         history.push("/");
         stopLoading();
       } catch (error) {

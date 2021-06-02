@@ -17,7 +17,14 @@ export const userReducer = function (state: any = initialState, action: any) {
       state = { ...state, user: action.payload };
       return state;
     case "LOGOUT":
-      // state = { ...state, user: null };
+      state = {
+        ...state,
+        user: {
+          email: "",
+          chatList: {},
+          accessToken: "",
+        },
+      };
       return state;
     case "LOAD_CHAT":
       state = { ...state, chat: state.user.chatList[action.payload].messages };
