@@ -1,6 +1,15 @@
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
+import { logoutUser } from "../../../redux/action/user";
 
-const PrivateNavItems = () => {
+const PrivateNavItems = ({ email }: any) => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const logOutHandler = () => {
+    dispatch(logoutUser());
+    localStorage.removeItem("token");
+    history.push("/login");
+  };
   return (
     <>
       <li className="nav-item">
@@ -9,6 +18,9 @@ const PrivateNavItems = () => {
         </Link>
       </li>
       <li className="nav-item">
+        <span className="nav-link active">{email}</span>
+      </li>
+      <li className="nav-item hoverEffect" onClick={logOutHandler}>
         <span className="nav-link active">Logout</span>
       </li>
     </>

@@ -1,5 +1,6 @@
+import React from "react";
 import { connect } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { tryLoginApi } from "../../api/user";
 import { port } from "../../helpers/config";
 import {
@@ -10,9 +11,9 @@ import {
 } from "../../redux/action/user";
 import { startLoading, stopLoading } from "../../utils/loading";
 
-const Login = (props: any) => {
-  let history = useHistory();
-  const loginFormHandler = async (event: any) => {
+class Login extends React.Component<any> {
+  loginFormHandler = async (event: any) => {
+    const { history, dispatch }: any = this.props;
     event.preventDefault();
     const emailElem = document.getElementById("userEmail") as HTMLInputElement;
     const email = emailElem.value;
@@ -48,7 +49,7 @@ const Login = (props: any) => {
         socket.onopen = () => {
           console.log("Socket is open");
           socket.send(JSON.stringify({ key: "setEmail", value: email }));
-          props.dispatch(setWs(socket));
+          dispatch(setWs(socket));
         };
         socket.onmessage = (event) => {
           try {
@@ -59,7 +60,7 @@ const Login = (props: any) => {
               const messageObj = { text, sender, receiverUser, sendAt };
               console.log("We have a message: ", messageObj);
               const receiverUserName = Object.keys(receiverUser)[0];
-              props.dispatch(
+              dispatch(
                 newMessage({
                   receiverUserName,
                   message: { text, received: true },
@@ -78,15 +79,17 @@ const Login = (props: any) => {
         };
         socket.onclose = () => {
           alert("Socket is closed");
-          props.dispatch(logoutUser());
+          dispatch(logoutUser());
           history.push("/login");
         };
-        props.dispatch(loginUser(user));
+        dispatch(loginUser(user));
         localStorage.setItem(
-          `${email}_token`,
+          "token",
           JSON.stringify({
             accessToken: user.accessToken,
             refreshToken: user.accessToken,
+            email,
+            password,
           })
         );
         history.push("/");
@@ -97,51 +100,54 @@ const Login = (props: any) => {
       }
     }
   };
-
-  return (
-    <form className="m-3" onSubmit={loginFormHandler}>
-      <div className="mb-3">
-        <label htmlFor="userEmail" className="form-label">
-          Email address
-        </label>
-        <input
-          type="email"
-          className="form-control"
-          id="userEmail"
-          required
-          aria-describedby="emailHelp"
-        />
-        <div id="emailHelp" className="form-text">
-          We'll never share your email with anyone else.
-        </div>
-      </div>
-      <div className="mb-3">
-        <label htmlFor="userPassword" className="form-label">
-          Password
-        </label>
-        <input
-          type="password"
-          className="form-control"
-          autoComplete="true"
-          required
-          id="userPassword"
-        />
-      </div>
-      <button type="submit" className="btn btn-outline-dark m-2">
-        Login
-      </button>
-      <Link to="/register">
-        <button type="submit" className="btn btn-outline-info">
-          Register Device
-        </button>
-      </Link>
-    </form>
-  );
-};
+  render() {
+    return (
+      <>
+        <form className="m-3" onSubmit={this.loginFormHandler}>
+          <div className="mb-3">
+            <label htmlFor="userEmail" className="form-label">
+              Email address
+            </label>
+            <input
+              type="email"
+              className="form-control"
+              id="userEmail"
+              required
+              aria-describedby="emailHelp"
+            />
+            <div id="emailHelp" className="form-text">
+              We'll never share your email with anyone else.
+            </div>
+          </div>
+          <div className="mb-3">
+            <label htmlFor="userPassword" className="form-label">
+              Password
+            </label>
+            <input
+              type="password"
+              className="form-control"
+              autoComplete="true"
+              required
+              id="userPassword"
+            />
+          </div>
+          <button type="submit" className="btn btn-outline-dark m-2">
+            Login
+          </button>
+          <Link to="/register">
+            <button type="submit" className="btn btn-outline-info">
+              Register Device
+            </button>
+          </Link>
+        </form>
+      </>
+    );
+  }
+}
 
 const mapStateToProps = (state: any) => {
   return {
     chatList: state.user.chatList,
   };
 };
-export default connect(mapStateToProps)(Login);
+export default connect(mapStateToProps)(withRouter(Login));
