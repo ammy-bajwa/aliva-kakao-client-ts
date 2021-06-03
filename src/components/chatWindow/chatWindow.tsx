@@ -12,34 +12,34 @@ const ChatWindow = (props: any) => {
     <div className="chatWindowContainer m-2">
       {console.log("props: ", props)}
       <h1>Chat Window</h1>
-      {chat.map(
-        (
-          { text, received, receiverUserName, senderName }: any,
-          index: number
-        ) => (
-          <div
-            key={index}
+      {chat.map((message: any, index: number) => (
+        <div
+          key={index}
+          className={
+            message.received
+              ? "d-flex border-bottom m-2"
+              : "d-flex flex-row-reverse"
+          }
+        >
+          {message.attachment && (
+            <img loading="lazy" src={message.attachment.thumbnailUrl} />
+          )}
+          <span
             className={
-              received ? "d-flex border-bottom m-2" : "d-flex flex-row-reverse"
+              message.received
+                ? "receiverMessage m-2 p-2 d-block w-100"
+                : "senderMessage m-2 p-2 d-block"
             }
           >
-            <span
-              className={
-                received
-                  ? "receiverMessage m-2 p-2 d-block w-100"
-                  : "senderMessage m-2 p-2 d-block"
-              }
-            >
-              <b>text: </b>
-              {text}
-              <b> from: </b>
-              {senderName}
-              <b> to: </b>
-              {receiverUserName}
-            </span>
-          </div>
-        )
-      )}
+            <b>text: </b>
+            {message.text}
+            <b> from: </b>
+            {message.senderName}
+            <b> to: </b>
+            {message.receiverUserName}
+          </span>
+        </div>
+      ))}
     </div>
   );
 };

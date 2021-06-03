@@ -56,14 +56,14 @@ class Login extends React.Component<any> {
             const data = JSON.parse(event.data);
             const { key } = data;
             if (key === "newMesssage") {
-              const { text, sender, receiverUser, sendAt } = data;
+              const { text, sender, receiverUser, sendAt, attachment } = data;
               const messageObj = { text, sender, receiverUser, sendAt };
               console.log("We have a message: ", messageObj);
               const receiverUserName = Object.keys(receiverUser)[0];
               dispatch(
                 newMessage({
                   receiverUserName,
-                  message: { text, received: true },
+                  message: { attachment, text, received: true },
                   senderName: sender.nickname,
                 })
               );
