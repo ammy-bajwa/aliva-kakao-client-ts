@@ -14,7 +14,15 @@ export const userReducer = function (state: any = initialState, action: any) {
   switch (action.type) {
     case "LOGIN":
       console.log(action);
-      state = { ...state, user: action.payload };
+      state = {
+        ...state,
+        user: {
+          email: action.payload.email,
+          chatList: action.payload.chatList,
+          accessToken: action.payload.accessToken,
+        },
+        chat: action.payload.messageStore,
+      };
       return state;
     case "LOGOUT":
       state = {
