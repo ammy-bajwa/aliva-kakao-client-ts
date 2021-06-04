@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { uploadFile } from "../../api/file";
 import { newMessage } from "../../redux/action/user";
 import "./messageInput.css";
 
@@ -16,25 +17,38 @@ const MessageInput = () => {
       "userFileUpload"
     ) as HTMLInputElement;
     let files: any = null;
+    if (!currentFocus) {
+      alert("Please a contact first");
+      return;
+    }
     if (userFileUpload.files) {
       for (const file in userFileUpload.files) {
         if (Object.prototype.hasOwnProperty.call(userFileUpload.files, file)) {
           const selectedFile = userFileUpload.files[file];
           files = Buffer.from(new Uint8Array(await selectedFile.arrayBuffer()));
+          const { path }: any = await uploadFile(selectedFile);
+          const channelId = chatList[currentFocus][`channelId`];
+          ws.send(
+            JSON.stringify({
+              key: "newMessageFile",
+              value: {
+                message,
+                receiver: currentFocus,
+                filePath: path,
+                email,
+                channelId,
+              },
+            })
+          );
         }
       }
-      console.log(`${files} files selected`);
-    }
-    if (!currentFocus) {
-      alert("Please a contact first");
-      return;
     } else {
       console.log(currentFocus);
       const channelId = chatList[currentFocus][`channelId`];
       ws.send(
         JSON.stringify({
           key: "newMessage",
-          value: { message, receiver: currentFocus, email, channelId, files },
+          value: { message, receiver: currentFocus, email, channelId },
         })
       );
       dispatch(
@@ -48,7 +62,11 @@ const MessageInput = () => {
   };
   return (
     <div className="messageInputContainer">
-      <form className="m-2" onSubmit={sendMessageHandler}>
+      <form
+        className="m-2"
+        onSubmit={sendMessageHandler}
+        encType="multipart/form-data"
+      >
         <div>
           <input
             type="text"
