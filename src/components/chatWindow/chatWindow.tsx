@@ -21,7 +21,7 @@ const ChatWindow = (props: any) => {
               : "d-flex flex-row-reverse"
           }
         >
-          {message.attachment && (
+          {message.attachment && message.attachment.thumbnailUrl && (
             <img
               loading="lazy"
               alt="userImages"
