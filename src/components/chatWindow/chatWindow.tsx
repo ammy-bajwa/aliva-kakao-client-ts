@@ -22,7 +22,11 @@ const ChatWindow = (props: any) => {
           }
         >
           {message.attachment && (
-            <img loading="lazy" src={message.attachment.thumbnailUrl} />
+            <img
+              loading="lazy"
+              alt="userImages"
+              src={message.attachment.thumbnailUrl}
+            />
           )}
           <span
             className={
