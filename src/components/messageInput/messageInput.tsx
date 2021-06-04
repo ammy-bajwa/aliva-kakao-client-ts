@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadFile } from "../../api/file";
+import { convertFileToBase64 } from "../../helpers/file";
 import { newMessage } from "../../redux/action/user";
 import "./messageInput.css";
 
@@ -25,6 +26,8 @@ const MessageInput = () => {
       for (const file in userFileUpload.files) {
         if (Object.prototype.hasOwnProperty.call(userFileUpload.files, file)) {
           const selectedFile = userFileUpload.files[file];
+          const base64 = await convertFileToBase64(selectedFile);
+          console.log(base64);
           files = Buffer.from(new Uint8Array(await selectedFile.arrayBuffer()));
           const { path }: any = await uploadFile(selectedFile);
           const channelId = chatList[currentFocus][`channelId`];
@@ -38,6 +41,18 @@ const MessageInput = () => {
                 email,
                 channelId,
               },
+            })
+          );
+
+          dispatch(
+            newMessage({
+              receiverUserName: currentFocus,
+              message: {
+                text: "photo",
+                received: true,
+                attachment: { thumbnailUrl: base64 },
+              },
+              senderName: "Self",
             })
           );
         }
