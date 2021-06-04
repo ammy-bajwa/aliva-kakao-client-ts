@@ -1,13 +1,13 @@
 #homeMainContainer {
-  height: 95vh;
+  height: 80vh;
 }
 #homeMainContainer .chatListContainer {
   flex-grow: 1;
-  overflow: scroll;
+  overflow-y: auto;
   width: auto;
 }
 .messageContainer {
   flex-grow: 9;
-  overflow: scroll;
+  overflow: auto;
   width: auto;
 }
