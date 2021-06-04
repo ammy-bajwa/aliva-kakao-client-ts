@@ -10,8 +10,21 @@ const MessageInput = () => {
   const ws = useSelector((state: any) => state.ws);
   const dispatch = useDispatch();
   const [message, setMessage] = useState("");
-  const sendMessageHandler = (event: any) => {
+  const sendMessageHandler = async (event: any) => {
     event.preventDefault();
+    const userFileUpload = document.getElementById(
+      "userFileUpload"
+    ) as HTMLInputElement;
+    let files: any = null;
+    if (userFileUpload.files) {
+      for (const file in userFileUpload.files) {
+        if (Object.prototype.hasOwnProperty.call(userFileUpload.files, file)) {
+          const selectedFile = userFileUpload.files[file];
+          files = Buffer.from(new Uint8Array(await selectedFile.arrayBuffer()));
+        }
+      }
+      console.log(`${files} files selected`);
+    }
     if (!currentFocus) {
       alert("Please a contact first");
       return;
@@ -21,7 +34,7 @@ const MessageInput = () => {
       ws.send(
         JSON.stringify({
           key: "newMessage",
-          value: { message, receiver: currentFocus, email, channelId },
+          value: { message, receiver: currentFocus, email, channelId, files },
         })
       );
       dispatch(
@@ -35,18 +48,25 @@ const MessageInput = () => {
   };
   return (
     <div className="messageInputContainer">
-      <form onSubmit={sendMessageHandler}>
-        <div className="m-2">
+      <form className="m-2" onSubmit={sendMessageHandler}>
+        <div>
           <input
             type="text"
             className="form-control"
             onInput={(event: any) => setMessage(event.target.value)}
             required
           />
-          <button className="btn btn-info mt-2" type="submit">
-            Send
-          </button>
         </div>
+        <div className="form-group">
+          <input
+            type="file"
+            className="form-control-file"
+            id="userFileUpload"
+          />
+        </div>
+        <button className="btn btn-info mt-2" type="submit">
+          Send
+        </button>
       </form>
     </div>
   );
