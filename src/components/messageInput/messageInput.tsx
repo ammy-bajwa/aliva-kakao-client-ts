@@ -22,11 +22,12 @@ const MessageInput = () => {
       alert("Please a contact first");
       return;
     }
-    if (!message || !userFileUpload.files) {
+    debugger;
+    if (!message && userFileUpload.files.length <= 0) {
       alert("Plase select a file or type some message");
       return;
     }
-    if (userFileUpload.files) {
+    if (userFileUpload.files.length > 0) {
       for (const file in userFileUpload.files) {
         if (Object.prototype.hasOwnProperty.call(userFileUpload.files, file)) {
           const selectedFile: any = userFileUpload.files[file];
