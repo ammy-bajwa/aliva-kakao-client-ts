@@ -14,7 +14,7 @@ const MessageInput = () => {
   const [message, setMessage] = useState("");
   const sendMessageHandler = async (event: any) => {
     event.preventDefault();
-    const userFileUpload = document.getElementById(
+    const userFileUpload: any = document.getElementById(
       "userFileUpload"
     ) as HTMLInputElement;
     let files: any = null;
@@ -22,10 +22,14 @@ const MessageInput = () => {
       alert("Please a contact first");
       return;
     }
+    if (!message || !userFileUpload.files) {
+      alert("Plase select a file or type some message");
+      return;
+    }
     if (userFileUpload.files) {
       for (const file in userFileUpload.files) {
         if (Object.prototype.hasOwnProperty.call(userFileUpload.files, file)) {
-          const selectedFile = userFileUpload.files[file];
+          const selectedFile: any = userFileUpload.files[file];
           const base64 = await convertFileToBase64(selectedFile);
           console.log(base64);
           files = Buffer.from(new Uint8Array(await selectedFile.arrayBuffer()));
@@ -87,7 +91,6 @@ const MessageInput = () => {
             type="text"
             className="form-control"
             onInput={(event: any) => setMessage(event.target.value)}
-            required
           />
         </div>
         <div className="form-group">
