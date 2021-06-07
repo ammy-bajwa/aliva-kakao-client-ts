@@ -6,8 +6,13 @@ import "./chatWindow.css";
 
 const ChatWindow = (props: any) => {
   const chat = useSelector((state: any) => {
-    console.log("useSelector");
-    return state.chat;
+    const { chat } = state;
+    console.log("useSelector before: ", chat);
+    chat.sort((a: any, b: any) => {
+      return a.sendAt - b.sendAt;
+    });
+    console.log("useSelector after: ", chat);
+    return chat;
   });
 
   useEffect(() => {
