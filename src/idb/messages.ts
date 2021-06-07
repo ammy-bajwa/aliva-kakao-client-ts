@@ -1,6 +1,6 @@
 import { SHA256 } from "crypto-js";
 
-import { openDB } from "idb";
+import { deleteDB, openDB } from "idb";
 
 export const handleIncommingMessages = async (
   messages: any,
@@ -46,7 +46,34 @@ export const getUserMessages = async (
   }
 };
 
-export const getLastMessageTime = async (
-  contacts: any,
-  loggedInUserId: number
-) => {};
+export const addNewMessageIdb = async (
+  loggedInUserId: number,
+  otherUserId: number,
+  newMessage: any
+) => {
+  const dbName = SHA256(`KAKAOCHAT${otherUserId}${loggedInUserId}`).toString();
+  const storeName = "MessageStore";
+  const key = "messages";
+  let dbNotExists = false;
+  const db = await openDB(dbName, 1, {
+    upgrade(db) {
+      dbNotExists = true;
+    },
+  });
+
+  if (dbNotExists) {
+    await deleteDB(dbName);
+    return;
+  } else {
+    const newValue = {
+      receiverUserName: newMessage.receiverUserName,
+      senderName: newMessage.senderName,
+      ...newMessage.message,
+    };
+    debugger;
+    const data = await db.get(storeName, key);
+    const value = data.concat([newValue]);
+    await db.put(storeName, value, key);
+    return data;
+  }
+};

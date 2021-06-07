@@ -8,6 +8,7 @@ import { tryLoginApi } from "../../api/user";
 import { startLoading, stopLoading } from "../../utils/loading";
 import { port } from "../../helpers/config";
 import { loginUser, newMessage, setWs } from "../../redux/action/user";
+import { addNewMessageIdb } from "../../idb/messages";
 // import { getLastMessageTime } from "../../idb/messages";
 
 class Navbar extends React.Component<any> {
@@ -41,7 +42,7 @@ class Navbar extends React.Component<any> {
           socket.send(JSON.stringify({ key: "setEmail", value: email }));
           dispatch(setWs(socket));
         };
-        socket.onmessage = (event) => {
+        socket.onmessage = async (event) => {
           try {
             const data = JSON.parse(event.data);
             const { key } = data;
@@ -50,12 +51,16 @@ class Navbar extends React.Component<any> {
               const messageObj = { text, sender, receiverUser, sendAt };
               console.log("We have a message: ", messageObj);
               const receiverUserName = Object.keys(receiverUser)[0];
-              dispatch(
-                newMessage({
-                  receiverUserName,
-                  message: { attachment, text, received: true, sendAt },
-                  senderName: sender.nickname,
-                })
+              const newMessageObj = {
+                receiverUserName,
+                message: { attachment, text, received: true, sendAt },
+                senderName: sender.nickname,
+              };
+              dispatch(newMessage(newMessageObj));
+              await addNewMessageIdb(
+                user.loggedInUserId,
+                receiverUser[receiverUserName].userId.low,
+                newMessageObj
               );
             } else if (key === "unreadMessages") {
               const { userId, messageStore } = data.value;

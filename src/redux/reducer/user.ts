@@ -53,16 +53,6 @@ export const userReducer = function (state: any = initialState, action: any) {
       return state;
     case "NEW_MESSAGE":
       const { receiverUserName, message, senderName } = action.payload;
-      // const userMessages = state.messages[receiverUserName];
-      // if (!userMessages) {
-      //   state.messages[receiverUserName] = [message];
-      // } else {
-      //   userMessages.concat([message]);
-      // }
-      // state = Object.assign(state, {
-      //   ...state,
-      //   messages: userMessages,
-      // });
       state = {
         ...state,
         chat: [...state.chat, { receiverUserName, ...message, senderName }],
