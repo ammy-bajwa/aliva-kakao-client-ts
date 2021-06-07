@@ -11,6 +11,7 @@ import { loginUser, newMessage, setWs } from "../../redux/action/user";
 import { addNewMessageIdb } from "../../idb/messages";
 import { store } from "../../redux";
 import { scrollToEndMessages } from "../../helpers/scroll";
+import { info } from "../../helpers/toast";
 // import { getLastMessageTime } from "../../idb/messages";
 
 class Navbar extends React.Component<any> {
@@ -65,6 +66,10 @@ class Navbar extends React.Component<any> {
               ) {
                 dispatch(newMessage(newMessageObj));
                 scrollToEndMessages();
+              } else {
+                info(
+                  `New Message From ${sender.nickname} to ${receiverUserName}`
+                );
               }
               await addNewMessageIdb(
                 user.loggedInUserId,
