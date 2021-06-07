@@ -2,14 +2,19 @@ import { connect } from "react-redux";
 
 import ChatListItem from "../../components/chatListItem/chatListItem";
 import Messages from "../../components/messages/messages";
-import { setFocusUser } from "../../redux/action/user";
+import { getUserMessages } from "../../idb/messages";
+import { loadChat, setFocusUser } from "../../redux/action/user";
 // import { loadChat } from "../../redux/action/user";
 
 import "./home.css";
 
 const Home = (props: any) => {
-  const onClickHandler = (name: string) => {
-    props.dispatch(setFocusUser(name));
+  const onClickHandler = async (name: string, focusedUserId: number) => {
+    const { dispatch, loggedInUserId } = props;
+    dispatch(setFocusUser(name));
+    const getUserChat = await getUserMessages(loggedInUserId, focusedUserId);
+    dispatch(loadChat(getUserChat));
+    console.log("getUserChat: ", getUserChat);
   };
 
   const getChatListItems = () => {
@@ -24,9 +29,12 @@ const Home = (props: any) => {
             profileImage={item.displayUserList[0].profileURL}
             name={item.displayUserList[0].nickname}
             key={index}
-            onClickHandler={() =>
-              onClickHandler(item.displayUserList[0].nickname)
-            }
+            onClickHandler={() => {
+              return onClickHandler(
+                item.displayUserList[0].nickname,
+                item.intId
+              );
+            }}
           />
         );
         index++;
@@ -58,6 +66,7 @@ const Home = (props: any) => {
 const mapStateToProps = (state: any) => {
   return {
     user: state.user,
+    loggedInUserId: state.loggedInUserId,
   };
 };
 

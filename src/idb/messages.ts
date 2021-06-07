@@ -23,3 +23,25 @@ export const handleIncommingMessages = async (
     }
   }
 };
+
+export const getUserMessages = async (
+  loggedInUserId: number,
+  otherUserId: number
+) => {
+  const dbName = SHA256(`KAKAOCHAT${otherUserId}${loggedInUserId}`).toString();
+  const storeName = "MessageStore";
+  const key = "messages";
+  let dbNotExists = false;
+  const db = await openDB(dbName, 1, {
+    upgrade(db) {
+      dbNotExists = true;
+    },
+  });
+
+  if (dbNotExists) {
+    return;
+  } else {
+    const data = await db.get(storeName, key);
+    return data;
+  }
+};

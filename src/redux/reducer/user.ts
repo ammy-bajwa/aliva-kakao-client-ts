@@ -4,6 +4,7 @@ const initialState = {
     chatList: {},
     accessToken: "",
   },
+  loggedInUserId: "",
   chat: [],
   currentFocus: "",
   ws: null,
@@ -21,7 +22,8 @@ export const userReducer = function (state: any = initialState, action: any) {
           chatList: action.payload.chatList,
           accessToken: action.payload.accessToken,
         },
-        chat: action.payload.messageStore,
+        loggedInUserId: action.payload.loggedInUserId,
+        chat: [],
       };
       return state;
     case "LOGOUT":
@@ -35,7 +37,7 @@ export const userReducer = function (state: any = initialState, action: any) {
       };
       return state;
     case "LOAD_CHAT":
-      state = { ...state, chat: state.user.chatList[action.payload].messages };
+      state = { ...state, chat: action.payload };
       return state;
     case "START_LOADING":
       state = { ...state, loading: true };

@@ -22,9 +22,9 @@ export const newMessage = (data: any) => ({
   payload: data,
 });
 
-export const loadChat = (name: string) => ({
+export const loadChat = (messages: any) => ({
   type: "LOAD_CHAT",
-  payload: name,
+  payload: messages,
 });
 
 export const setStartLoading = () => ({
