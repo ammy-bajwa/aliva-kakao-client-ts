@@ -84,6 +84,8 @@ class Navbar extends React.Component<any> {
         stopLoading();
       } catch (error) {
         stopLoading();
+        localStorage.removeItem("token");
+        history.push("/login");
         console.error(error);
       }
     } else {
