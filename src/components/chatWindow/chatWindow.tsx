@@ -28,6 +28,8 @@ const ChatWindow = (props: any) => {
                 loading="lazy"
                 alt="userImages"
                 src={message.attachment.thumbnailUrl}
+                width="90"
+                height="90"
               />
             )}
           <span

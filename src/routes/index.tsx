@@ -1,4 +1,5 @@
 import { BrowserRouter, Switch } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 import Login from "../pages/login/login";
 import RegisterDevice from "../pages/registerDevice/registerDevice";
@@ -22,6 +23,7 @@ class MainRouter extends React.Component {
       return (
         <div>
           <BrowserRouter>
+            <ToastContainer />
             <Navbar />
             <Switch>
               <Public path="/login" component={Login} />
