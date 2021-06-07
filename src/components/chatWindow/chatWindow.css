@@ -1,5 +1,5 @@
-.chatWindowContainer {
-  height: 80vh;
+#chatWindowContainer {
+  height: auto;
 }
 
 .receiverMessage {

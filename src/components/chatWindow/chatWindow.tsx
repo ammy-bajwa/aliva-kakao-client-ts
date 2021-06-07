@@ -9,7 +9,7 @@ const ChatWindow = (props: any) => {
   });
 
   return (
-    <div className="chatWindowContainer m-2">
+    <div className="m-2" id="chatWindowContainer">
       {console.log("props: ", props)}
       <h1>Chat Window</h1>
       {chat.map((message: any, index: number) => (
@@ -43,6 +43,8 @@ const ChatWindow = (props: any) => {
             {message.senderName}
             <b> to: </b>
             {message.receiverUserName}
+            <b> Sened At: </b>
+            {message.sendAt}
           </span>
         </div>
       ))}

@@ -22,7 +22,6 @@ const MessageInput = () => {
       alert("Please a contact first");
       return;
     }
-    debugger;
     if (!message && userFileUpload.files.length <= 0) {
       alert("Plase select a file or type some message");
       return;
@@ -60,11 +59,18 @@ const MessageInput = () => {
               senderName: "Self",
             })
           );
+          const messageContainer: any = document.getElementById(
+            "chatWindowContainer"
+          ) as HTMLElement;
+          messageContainer.scrollTop = messageContainer.scrollHeight;
+          // messageContainer.scrollTo(messageContainer.scrollHeight);
+          console.log("Fired");
         }
       }
     } else {
       console.log(currentFocus);
       const channelId = chatList[currentFocus][`channelId`];
+      const sendAt = new Date().getTime();
       ws.send(
         JSON.stringify({
           key: "newMessage",
@@ -74,7 +80,7 @@ const MessageInput = () => {
       dispatch(
         newMessage({
           receiverUserName: currentFocus,
-          message: { text: message, received: true },
+          message: { text: message, received: true, sendAt },
           senderName: "Self",
         })
       );

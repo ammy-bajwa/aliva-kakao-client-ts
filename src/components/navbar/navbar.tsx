@@ -51,7 +51,7 @@ class Navbar extends React.Component<any> {
               dispatch(
                 newMessage({
                   receiverUserName,
-                  message: { attachment, text, received: true },
+                  message: { attachment, text, received: true, sendAt },
                   senderName: sender.nickname,
                 })
               );
