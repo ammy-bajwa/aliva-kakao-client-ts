@@ -8,6 +8,7 @@ import { tryLoginApi } from "../../api/user";
 import { startLoading, stopLoading } from "../../utils/loading";
 import { port } from "../../helpers/config";
 import { loginUser, newMessage, setWs } from "../../redux/action/user";
+// import { getLastMessageTime } from "../../idb/messages";
 
 class Navbar extends React.Component<any> {
   async componentDidMount() {
@@ -19,6 +20,7 @@ class Navbar extends React.Component<any> {
       try {
         startLoading();
         const { deviceName, deviceId } = JSON.parse(deviceData);
+        // const lastMessages = await getLastMessageTime();
         const user: any = await tryLoginApi(
           email,
           password,
@@ -55,6 +57,9 @@ class Navbar extends React.Component<any> {
                   senderName: sender.nickname,
                 })
               );
+            } else if (key === "unreadMessages") {
+              const { userId, messageStore } = data.value;
+              console.log(userId, messageStore);
             }
           } catch (error) {
             console.log(error);

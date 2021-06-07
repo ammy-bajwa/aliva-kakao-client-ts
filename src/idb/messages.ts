@@ -45,3 +45,8 @@ export const getUserMessages = async (
     return data;
   }
 };
+
+export const getLastMessageTime = async (
+  contacts: any,
+  loggedInUserId: number
+) => {};

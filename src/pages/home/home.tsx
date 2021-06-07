@@ -10,11 +10,25 @@ import "./home.css";
 
 const Home = (props: any) => {
   const onClickHandler = async (name: string, focusedUserId: number) => {
-    const { dispatch, loggedInUserId } = props;
+    const { dispatch, loggedInUserId, ws, user } = props;
     dispatch(setFocusUser(name));
     const getUserChat = await getUserMessages(loggedInUserId, focusedUserId);
     dispatch(loadChat(getUserChat));
+    ws.send(
+      JSON.stringify({
+        key: "isMessageUpdateNeeded",
+        value: {
+          time: getUserChat[getUserChat.length - 1].sendAt,
+          email: user.email,
+          focusedUserId,
+        },
+      })
+    );
     console.log("getUserChat: ", getUserChat);
+
+    // Use websocket to exchange last message timestamp
+
+    // Then if required we will fetch the latest messages
   };
 
   const getChatListItems = () => {
@@ -67,6 +81,7 @@ const mapStateToProps = (state: any) => {
   return {
     user: state.user,
     loggedInUserId: state.loggedInUserId,
+    ws: state.ws,
   };
 };
 
