@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
 import { tryLoginApi } from "../../api/user";
 import { port } from "../../helpers/config";
+import { addNewMessageIdb } from "../../idb/messages";
 import {
   loginUser,
   logoutUser,
@@ -51,7 +52,7 @@ class Login extends React.Component<any> {
           socket.send(JSON.stringify({ key: "setEmail", value: email }));
           dispatch(setWs(socket));
         };
-        socket.onmessage = (event) => {
+        socket.onmessage = async (event) => {
           try {
             const data = JSON.parse(event.data);
             const { key } = data;
@@ -60,13 +61,20 @@ class Login extends React.Component<any> {
               const messageObj = { text, sender, receiverUser, sendAt };
               console.log("We have a message: ", messageObj);
               const receiverUserName = Object.keys(receiverUser)[0];
-              dispatch(
-                newMessage({
-                  receiverUserName,
-                  message: { attachment, text, received: true },
-                  senderName: sender.nickname,
-                })
+              const newMessageObj = {
+                receiverUserName,
+                message: { attachment, text, received: true, sendAt },
+                senderName: sender.nickname,
+              };
+              dispatch(newMessage(newMessageObj));
+              await addNewMessageIdb(
+                user.loggedInUserId,
+                receiverUser[receiverUserName].userId.low,
+                newMessageObj
               );
+            } else if (key === "unreadMessages") {
+              const { userId, messageStore } = data.value;
+              console.log(userId, messageStore);
             }
           } catch (error) {
             console.log(error);
@@ -96,6 +104,7 @@ class Login extends React.Component<any> {
         stopLoading();
       } catch (error) {
         stopLoading();
+        localStorage.removeItem("token");
         console.error(error);
       }
     }

@@ -17,17 +17,6 @@ export const setWs = (ws: any) => ({
   payload: ws,
 });
 
-// export const newMessage = (data: any) => {
-//   return async (dispatch: any) => {
-//     await addNewMessageIdb();
-//     // {
-//       //   type: "NEW_MESSAGE",
-//       //   payload: data,
-//       // }
-//     return;
-//   };
-// };
-
 export const newMessage = (data: any) => ({
   type: "NEW_MESSAGE",
   payload: data,

@@ -14,7 +14,7 @@ import { addNewMessageIdb } from "../../idb/messages";
 class Navbar extends React.Component<any> {
   async componentDidMount() {
     const isKeepLogin = localStorage.getItem("token");
-    const { dispatch, history, token }: any = this.props;
+    const { dispatch, history, token, currentFocus }: any = this.props;
     if (isKeepLogin && !token) {
       const { email, password } = JSON.parse(isKeepLogin);
       const deviceData: any = localStorage.getItem(email);
@@ -48,20 +48,24 @@ class Navbar extends React.Component<any> {
             const { key } = data;
             if (key === "newMesssage") {
               const { text, sender, receiverUser, sendAt, attachment } = data;
-              const messageObj = { text, sender, receiverUser, sendAt };
-              console.log("We have a message: ", messageObj);
               const receiverUserName = Object.keys(receiverUser)[0];
+
               const newMessageObj = {
                 receiverUserName,
                 message: { attachment, text, received: true, sendAt },
                 senderName: sender.nickname,
               };
-              dispatch(newMessage(newMessageObj));
               await addNewMessageIdb(
                 user.loggedInUserId,
                 receiverUser[receiverUserName].userId.low,
                 newMessageObj
               );
+              if (
+                currentFocus === sender.nickname ||
+                currentFocus === receiverUserName
+              ) {
+                dispatch(newMessage(newMessageObj));
+              }
             } else if (key === "unreadMessages") {
               const { userId, messageStore } = data.value;
               console.log(userId, messageStore);
@@ -136,6 +140,7 @@ const mapStateToProps = (state: any) => {
   return {
     token: state.user.accessToken,
     email: state.user.email,
+    currentFocus: state.currentFocus,
   };
 };
 
