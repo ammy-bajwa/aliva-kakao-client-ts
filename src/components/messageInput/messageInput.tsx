@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { uploadFile } from "../../api/file";
 import { errors } from "../../helpers/errorCodes";
 import { convertFileToBase64 } from "../../helpers/file";
+import { scrollToEndMessages } from "../../helpers/scroll";
 import { success } from "../../helpers/toast";
 import { newMessage } from "../../redux/action/user";
 import "./messageInput.css";
@@ -95,6 +96,7 @@ const MessageInput = () => {
         console.log("Fired");
       }
       success("Sended Successfully");
+      scrollToEndMessages();
     } catch (error) {
       console.error(errors);
       errors("Error in sending message");

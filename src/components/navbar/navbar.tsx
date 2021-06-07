@@ -9,12 +9,14 @@ import { startLoading, stopLoading } from "../../utils/loading";
 import { port } from "../../helpers/config";
 import { loginUser, newMessage, setWs } from "../../redux/action/user";
 import { addNewMessageIdb } from "../../idb/messages";
+import { store } from "../../redux";
+import { scrollToEndMessages } from "../../helpers/scroll";
 // import { getLastMessageTime } from "../../idb/messages";
 
 class Navbar extends React.Component<any> {
   async componentDidMount() {
     const isKeepLogin = localStorage.getItem("token");
-    const { dispatch, history, token, currentFocus }: any = this.props;
+    const { dispatch, history, token }: any = this.props;
     if (isKeepLogin && !token) {
       const { email, password } = JSON.parse(isKeepLogin);
       const deviceData: any = localStorage.getItem(email);
@@ -55,17 +57,20 @@ class Navbar extends React.Component<any> {
                 message: { attachment, text, received: true, sendAt },
                 senderName: sender.nickname,
               };
-              await addNewMessageIdb(
-                user.loggedInUserId,
-                receiverUser[receiverUserName].userId.low,
-                newMessageObj
-              );
+              const { currentFocus } = await store.getState();
+              console.log("currentFocus: ", currentFocus);
               if (
                 currentFocus === sender.nickname ||
                 currentFocus === receiverUserName
               ) {
                 dispatch(newMessage(newMessageObj));
+                scrollToEndMessages();
               }
+              await addNewMessageIdb(
+                user.loggedInUserId,
+                receiverUser[receiverUserName].userId.low,
+                newMessageObj
+              );
             } else if (key === "unreadMessages") {
               const { userId, messageStore } = data.value;
               console.log(userId, messageStore);
@@ -140,7 +145,6 @@ const mapStateToProps = (state: any) => {
   return {
     token: state.user.accessToken,
     email: state.user.email,
-    currentFocus: state.currentFocus,
   };
 };
 

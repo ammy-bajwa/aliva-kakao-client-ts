@@ -70,7 +70,7 @@ const Home = (props: any) => {
         /> */}
         {props.user.chatList ? getChatListItems() : ""}
       </div>
-      <div className="border m-2 messageContainer">
+      <div className="border m-2" id="messageContainer">
         <Messages />
       </div>
     </div>

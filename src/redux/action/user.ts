@@ -17,10 +17,12 @@ export const setWs = (ws: any) => ({
   payload: ws,
 });
 
-export const newMessage = (data: any) => ({
-  type: "NEW_MESSAGE",
-  payload: data,
-});
+export const newMessage = (data: any) => {
+  return {
+    type: "NEW_MESSAGE",
+    payload: data,
+  };
+};
 
 export const loadChat = (messages: any) => ({
   type: "LOAD_CHAT",

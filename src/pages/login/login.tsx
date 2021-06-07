@@ -3,7 +3,9 @@ import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
 import { tryLoginApi } from "../../api/user";
 import { port } from "../../helpers/config";
+import { scrollToEndMessages } from "../../helpers/scroll";
 import { addNewMessageIdb } from "../../idb/messages";
+import { store } from "../../redux";
 import {
   loginUser,
   logoutUser,
@@ -14,7 +16,7 @@ import { startLoading, stopLoading } from "../../utils/loading";
 
 class Login extends React.Component<any> {
   loginFormHandler = async (event: any) => {
-    const { history, dispatch }: any = this.props;
+    const { history, dispatch, currentFocus }: any = this.props;
     event.preventDefault();
     const emailElem = document.getElementById("userEmail") as HTMLInputElement;
     const email = emailElem.value;
@@ -66,7 +68,14 @@ class Login extends React.Component<any> {
                 message: { attachment, text, received: true, sendAt },
                 senderName: sender.nickname,
               };
-              dispatch(newMessage(newMessageObj));
+              const { currentFocus } = await store.getState();
+              if (
+                currentFocus === sender.nickname ||
+                currentFocus === receiverUserName
+              ) {
+                dispatch(newMessage(newMessageObj));
+                scrollToEndMessages();
+              }
               await addNewMessageIdb(
                 user.loggedInUserId,
                 receiverUser[receiverUserName].userId.low,
@@ -157,6 +166,7 @@ class Login extends React.Component<any> {
 const mapStateToProps = (state: any) => {
   return {
     chatList: state.user.chatList,
+    currentFocus: state.currentFocus,
   };
 };
 export default connect(mapStateToProps)(withRouter(Login));

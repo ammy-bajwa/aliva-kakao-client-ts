@@ -70,7 +70,6 @@ export const addNewMessageIdb = async (
       senderName: newMessage.senderName,
       ...newMessage.message,
     };
-    debugger;
     const data = await db.get(storeName, key);
     const value = data.concat([newValue]);
     await db.put(storeName, value, key);
