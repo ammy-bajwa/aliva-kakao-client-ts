@@ -12,6 +12,7 @@ import { addNewMessageIdb } from "../../idb/messages";
 import { store } from "../../redux";
 import { scrollToEndMessages } from "../../helpers/scroll";
 import { info } from "../../helpers/toast";
+import { handleContactList } from "../../helpers/contact";
 // import { getLastMessageTime } from "../../idb/messages";
 
 class Navbar extends React.Component<any> {
@@ -52,24 +53,23 @@ class Navbar extends React.Component<any> {
             if (key === "newMesssage") {
               const { text, sender, receiverUser, sendAt, attachment } = data;
               const receiverUserName = Object.keys(receiverUser)[0];
-
+              const senderName = sender.nickname;
               const newMessageObj = {
                 receiverUserName,
                 message: { attachment, text, received: true, sendAt },
-                senderName: sender.nickname,
+                senderName,
               };
               const { currentFocus } = await store.getState();
               console.log("currentFocus: ", currentFocus);
+              await handleContactList(senderName, receiverUserName, email);
               if (
-                currentFocus === sender.nickname ||
+                currentFocus === senderName ||
                 currentFocus === receiverUserName
               ) {
                 dispatch(newMessage(newMessageObj));
                 scrollToEndMessages();
               } else {
-                info(
-                  `New Message From ${sender.nickname} to ${receiverUserName}`
-                );
+                info(`New Message From ${senderName} to ${receiverUserName}`);
               }
               await addNewMessageIdb(
                 user.loggedInUserId,
