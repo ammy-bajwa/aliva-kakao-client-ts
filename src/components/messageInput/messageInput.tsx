@@ -22,7 +22,6 @@ const MessageInput = () => {
       const userFileUpload: any = document.getElementById(
         "userFileUpload"
       ) as HTMLInputElement;
-      let files: any = null;
       if (!currentFocus) {
         alert("Please a contact first");
         return;
@@ -39,9 +38,6 @@ const MessageInput = () => {
             const selectedFile: any = userFileUpload.files[file];
             const base64 = await convertFileToBase64(selectedFile);
             console.log(base64);
-            files = Buffer.from(
-              new Uint8Array(await selectedFile.arrayBuffer())
-            );
             const { path }: any = await uploadFile(selectedFile);
             const channelId = chatList[currentFocus][`channelId`];
             ws.send(

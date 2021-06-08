@@ -1,6 +1,5 @@
 import { port } from "../helpers/config";
 import { errors } from "../helpers/errorCodes";
-import { handleIncommingMessages } from "../idb/messages";
 import { store } from "../redux";
 
 export const tryLoginApi = async (
@@ -46,8 +45,6 @@ export const tryLoginApi = async (
           reject(errorMessage);
         } else {
           console.log("result: ", result);
-          const { messages, loggedInUserId } = result;
-          // handleIncommingMessages(messages, loggedInUserId);
           resolve(result);
         }
       }

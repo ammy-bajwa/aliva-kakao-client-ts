@@ -4,20 +4,15 @@ import { getUserChat } from "../../api/chat";
 import ChatListItem from "../../components/chatListItem/chatListItem";
 import Messages from "../../components/messages/messages";
 import { scrollToEndMessages } from "../../helpers/scroll";
-import {
-  getUserMessages,
-  handleIncommingMessages,
-  lastDbMessageTime,
-} from "../../idb/messages";
+import { handleIncommingMessages, lastDbMessageTime } from "../../idb/messages";
 import { loadChat, setFocusUser } from "../../redux/action/user";
-// import { loadChat } from "../../redux/action/user";
 
 import "./home.css";
 
 const Home = (props: any) => {
   const onClickHandler = async (name: string, focusedUserId: number) => {
     try {
-      const { dispatch, loggedInUserId, ws, user } = props;
+      const { dispatch, loggedInUserId, user } = props;
       dispatch(setFocusUser(name));
       const { allMessages, lastMessageTimeStamp }: any =
         await lastDbMessageTime(loggedInUserId, focusedUserId);
@@ -26,7 +21,6 @@ const Home = (props: any) => {
       const { messages }: any = await getUserChat(
         user.email,
         name,
-        loggedInUserId,
         lastMessageTimeStamp
       );
       dispatch(loadChat([...allMessages, ...messages]));
@@ -39,25 +33,6 @@ const Home = (props: any) => {
     } catch (error) {
       console.error(error);
     }
-    // const getUserChat =
-    //   (await getUserMessages(loggedInUserId, focusedUserId)) || [];
-    // const getUserChat: any = [];
-    // dispatch(loadChat(getUserChat));
-    // ws.send(
-    //   JSON.stringify({
-    //     key: "isMessageUpdateNeeded",
-    //     value: {
-    //       time: getUserChat[getUserChat.length - 1].sendAt,
-    //       email: user.email,
-    //       focusedUserId,
-    //     },
-    //   })
-    // );
-    // console.log("getUserChat: ", getUserChat);
-
-    // Use websocket to exchange last message timestamp
-
-    // Then if required we will fetch the latest messages
   };
 
   const getChatListItems = () => {

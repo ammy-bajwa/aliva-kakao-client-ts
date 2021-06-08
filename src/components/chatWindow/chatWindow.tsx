@@ -1,53 +1,16 @@
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getUserChat } from "../../api/chat";
-import { scrollToEndMessages } from "../../helpers/scroll";
-import { handleIncommingMessages, lastDbMessageTime } from "../../idb/messages";
-import { loadChat } from "../../redux/action/user";
+import { useSelector } from "react-redux";
 
 import "./chatWindow.css";
 
 const ChatWindow = (props: any) => {
-  const dispatch = useDispatch();
-  const { chat, currentFocus, email, loggedInUserId, focusedUserId } =
-    useSelector((state: any) => {
-      const {
-        chat,
-        currentFocus,
-        user: { email, chatList },
-        loggedInUserId,
-      } = state;
-      // console.log("useSelector before: ", chat);
-      // chat.sort((a: any, b: any) => {
-      //   return a.sendAt - b.sendAt;
-      // });
-      // console.log("useSelector after: ", chat);
-      const focusedUserId =
-        chatList[currentFocus]?.displayUserList[0]?.userId?.low;
-
-      return { chat, currentFocus, email, loggedInUserId, focusedUserId };
+  const { chat } = useSelector((state: any) => {
+    const { chat } = state;
+    chat.sort((a: any, b: any) => {
+      return a.sendAt - b.sendAt;
     });
+    return { chat };
+  });
 
-  useEffect(() => {
-    (async () => {
-      if (currentFocus) {
-        // console.log("Fired");
-        // const lastMessageTimeStamp = await lastDbMessageTime(
-        //   loggedInUserId,
-        //   focusedUserId
-        // );
-        // console.log(lastMessageTimeStamp);
-        // const { messages }: any = await getUserChat(
-        //   email,
-        //   currentFocus,
-        //   loggedInUserId,
-        //   lastMessageTimeStamp
-        // );
-        // dispatch(loadChat(messages));
-        // scrollToEndMessages();
-      }
-    })();
-  }, [currentFocus]);
   return (
     <div className="m-2" id="chatWindowContainer">
       {console.log("props: ", props)}

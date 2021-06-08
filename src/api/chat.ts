@@ -1,10 +1,8 @@
 import { port } from "../helpers/config";
-import { handleIncommingMessages } from "../idb/messages";
 
 export const getUserChat = async (
   email: string,
   nickNameToGetChat: string,
-  currentLoggedInUserId: number,
   lastMessageTimeStamp: any
 ) => {
   const setCodePromise = new Promise(async (resolve, reject) => {

@@ -16,7 +16,7 @@ import { startLoading, stopLoading } from "../../utils/loading";
 
 class Login extends React.Component<any> {
   loginFormHandler = async (event: any) => {
-    const { history, dispatch, currentFocus }: any = this.props;
+    const { history, dispatch }: any = this.props;
     event.preventDefault();
     const emailElem = document.getElementById("userEmail") as HTMLInputElement;
     const email = emailElem.value;
