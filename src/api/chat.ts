@@ -4,13 +4,14 @@ import { handleIncommingMessages } from "../idb/messages";
 export const getUserChat = async (
   email: string,
   nickNameToGetChat: string,
-  currentLoggedInUserId: number
+  currentLoggedInUserId: number,
+  lastMessageTimeStamp: any
 ) => {
   const setCodePromise = new Promise(async (resolve, reject) => {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, nickNameToGetChat }),
+      body: JSON.stringify({ email, nickNameToGetChat, lastMessageTimeStamp }),
     };
     let apiEndPoint = "";
     if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
@@ -31,7 +32,6 @@ export const getUserChat = async (
     } else {
       const { userId, messages } = result.data;
       resolve({ userId, messages });
-      await handleIncommingMessages(messages, currentLoggedInUserId, userId);
       console.log(result);
     }
   });

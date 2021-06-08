@@ -1,8 +1,14 @@
 import { connect } from "react-redux";
+import { getUserChat } from "../../api/chat";
 
 import ChatListItem from "../../components/chatListItem/chatListItem";
 import Messages from "../../components/messages/messages";
-import { getUserMessages } from "../../idb/messages";
+import { scrollToEndMessages } from "../../helpers/scroll";
+import {
+  getUserMessages,
+  handleIncommingMessages,
+  lastDbMessageTime,
+} from "../../idb/messages";
 import { loadChat, setFocusUser } from "../../redux/action/user";
 // import { loadChat } from "../../redux/action/user";
 
@@ -10,8 +16,29 @@ import "./home.css";
 
 const Home = (props: any) => {
   const onClickHandler = async (name: string, focusedUserId: number) => {
-    const { dispatch, loggedInUserId, ws, user } = props;
-    dispatch(setFocusUser(name));
+    try {
+      const { dispatch, loggedInUserId, ws, user } = props;
+      dispatch(setFocusUser(name));
+      const { allMessages, lastMessageTimeStamp }: any =
+        await lastDbMessageTime(loggedInUserId, focusedUserId);
+      console.log("Fired");
+      console.log(lastMessageTimeStamp);
+      const { messages }: any = await getUserChat(
+        user.email,
+        name,
+        loggedInUserId,
+        lastMessageTimeStamp
+      );
+      dispatch(loadChat([...allMessages, ...messages]));
+      await handleIncommingMessages(
+        [...allMessages, ...messages],
+        loggedInUserId,
+        focusedUserId
+      );
+      scrollToEndMessages();
+    } catch (error) {
+      console.error(error);
+    }
     // const getUserChat =
     //   (await getUserMessages(loggedInUserId, focusedUserId)) || [];
     // const getUserChat: any = [];
