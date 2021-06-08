@@ -1,23 +1,39 @@
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getUserChat } from "../../api/chat";
 import { scrollToEndMessages } from "../../helpers/scroll";
 
 import "./chatWindow.css";
 
 const ChatWindow = (props: any) => {
-  const chat = useSelector((state: any) => {
-    const { chat } = state;
-    console.log("useSelector before: ", chat);
-    chat.sort((a: any, b: any) => {
-      return a.sendAt - b.sendAt;
-    });
-    console.log("useSelector after: ", chat);
-    return chat;
-  });
+  const { chat, currentFocus, email, loggedInUserId } = useSelector(
+    (state: any) => {
+      const {
+        chat,
+        currentFocus,
+        user: { email },
+        loggedInUserId,
+      } = state;
+      console.log("useSelector before: ", chat);
+      chat.sort((a: any, b: any) => {
+        return a.sendAt - b.sendAt;
+      });
+      console.log("useSelector after: ", chat);
+      return { chat, currentFocus, email, loggedInUserId };
+    }
+  );
 
   useEffect(() => {
-    scrollToEndMessages();
-  }, [chat]);
+    (async () => {
+      if (currentFocus) {
+        console.log("Fired");
+        const data = await getUserChat(email, currentFocus, loggedInUserId);
+        // const data = await getUserChat(email, currentFocus, loggedInUserId);
+        console.log(data);
+        scrollToEndMessages();
+      }
+    })();
+  }, [currentFocus]);
   return (
     <div className="m-2" id="chatWindowContainer">
       {console.log("props: ", props)}

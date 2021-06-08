@@ -47,7 +47,7 @@ export const tryLoginApi = async (
         } else {
           console.log("result: ", result);
           const { messages, loggedInUserId } = result;
-          handleIncommingMessages(messages, loggedInUserId);
+          // handleIncommingMessages(messages, loggedInUserId);
           resolve(result);
         }
       }

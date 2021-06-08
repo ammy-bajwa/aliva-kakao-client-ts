@@ -12,19 +12,21 @@ const Home = (props: any) => {
   const onClickHandler = async (name: string, focusedUserId: number) => {
     const { dispatch, loggedInUserId, ws, user } = props;
     dispatch(setFocusUser(name));
-    const getUserChat = await getUserMessages(loggedInUserId, focusedUserId);
-    dispatch(loadChat(getUserChat));
-    ws.send(
-      JSON.stringify({
-        key: "isMessageUpdateNeeded",
-        value: {
-          time: getUserChat[getUserChat.length - 1].sendAt,
-          email: user.email,
-          focusedUserId,
-        },
-      })
-    );
-    console.log("getUserChat: ", getUserChat);
+    // const getUserChat =
+    //   (await getUserMessages(loggedInUserId, focusedUserId)) || [];
+    // const getUserChat: any = [];
+    // dispatch(loadChat(getUserChat));
+    // ws.send(
+    //   JSON.stringify({
+    //     key: "isMessageUpdateNeeded",
+    //     value: {
+    //       time: getUserChat[getUserChat.length - 1].sendAt,
+    //       email: user.email,
+    //       focusedUserId,
+    //     },
+    //   })
+    // );
+    // console.log("getUserChat: ", getUserChat);
 
     // Use websocket to exchange last message timestamp
 
