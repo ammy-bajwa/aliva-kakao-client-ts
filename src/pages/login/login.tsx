@@ -3,7 +3,9 @@ import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
 import { tryLoginApi } from "../../api/user";
 import { port } from "../../helpers/config";
+import { handleContactList } from "../../helpers/contact";
 import { scrollToEndMessages } from "../../helpers/scroll";
+import { info } from "../../helpers/toast";
 import { addNewMessageIdb } from "../../idb/messages";
 import { store } from "../../redux";
 import {
@@ -60,21 +62,24 @@ class Login extends React.Component<any> {
             const { key } = data;
             if (key === "newMesssage") {
               const { text, sender, receiverUser, sendAt, attachment } = data;
-              const messageObj = { text, sender, receiverUser, sendAt };
-              console.log("We have a message: ", messageObj);
               const receiverUserName = Object.keys(receiverUser)[0];
+              const senderName = sender.nickname;
               const newMessageObj = {
                 receiverUserName,
                 message: { attachment, text, received: true, sendAt },
-                senderName: sender.nickname,
+                senderName,
               };
               const { currentFocus } = await store.getState();
+              console.log("currentFocus: ", currentFocus);
+              await handleContactList(senderName, receiverUserName, email);
               if (
-                currentFocus === sender.nickname ||
+                currentFocus === senderName ||
                 currentFocus === receiverUserName
               ) {
                 dispatch(newMessage(newMessageObj));
                 scrollToEndMessages();
+              } else {
+                info(`New Message From ${senderName} to ${receiverUserName}`);
               }
               await addNewMessageIdb(
                 user.loggedInUserId,
