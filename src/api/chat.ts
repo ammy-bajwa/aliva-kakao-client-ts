@@ -3,13 +3,21 @@ import { port } from "../helpers/config";
 export const getUserChat = async (
   email: string,
   nickNameToGetChat: string,
-  lastMessageTimeStamp: any
+  lastMessageTimeStamp: any,
+  lastChatLogId: any,
+  logId: any
 ) => {
   const setCodePromise = new Promise(async (resolve, reject) => {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, nickNameToGetChat, lastMessageTimeStamp }),
+      body: JSON.stringify({
+        email,
+        nickNameToGetChat,
+        lastMessageTimeStamp,
+        lastChatLogId,
+        startChatLogId: logId,
+      }),
     };
     let apiEndPoint = "";
     if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {

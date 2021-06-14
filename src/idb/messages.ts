@@ -110,6 +110,7 @@ export const lastDbMessageTime = async (
         resolve({
           allMessages: [],
           lastMessageTimeStamp: 0,
+          logId: 0,
         });
         db.close();
         await deleteDB(dbName);
@@ -118,6 +119,7 @@ export const lastDbMessageTime = async (
         resolve({
           allMessages: data || [],
           lastMessageTimeStamp: data[data.length - 1].sendAt || 0,
+          logId: data[data.length - 1].logId || 0,
         });
       }
     } catch (error) {

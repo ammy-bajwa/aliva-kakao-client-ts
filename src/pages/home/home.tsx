@@ -13,15 +13,18 @@ const Home = (props: any) => {
   const onClickHandler = async (name: string, focusedUserId: number) => {
     try {
       const { dispatch, loggedInUserId, user } = props;
+      const lastChatLogId = user.chatList[name]?.lastChatLogId;
       dispatch(setFocusUser(name));
-      const { allMessages, lastMessageTimeStamp }: any =
+      const { allMessages, lastMessageTimeStamp, logId }: any =
         await lastDbMessageTime(loggedInUserId, focusedUserId);
       console.log("Fired");
       console.log(lastMessageTimeStamp);
       const { messages }: any = await getUserChat(
         user.email,
         name,
-        lastMessageTimeStamp
+        lastMessageTimeStamp,
+        lastChatLogId,
+        logId
       );
       dispatch(loadChat([...allMessages, ...messages]));
       await handleIncommingMessages(
