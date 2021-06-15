@@ -68,19 +68,20 @@ export const addNewMessageIdb = async (
   const db = await openDB(dbName, 1, {
     upgrade(db) {
       dbNotExists = true;
+      db.createObjectStore(storeName);
     },
   });
 
+  const newValue = {
+    receiverUserName: newMessage.receiverUserName,
+    senderName: newMessage.senderName,
+    ...newMessage.message,
+  };
   if (dbNotExists) {
+    await db.put(storeName, [newValue], key);
     db.close();
-    await deleteDB(dbName);
     return;
   } else {
-    const newValue = {
-      receiverUserName: newMessage.receiverUserName,
-      senderName: newMessage.senderName,
-      ...newMessage.message,
-    };
     const data = await db.get(storeName, key);
     const value = data.concat([newValue]);
     await db.put(storeName, value, key);
