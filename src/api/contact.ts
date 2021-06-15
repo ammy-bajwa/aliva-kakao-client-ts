@@ -1,7 +1,9 @@
 import { port } from "../helpers/config";
+import { startLoading, stopLoading } from "../utils/loading";
 
 export const getChatList = async (email: string) => {
   const setCodePromise = new Promise(async (resolve, reject) => {
+    startLoading();
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -17,6 +19,7 @@ export const getChatList = async (email: string) => {
     }
     let result: any = await fetch(apiEndPoint, requestOptions);
     result = await result.json();
+    stopLoading();
     if (result.error) {
       let errorMessage = result.message;
       alert(errorMessage);

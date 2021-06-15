@@ -1,5 +1,6 @@
 import { port } from "../helpers/config";
 import { store } from "../redux";
+import { startLoading, stopLoading } from "../utils/loading";
 
 export const uploadFile = async (file: any) => {
   const fileUploadPromise = new Promise(async (resolve, reject) => {
@@ -11,6 +12,7 @@ export const uploadFile = async (file: any) => {
         console.log("accessToken: ", accessToken);
         var data = new FormData();
         data.append("myFile", file);
+        startLoading();
         const requestOptions = {
           method: "POST",
           body: data,
@@ -26,10 +28,11 @@ export const uploadFile = async (file: any) => {
         let result: any = await fetch(apiEndPoint, requestOptions);
         result = await result.json();
         console.log("result: ", result);
-
+        stopLoading();
         resolve(result);
       }
     } catch (error) {
+      stopLoading();
       reject(error);
     }
   });
