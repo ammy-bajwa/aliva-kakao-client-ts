@@ -1,11 +1,19 @@
 .chatListItemContainer {
-  background: #232526;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #414345, #232526);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #232526; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #414345,
+    #232526
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #414345,
+    #232526
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   color: white;
 }
 .chatListItemContainer:hover {
-  box-shadow: rgb(75, 75, 75) 3px 4px;
+  box-shadow: #eaeaea 5px 10px;
   cursor: pointer;
   transition: 0.5s;
   width: auto;
@@ -21,7 +29,7 @@
 }
 
 .focusedContact {
-  box-shadow: rgb(75, 75, 75) 3px 4px;
+  box-shadow: #eaeaea 5px 10px;
   cursor: pointer;
   transition: 0.5s;
 }
