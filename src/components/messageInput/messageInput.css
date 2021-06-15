@@ -1,5 +1,6 @@
 .messageInputContainer {
   bottom: 0px;
   position: absolute;
-  width: 60vw;
+  width: 70vw;
+  right: 15%;
 }
