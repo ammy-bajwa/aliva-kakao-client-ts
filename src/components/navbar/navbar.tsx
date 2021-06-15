@@ -11,7 +11,10 @@ class Navbar extends React.Component<any> {
   async componentDidMount() {
     const isKeepLogin = localStorage.getItem("token");
     const { dispatch, history, token }: any = this.props;
-    await loginHandler(isKeepLogin, token, dispatch, history);
+    try {
+      await loginHandler(isKeepLogin, token, dispatch, history);
+      history.push("/");
+    } catch (error) {}
   }
   render() {
     const { token, email }: any = this.props;

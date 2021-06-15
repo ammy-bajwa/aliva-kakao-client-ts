@@ -1,3 +1,4 @@
+import { Redirect } from "react-router-dom";
 import { tryLoginApi } from "../api/user";
 import { addNewMessageIdb } from "../idb/messages";
 import { store } from "../redux";
@@ -99,8 +100,8 @@ export const loginHandler = async (
           password,
         })
       );
-      history.push("/");
       stopLoading();
+      history.push("/");
     } catch (error) {
       stopLoading();
       localStorage.removeItem("token");

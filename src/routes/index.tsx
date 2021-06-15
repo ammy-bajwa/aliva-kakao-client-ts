@@ -1,4 +1,4 @@
-import { BrowserRouter, Switch } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import Login from "../pages/login/login";
@@ -22,17 +22,15 @@ class MainRouter extends React.Component {
       );
     } else {
       return (
-        <div>
+        <>
           <BrowserRouter>
             <ToastContainer />
             <Navbar />
-            <Switch>
-              <Public path="/login" component={Login} />
-              <Public path="/register" component={RegisterDevice} />
-              <Private path="/" component={Home} />
-            </Switch>
+            <Public exact path="/login" component={Login} />
+            <Public path="/register" component={RegisterDevice} />
+            <Private path="/" component={Home} />
           </BrowserRouter>
-        </div>
+        </>
       );
     }
   }
