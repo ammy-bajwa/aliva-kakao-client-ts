@@ -9,15 +9,16 @@ import Public from "./public/public";
 import { connect } from "react-redux";
 import Private from "./private/private";
 import React from "react";
+import Loading from "../components/loading/loading";
 
 class MainRouter extends React.Component {
   render() {
     const { loading }: any = this.props;
     if (loading) {
       return (
-        <div>
-          <h1>Loading ..........</h1>
-        </div>
+        <>
+          <Loading />
+        </>
       );
     } else {
       return (
