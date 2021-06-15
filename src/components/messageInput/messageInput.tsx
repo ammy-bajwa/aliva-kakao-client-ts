@@ -118,6 +118,7 @@ const MessageInput = () => {
             type="file"
             className="form-control-file"
             id="userFileUpload"
+            accept="image/*"
           />
         </div>
         <button className="btn btn-outline-light mt-2" type="submit">
