@@ -154,7 +154,7 @@ class Login extends React.Component<any> {
               id="userPassword"
             />
           </div>
-          <button type="submit" className="btn btn-outline-dark m-2">
+          <button type="submit" className="btn btn-outline-light m-2">
             Login
           </button>
           <Link to="/register">

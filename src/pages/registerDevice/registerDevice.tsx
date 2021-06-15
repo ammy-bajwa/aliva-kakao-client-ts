@@ -96,7 +96,7 @@ const RegisterDevice = () => {
             required
           />
         </div>
-        <button type="submit" className="btn btn-outline-dark m-2">
+        <button type="submit" className="btn btn-outline-light m-2">
           Send Code
         </button>
         <Link to="/login">
@@ -118,7 +118,7 @@ const RegisterDevice = () => {
             required
           />
         </div>
-        <button type="submit" className="btn btn-outline-dark m-2">
+        <button type="submit" className="btn btn-outline-light m-2">
           Register
         </button>
       </form>

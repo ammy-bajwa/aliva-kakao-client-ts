@@ -65,8 +65,8 @@ const Home = (props: any) => {
     return items;
   };
   return (
-    <div className="d-flex" id="homeMainContainer">
-      <div className="chatListContainer border d-flex flex-column flex-wrap m-2 justify-content-center">
+    <div className="d-flex rounded" id="homeMainContainer">
+      <div className="chatListContainer border rounded d-flex flex-column flex-wrap m-2 justify-content-center">
         {/* <ChatListItem
           profileImage="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
           name="amir"
@@ -77,7 +77,7 @@ const Home = (props: any) => {
         /> */}
         {props.user.chatList ? getChatListItems() : ""}
       </div>
-      <div className="border m-2" id="messageContainer">
+      <div className="border m-2 rounded" id="messageContainer">
         <Messages />
       </div>
     </div>
