@@ -120,7 +120,7 @@ const MessageInput = () => {
             id="userFileUpload"
           />
         </div>
-        <button className="btn btn-info mt-2" type="submit">
+        <button className="btn btn-outline-light mt-2" type="submit">
           Send
         </button>
       </form>

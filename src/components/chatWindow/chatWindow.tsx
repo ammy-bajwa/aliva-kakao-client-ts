@@ -62,7 +62,7 @@ const ChatWindow = (props: any) => {
               <span
                 className={`m-2 p-2 d-block w-100 rounded ${
                   currentFocus === message.receiverUserName
-                    ? "receiverMessage border border-info"
+                    ? "receiverMessage border border-light"
                     : "senderMessage border border-dark"
                 }`}
               >
