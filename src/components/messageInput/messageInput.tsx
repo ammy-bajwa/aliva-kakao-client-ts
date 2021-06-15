@@ -113,7 +113,7 @@ const MessageInput = () => {
             value={message}
           />
         </div>
-        <div className="form-group">
+        <div className="form-group mt-2">
           <input
             type="file"
             className="form-control-file"
