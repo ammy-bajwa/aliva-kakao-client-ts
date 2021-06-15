@@ -27,3 +27,7 @@ code {
 .hoverEffect:hover {
   cursor: pointer;
 }
+
+.hoverPointer:hover {
+  cursor: pointer;
+}
