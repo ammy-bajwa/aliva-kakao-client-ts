@@ -15,3 +15,15 @@ export const handleContactList = async (
     await handleContacts(chatList, loggedInUserId);
   }
 };
+
+export const isInContact = async (name: any) => {
+  const isInContactPromise = new Promise(async (resolve, reject) => {
+    const { user: chatList } = await store.getState();
+    if (!chatList[name]) {
+      resolve(false);
+    } else {
+      resolve(true);
+    }
+  });
+  return await isInContactPromise;
+};

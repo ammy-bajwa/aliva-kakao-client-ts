@@ -13,7 +13,6 @@ class Navbar extends React.Component<any> {
     const { dispatch, history, token }: any = this.props;
     try {
       await loginHandler(isKeepLogin, token, dispatch, history);
-      history.push("/");
     } catch (error) {}
   }
   render() {

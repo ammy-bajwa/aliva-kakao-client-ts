@@ -4,7 +4,7 @@ import { store } from "../redux";
 import { loginUser, newMessage, setWs } from "../redux/action/user";
 import { startLoading, stopLoading } from "../utils/loading";
 import { port } from "./config";
-import { handleContactList } from "./contact";
+import { handleContactList, isInContact } from "./contact";
 import { scrollToEndMessages } from "./scroll";
 import { info } from "./toast";
 
@@ -55,7 +55,6 @@ export const loginHandler = async (
               senderName,
             };
             const { currentFocus } = await store.getState();
-            console.log("currentFocus: ", currentFocus);
             await handleContactList(senderName, receiverUserName, email);
             if (
               currentFocus === senderName ||
@@ -66,11 +65,23 @@ export const loginHandler = async (
             } else {
               info(`New Message From ${senderName} to ${receiverUserName}`);
             }
-            await addNewMessageIdb(
-              user.loggedInUserId,
-              receiverUser[receiverUserName].userId.low,
-              newMessageObj
-            );
+            const isInContactExists = await isInContact(senderName);
+            if (!isInContactExists) {
+              const {
+                user: { chatList },
+              } = await store.getState();
+              await addNewMessageIdb(
+                user.loggedInUserId,
+                chatList[senderName].intId,
+                newMessageObj
+              );
+            } else {
+              await addNewMessageIdb(
+                user.loggedInUserId,
+                receiverUser[receiverUserName].intId,
+                newMessageObj
+              );
+            }
           } else if (key === "unreadMessages") {
             const { userId, messageStore } = data.value;
             console.log(userId, messageStore);

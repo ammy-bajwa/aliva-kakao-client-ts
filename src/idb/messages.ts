@@ -61,6 +61,9 @@ export const addNewMessageIdb = async (
   otherUserId: number,
   newMessage: any
 ) => {
+  console.log("loggedInUserId: ", loggedInUserId);
+  console.log("otherUserId: ", otherUserId);
+
   const dbName = SHA256(`KAKAOCHAT${otherUserId}${loggedInUserId}`).toString();
   const storeName = "MessageStore";
   const key = "messages";
@@ -71,7 +74,6 @@ export const addNewMessageIdb = async (
       db.createObjectStore(storeName);
     },
   });
-
   const newValue = {
     receiverUserName: newMessage.receiverUserName,
     senderName: newMessage.senderName,

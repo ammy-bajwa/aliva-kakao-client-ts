@@ -5,10 +5,12 @@ const Private = ({ component: Component, token, ...rest }: any) => (
   <Route
     {...rest}
     render={(props) => {
+      console.log("token: ", token);
       if (!token) {
         return <Redirect to={{ pathname: "/login" }} />;
+      } else {
+        return <Component {...props} />;
       }
-      return <Component {...props} />;
     }}
   />
 );

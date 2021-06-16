@@ -27,7 +27,7 @@ class MainRouter extends React.Component {
             <ToastContainer />
             <Navbar />
             <Public exact path="/login" component={Login} />
-            <Public path="/register" component={RegisterDevice} />
+            <Public exact path="/register" component={RegisterDevice} />
             <Private path="/" component={Home} />
           </BrowserRouter>
         </>
