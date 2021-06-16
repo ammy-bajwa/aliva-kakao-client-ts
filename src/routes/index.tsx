@@ -19,7 +19,7 @@ class MainRouter extends React.Component {
         <BrowserRouter>
           <ToastContainer />
           <Navbar />
-          {!loading ? (
+          {loading ? (
             <Loading />
           ) : (
             <>
