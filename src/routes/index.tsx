@@ -14,25 +14,23 @@ import Loading from "../components/loading/loading";
 class MainRouter extends React.Component {
   render() {
     const { loading }: any = this.props;
-    if (loading) {
-      return (
-        <>
-          <Loading />
-        </>
-      );
-    } else {
-      return (
-        <>
-          <BrowserRouter>
-            <ToastContainer />
-            <Navbar />
-            <Public exact path="/login" component={Login} />
-            <Public exact path="/register" component={RegisterDevice} />
-            <Private path="/" component={Home} />
-          </BrowserRouter>
-        </>
-      );
-    }
+    return (
+      <>
+        <BrowserRouter>
+          <ToastContainer />
+          <Navbar />
+          {loading ? (
+            <Loading />
+          ) : (
+            <>
+              <Private exact path="/" component={Home} />
+              <Public exact path="/login" component={Login} />
+              <Public exact path="/register" component={RegisterDevice} />
+            </>
+          )}
+        </BrowserRouter>
+      </>
+    );
   }
 }
 

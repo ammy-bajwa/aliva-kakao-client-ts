@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { v4 as randomId } from "uuid";
 import {
@@ -8,6 +9,10 @@ import {
 const RegisterDevice = () => {
   const history = useHistory();
 
+  const [deviceName, setDeviceName] = useState("");
+  const [isLoadingSend, setLoadingSend] = useState(false);
+  const [isLoadingRegister, setLoadingRegister] = useState(false);
+
   const registerFormHandler = async (event: any) => {
     event.preventDefault();
     const emailElem = document.getElementById("userEmail") as HTMLInputElement;
@@ -17,20 +22,19 @@ const RegisterDevice = () => {
     ) as HTMLInputElement;
 
     const password = passwordElem.value;
-    const deviceNameElem = document.getElementById(
-      "machineName"
-    ) as HTMLInputElement;
-    const deviceName = deviceNameElem.value;
     let deviceId = randomId();
     deviceId = deviceId.split("-").join("");
     console.log("deviceId: ", deviceId);
     try {
+      setLoadingSend(true);
       await trySendDeviceRegisterApi(deviceName, deviceId, email, password);
       localStorage.setItem(email, JSON.stringify({ deviceName, deviceId }));
+      setLoadingSend(false);
       console.log("deviceName: ", deviceName);
       console.log("deviceId: ", deviceId);
     } catch (error) {
       console.error(error);
+      setLoadingSend(false);
     }
   };
 
@@ -48,10 +52,13 @@ const RegisterDevice = () => {
     ) as HTMLInputElement;
     const registerCode = registerCodeElem.value;
     try {
+      setLoadingRegister(true);
       await trySetDeviceRegisterApi(registerCode, email, password);
+      setLoadingRegister(false);
       history.push("/login");
     } catch (error) {
       console.error(error);
+      setLoadingRegister(false);
     }
   };
   return (
@@ -93,11 +100,20 @@ const RegisterDevice = () => {
             className="form-control"
             placeholder="Office Pc"
             id="machineName"
+            onInput={(event: any) => setDeviceName(event.target.value)}
             required
           />
         </div>
         <button type="submit" className="btn btn-outline-light m-2">
-          Send Code
+          {isLoadingSend ? (
+            <span
+              className="spinner-grow spinner-grow-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+          ) : (
+            "Send Code"
+          )}
         </button>
         <Link to="/login">
           <button type="submit" className="btn btn-outline-info">
@@ -119,7 +135,15 @@ const RegisterDevice = () => {
           />
         </div>
         <button type="submit" className="btn btn-outline-light m-2">
-          Register
+          {isLoadingRegister ? (
+            <span
+              className="spinner-grow spinner-grow-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+          ) : (
+            "Register"
+          )}
         </button>
       </form>
     </div>

@@ -1,6 +1,5 @@
 import { port } from "../helpers/config";
 import { errors } from "../helpers/errorCodes";
-import { startLoading, stopLoading } from "../utils/loading";
 
 export const trySendDeviceRegisterApi = async (
   deviceName: string,
@@ -8,7 +7,6 @@ export const trySendDeviceRegisterApi = async (
   email: string,
   password: string
 ) => {
-  startLoading();
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -24,7 +22,6 @@ export const trySendDeviceRegisterApi = async (
   }
   let result: any = await fetch(apiEndPoint, requestOptions);
   result = await result.json();
-  stopLoading();
   if (result.error) {
     const errorMessage = result.message;
     alert(errorMessage);
@@ -41,7 +38,6 @@ export const trySetDeviceRegisterApi = async (
   password: string
 ) => {
   const setCodePromise = new Promise(async (resolve, reject) => {
-    startLoading();
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -57,7 +53,6 @@ export const trySetDeviceRegisterApi = async (
     }
     let result: any = await fetch(apiEndPoint, requestOptions);
     result = await result.json();
-    stopLoading();
     if (result.error) {
       let errorMessage = errors[`${result.error}`];
       if (!errorMessage) {

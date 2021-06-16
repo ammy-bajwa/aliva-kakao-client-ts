@@ -47,8 +47,9 @@ export const loginHandler = async (
           const { key } = data;
           if (key === "newMesssage") {
             const { text, sender, receiverUser, sendAt, attachment } = data;
-            const receiverUserName = Object.keys(receiverUser)[0];
-            const senderName = sender.nickname;
+            const { nickname: receiverUserName, intId: receiverIntId } =
+              receiverUser;
+            const { nickname: senderName, intId: senderIntId } = sender;
             const newMessageObj = {
               receiverUserName,
               message: { attachment, text, received: true, sendAt },
@@ -67,18 +68,15 @@ export const loginHandler = async (
             }
             const isInContactExists = await isInContact(senderName);
             if (!isInContactExists) {
-              const {
-                user: { chatList },
-              } = await store.getState();
               await addNewMessageIdb(
                 user.loggedInUserId,
-                chatList[senderName].intId,
+                receiverIntId,
                 newMessageObj
               );
             } else {
               await addNewMessageIdb(
                 user.loggedInUserId,
-                receiverUser[receiverUserName].intId,
+                senderIntId,
                 newMessageObj
               );
             }
