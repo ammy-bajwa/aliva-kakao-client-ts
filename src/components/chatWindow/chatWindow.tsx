@@ -32,11 +32,14 @@ const ChatWindow = (props: any) => {
     return { chat, currentFocus };
   });
 
-  const imageOnClickHandler = (message: any) => {
-    let image = new Image();
+  const imageOnClickHandler = async (message: any) => {
+    let image = document.createElement("img");
     image.src = message.attachment.url;
-    let w: any = window.open("");
-    w.document.write(image.outerHTML);
+    let w: any = window.open("", "_blank");
+    w.document.title = "AlivaKakaoClient";
+    w.document.title = "AlivaKakaoClient";
+    w.document.body.appendChild(image);
+    w.location.href = message.attachment.url;
   };
 
   useEffect(() => {

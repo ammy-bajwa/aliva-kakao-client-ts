@@ -9126,6 +9126,11 @@ react-loading@^2.0.3:
   resolved "https://registry.yarnpkg.com/react-loading/-/react-loading-2.0.3.tgz#e8138fb0c3e4674e481b320802ac7048ae14ffb9"
   integrity sha512-Vdqy79zq+bpeWJqC+xjltUjuGApyoItPgL0vgVfcJHhqwU7bAMKzysfGW/ADu6i0z0JiOCRJjo+IkFNkRNbA3A==
 
+react-modal-image@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/react-modal-image/-/react-modal-image-2.5.0.tgz#c9f047ae2a1b8ca54c35dbdad3bbca846cf21632"
+  integrity sha512-QucQrgOLmF44CD4EFDLZ9ICrbHEZwztjALgx1GsNmMWZrAtmzDLarG+T1TK2OSE4w1eHfkXtmEhQibjbt0mT2g==
+
 react-redux@^7.2.4:
   version "7.2.4"
   resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-7.2.4.tgz#1ebb474032b72d806de2e0519cd07761e222e225"
