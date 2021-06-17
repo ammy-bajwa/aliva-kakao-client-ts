@@ -92,7 +92,6 @@ const MessageInput = () => {
         console.log("Fired");
       }
       success("Sended Successfully");
-      scrollToEndMessages();
     } catch (error) {
       console.error(errors);
       errors("Error in sending message");

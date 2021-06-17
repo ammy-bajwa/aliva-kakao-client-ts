@@ -10,7 +10,7 @@ export const handleIncommingMessages = async (
   const messageHandlerPromise = new Promise(async (resolve, reject) => {
     try {
       const dbName = SHA256(
-        `KAKAOCHAT${otherUserId}${loggedInUserId}`
+        `KAKAOCHAT${loggedInUserId}${otherUserId}`
       ).toString();
       const storeName = "MessageStore";
       const key = "messages";
@@ -35,7 +35,7 @@ export const getUserMessages = async (
   loggedInUserId: number,
   otherUserId: number
 ) => {
-  const dbName = SHA256(`KAKAOCHAT${otherUserId}${loggedInUserId}`).toString();
+  const dbName = SHA256(`KAKAOCHAT${loggedInUserId}${otherUserId}`).toString();
   const storeName = "MessageStore";
   const key = "messages";
   let dbNotExists = false;
@@ -63,8 +63,7 @@ export const addNewMessageIdb = async (
 ) => {
   console.log("loggedInUserId: ", loggedInUserId);
   console.log("otherUserId: ", otherUserId);
-
-  const dbName = SHA256(`KAKAOCHAT${otherUserId}${loggedInUserId}`).toString();
+  const dbName = SHA256(`KAKAOCHAT${loggedInUserId}${otherUserId}`).toString();
   const storeName = "MessageStore";
   const key = "messages";
   let dbNotExists = false;
@@ -99,7 +98,7 @@ export const lastDbMessageTime = async (
   const getLastMessagePromise = new Promise(async (resolve, reject) => {
     try {
       const dbName = SHA256(
-        `KAKAOCHAT${otherUserId}${loggedInUserId}`
+        `KAKAOCHAT${loggedInUserId}${otherUserId}`
       ).toString();
       const storeName = "MessageStore";
       const key = "messages";

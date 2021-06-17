@@ -1,7 +1,9 @@
 import moment from "moment";
+import { useEffect } from "react";
 
 import { useSelector } from "react-redux";
 import { convertFileToBase64 } from "../../helpers/file";
+import { scrollToEndMessages } from "../../helpers/scroll";
 
 import "./chatWindow.css";
 
@@ -29,6 +31,10 @@ const ChatWindow = (props: any) => {
 
     return { chat, currentFocus };
   });
+
+  useEffect(() => {
+    scrollToEndMessages();
+  }, [chat]);
 
   return (
     <div className="m-2" id="chatWindowContainer">
