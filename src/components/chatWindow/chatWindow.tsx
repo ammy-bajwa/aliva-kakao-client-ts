@@ -38,41 +38,39 @@ const ChatWindow = (props: any) => {
         ? chat.map((message: any, index: number) => (
             <div
               key={index}
-              className={
-                message.received
-                  ? "d-flex border-bottom m-2 text-light"
-                  : "d-flex flex-row-reverse text-light"
-              }
+              className={`text-light p-1 w-100 d-flex flex-row ${
+                currentFocus === message.receiverUserName
+                  ? "justify-content-end"
+                  : "justify-content-start"
+              }`}
             >
-              {message.text === "photo" &&
-                message.attachment &&
-                message.attachment.thumbnailUrl && (
-                  <img
-                    loading="lazy"
-                    alt="userImages"
-                    src={message.attachment.thumbnailUrl}
-                    onClick={() =>
-                      window.open(message.attachment.url, "_blank")
-                    }
-                    className="hoverPointer"
-                    width="90"
-                    height="90"
-                  />
-                )}
-              <span
-                className={`m-2 p-2 d-block w-100 rounded ${
+              <div
+                className={`border border-dark rounded p-1 ${
                   currentFocus === message.receiverUserName
-                    ? "receiverMessage border border-light"
-                    : "senderMessage border border-dark"
+                    ? "receiverMessage"
+                    : "senderMessage"
                 }`}
               >
-                {message.text}
-                <hr />
-                <span className="w-100 d-flex justify-content-between">
-                  <span>{moment(message.sendAt).format("hh:mm:ss A")}</span>
-                  <span>{moment(message.sendAt).format("DD/MM/YYYY")}</span>
+                {message.text === "photo" &&
+                  message.attachment &&
+                  message.attachment.thumbnailUrl && (
+                    <img
+                      loading="lazy"
+                      alt="userImages"
+                      src={message.attachment.thumbnailUrl}
+                      onClick={() =>
+                        window.open(message.attachment.url, "_blank")
+                      }
+                      className="hoverPointer"
+                      width="90"
+                      height="90"
+                    />
+                  )}
+                <span className="m-1 text-wrap">{message.text} </span>
+                <span className="small bg-secondary makeItLight rounded p-1">
+                  {moment(message.sendAt).format("hh:mm:ss A DD/MM/YYYY")}
                 </span>
-              </span>
+              </div>
             </div>
           ))
         : "Message Will Be Here"}
