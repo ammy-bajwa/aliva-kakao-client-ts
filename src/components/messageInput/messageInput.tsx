@@ -66,20 +66,20 @@ const MessageInput = () => {
               })
             );
 
-            await addNewMessageIdb(
-              loggedInUserId,
-              chatList[currentFocus].intId,
-              {
-                message: {
-                  text: "photo",
-                  attachment: { thumbnailUrl: base64, url: base64 },
-                  received: true,
-                  sendAt,
-                },
-                receiverUserName: currentFocus,
-                senderName: email,
-              }
-            );
+            // await addNewMessageIdb(
+            //   loggedInUserId,
+            //   chatList[currentFocus].intId,
+            //   {
+            //     message: {
+            //       text: "photo",
+            //       attachment: { thumbnailUrl: base64, url: base64 },
+            //       received: true,
+            //       sendAt,
+            //     },
+            //     receiverUserName: currentFocus,
+            //     senderName: email,
+            //   }
+            // );
           }
         }
       } else {
@@ -99,11 +99,6 @@ const MessageInput = () => {
           })
         );
         setMessage("");
-        await addNewMessageIdb(loggedInUserId, chatList[currentFocus].intId, {
-          message: { text: message, attachment: {}, received: true, sendAt },
-          receiverUserName: currentFocus,
-          senderName: email,
-        });
         console.log("Fired");
       }
       success("Sended Successfully");

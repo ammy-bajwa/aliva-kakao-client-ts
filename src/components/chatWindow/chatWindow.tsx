@@ -19,7 +19,7 @@ const ChatWindow = (props: any) => {
         messageObj.attachment &&
         messageObj.attachment.thumbnailUrl
       ) {
-        console.log("messageObj: ", messageObj);
+        // console.log("messageObj: ", messageObj);
         // const result = await fetch(messageObj.attachment.thumbnailUrl, {
         //   mode: "no-cors",
         // });
