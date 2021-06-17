@@ -1,5 +1,9 @@
 import { tryLoginApi } from "../api/user";
-import { addNewMessageIdb, updatedLastMessageTimeStamp } from "../idb/messages";
+import {
+  addNewMessageIdb,
+  getLastMessageTimeStamp,
+  updatedLastMessageTimeStamp,
+} from "../idb/messages";
 import { store } from "../redux";
 import { loginUser, newMessage, setWs } from "../redux/action/user";
 import { startLoading, stopLoading } from "../utils/loading";
@@ -20,12 +24,13 @@ export const loginHandler = async (
     try {
       startLoading();
       const { deviceName, deviceId } = JSON.parse(deviceData);
-      // const lastMessages = await getLastMessageTime();
+      const lastMessageTimeStamp = await getLastMessageTimeStamp(email);
       const user: any = await tryLoginApi(
         email,
         password,
         deviceName,
-        deviceId
+        deviceId,
+        lastMessageTimeStamp
       );
       let wsEndPoint = "";
       if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {

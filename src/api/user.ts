@@ -8,7 +8,8 @@ export const tryLoginApi = async (
   email: string,
   password: string,
   deviceName: string,
-  deviceId: string
+  deviceId: string,
+  lastMessageTimeStamp: any
 ) => {
   const loginPromise = new Promise(async (resolve, reject) => {
     try {
@@ -26,6 +27,7 @@ export const tryLoginApi = async (
             password,
             deviceName,
             deviceId,
+            lastMessageTimeStamp,
           }),
         };
         let apiEndPoint = "";
