@@ -3,14 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { uploadFile } from "../../api/file";
 import { errors } from "../../helpers/errorCodes";
 import { convertFileToBase64 } from "../../helpers/file";
-import { scrollToEndMessages } from "../../helpers/scroll";
 import { success } from "../../helpers/toast";
+import { addNewMessageIdb } from "../../idb/messages";
 import { newMessage } from "../../redux/action/user";
 import "./messageInput.css";
 
 const MessageInput = () => {
   const currentFocus = useSelector((state: any) => state.currentFocus);
   const email = useSelector((state: any) => state.user.email);
+  const loggedInUserId = useSelector((state: any) => state.loggedInUserId);
   const chatList = useSelector((state: any) => state.user.chatList);
   const ws = useSelector((state: any) => state.ws);
   const dispatch = useDispatch();
@@ -52,18 +53,32 @@ const MessageInput = () => {
                 },
               })
             );
-
             dispatch(
               newMessage({
                 receiverUserName: currentFocus,
                 message: {
                   text: "photo",
                   received: true,
-                  attachment: { thumbnailUrl: base64 },
+                  attachment: { thumbnailUrl: base64, url: base64 },
                   sendAt,
                 },
-                senderName: "Self",
+                senderName: email,
               })
+            );
+
+            await addNewMessageIdb(
+              loggedInUserId,
+              chatList[currentFocus].intId,
+              {
+                message: {
+                  text: "photo",
+                  attachment: { thumbnailUrl: base64, url: base64 },
+                  received: true,
+                  sendAt,
+                },
+                receiverUserName: currentFocus,
+                senderName: email,
+              }
             );
           }
         }
@@ -79,16 +94,16 @@ const MessageInput = () => {
         dispatch(
           newMessage({
             receiverUserName: currentFocus,
-            message: { text: message, received: true, sendAt },
+            message: { text: message, attachment: {}, received: true, sendAt },
             senderName: "Self",
           })
         );
         setMessage("");
-        const messageContainer: any = document.getElementById(
-          "chatWindowContainer"
-        ) as HTMLElement;
-        messageContainer.scrollTop = messageContainer.scrollHeight;
-        // messageContainer.scrollTo(messageContainer.scrollHeight);
+        await addNewMessageIdb(loggedInUserId, chatList[currentFocus].intId, {
+          message: { text: message, attachment: {}, received: true, sendAt },
+          receiverUserName: currentFocus,
+          senderName: email,
+        });
         console.log("Fired");
       }
       success("Sended Successfully");

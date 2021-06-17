@@ -2,7 +2,7 @@ import moment from "moment";
 import { useEffect } from "react";
 
 import { useSelector } from "react-redux";
-import { convertFileToBase64 } from "../../helpers/file";
+// import { convertFileToBase64 } from "../../helpers/file";
 import { scrollToEndMessages } from "../../helpers/scroll";
 
 import "./chatWindow.css";
@@ -20,17 +20,24 @@ const ChatWindow = (props: any) => {
         messageObj.attachment.thumbnailUrl
       ) {
         console.log("messageObj: ", messageObj);
-        const result = await fetch(messageObj.attachment.thumbnailUrl, {
-          mode: "no-cors",
-        });
-        const blob = await result.blob();
-        const result64 = await convertFileToBase64(blob);
-        console.log("result64: ", result64);
+        // const result = await fetch(messageObj.attachment.thumbnailUrl, {
+        //   mode: "no-cors",
+        // });
+        // const blob = await result.blob();
+        // const result64 = await convertFileToBase64(blob);
+        // console.log("result64: ", result64.length);
       }
     });
 
     return { chat, currentFocus };
   });
+
+  const imageOnClickHandler = (message: any) => {
+    let image = new Image();
+    image.src = message.attachment.url;
+    let w: any = window.open("");
+    w.document.write(image.outerHTML);
+  };
 
   useEffect(() => {
     scrollToEndMessages();
@@ -64,9 +71,7 @@ const ChatWindow = (props: any) => {
                       loading="lazy"
                       alt="userImages"
                       src={message.attachment.thumbnailUrl}
-                      onClick={() =>
-                        window.open(message.attachment.url, "_blank")
-                      }
+                      onClick={() => imageOnClickHandler(message)}
                       className="hoverPointer"
                       width="90"
                       height="90"

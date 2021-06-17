@@ -67,18 +67,26 @@ export const loginHandler = async (
               info(`New Message From ${senderName} to ${receiverUserName}`);
             }
             const isInContactExists = await isInContact(senderName);
-            if (!isInContactExists) {
+            if (isInContactExists) {
               await addNewMessageIdb(
                 user.loggedInUserId,
                 receiverIntId,
                 newMessageObj
               );
             } else {
-              await addNewMessageIdb(
-                user.loggedInUserId,
-                senderIntId,
-                newMessageObj
-              );
+              if (senderIntId === user.loggedInUserId) {
+                await addNewMessageIdb(
+                  user.loggedInUserId,
+                  receiverIntId,
+                  newMessageObj
+                );
+              } else {
+                await addNewMessageIdb(
+                  user.loggedInUserId,
+                  senderIntId,
+                  newMessageObj
+                );
+              }
             }
           } else if (key === "unreadMessages") {
             const { userId, messageStore } = data.value;
