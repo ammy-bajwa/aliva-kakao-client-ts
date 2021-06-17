@@ -9,7 +9,6 @@ export const getUserChat = async (
   logId: any
 ) => {
   const setCodePromise = new Promise(async (resolve, reject) => {
-    startLoading();
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -31,7 +30,6 @@ export const getUserChat = async (
     }
     let result: any = await fetch(apiEndPoint, requestOptions);
     result = await result.json();
-    stopLoading();
     if (result.error) {
       let errorMessage = result.message;
       alert(errorMessage);
