@@ -131,3 +131,29 @@ export const lastDbMessageTime = async (
   });
   return await getLastMessagePromise;
 };
+
+export const updatedLastMessageTimeStamp = async (
+  email: string,
+  latestTimeStamp: number
+) => {
+  const updatedTimePromise = new Promise(async (resolve, reject) => {
+    try {
+      const dbName = SHA256(`KAKAOTIMESTAMP${email}`).toString();
+      const storeName = "time";
+      const key = "timeStamp";
+      const db = await openDB(dbName, 1, {
+        upgrade(db) {
+          db.createObjectStore(storeName);
+        },
+      });
+      await db.put(storeName, latestTimeStamp, key);
+      db.close();
+      resolve(true);
+    } catch (error) {
+      reject(error);
+      console.error(error);
+    }
+  });
+
+  return await updatedTimePromise;
+};

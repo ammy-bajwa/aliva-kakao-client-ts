@@ -1,5 +1,5 @@
 import { tryLoginApi } from "../api/user";
-import { addNewMessageIdb } from "../idb/messages";
+import { addNewMessageIdb, updatedLastMessageTimeStamp } from "../idb/messages";
 import { store } from "../redux";
 import { loginUser, newMessage, setWs } from "../redux/action/user";
 import { startLoading, stopLoading } from "../utils/loading";
@@ -87,6 +87,7 @@ export const loginHandler = async (
                   newMessageObj
                 );
               }
+              await updatedLastMessageTimeStamp(email, sendAt);
             }
           } else if (key === "unreadMessages") {
             const { userId, messageStore } = data.value;
