@@ -2,9 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadFile } from "../../api/file";
 import { errors } from "../../helpers/errorCodes";
-import { convertFileToBase64 } from "../../helpers/file";
 import { success } from "../../helpers/toast";
-import { addNewMessageIdb } from "../../idb/messages";
 import { newMessage } from "../../redux/action/user";
 import "./messageInput.css";
 
@@ -37,8 +35,6 @@ const MessageInput = () => {
             Object.prototype.hasOwnProperty.call(userFileUpload.files, file)
           ) {
             const selectedFile: any = userFileUpload.files[file];
-            const base64 = await convertFileToBase64(selectedFile);
-            console.log(base64);
             const { path }: any = await uploadFile(selectedFile);
             const channelId = chatList[currentFocus][`channelId`];
             ws.send(
@@ -53,33 +49,6 @@ const MessageInput = () => {
                 },
               })
             );
-            dispatch(
-              newMessage({
-                receiverUserName: currentFocus,
-                message: {
-                  text: "photo",
-                  received: true,
-                  attachment: { thumbnailUrl: base64, url: base64 },
-                  sendAt,
-                },
-                senderName: email,
-              })
-            );
-
-            // await addNewMessageIdb(
-            //   loggedInUserId,
-            //   chatList[currentFocus].intId,
-            //   {
-            //     message: {
-            //       text: "photo",
-            //       attachment: { thumbnailUrl: base64, url: base64 },
-            //       received: true,
-            //       sendAt,
-            //     },
-            //     receiverUserName: currentFocus,
-            //     senderName: email,
-            //   }
-            // );
           }
         }
       } else {
