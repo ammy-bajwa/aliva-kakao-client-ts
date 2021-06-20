@@ -1,5 +1,5 @@
 import { port } from "../helpers/config";
-import { startLoading, stopLoading } from "../utils/loading";
+// import { startLoading, stopLoading } from "../utils/loading";
 
 export const getUserChat = async (
   email: string,

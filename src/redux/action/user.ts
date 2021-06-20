@@ -41,3 +41,8 @@ export const setContactList = (contactList: any) => ({
   type: "SET_CONTACT_LIST",
   payload: contactList,
 });
+
+export const setSending = (sending: boolean) => ({
+  type: "SET_SENDING",
+  payload: sending,
+});

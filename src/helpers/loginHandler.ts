@@ -5,7 +5,7 @@ import {
   updatedLastMessageTimeStamp,
 } from "../idb/messages";
 import { store } from "../redux";
-import { loginUser, newMessage, setWs } from "../redux/action/user";
+import { loginUser, newMessage, setSending, setWs } from "../redux/action/user";
 import { startLoading, stopLoading } from "../utils/loading";
 import { port } from "./config";
 import { handleContactList, isInContact } from "./contact";
@@ -69,8 +69,8 @@ export const loginHandler = async (
               currentFocus === receiverUserName
             ) {
               dispatch(newMessage(newMessageObj));
+              dispatch(setSending(false));
               scrollToEndMessages();
-              console.log("Should Fire");
             } else {
               info(`New Message From ${senderName} to ${receiverUserName}`);
             }
