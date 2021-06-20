@@ -58,7 +58,7 @@ export const userReducer = function (state: any = initialState, action: any) {
       const { receiverUserName, message, senderName } = action.payload;
       state = {
         ...state,
-        chat: [...state.chat, { receiverUserName, ...message, senderName }],
+        chat: state.chat.concat([{ receiverUserName, ...message, senderName }]),
       };
       return state;
     default:

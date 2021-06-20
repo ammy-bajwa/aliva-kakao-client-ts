@@ -51,6 +51,7 @@ const MessageInput = () => {
             );
           }
         }
+        success("Sended Successfully");
       } else {
         console.log(currentFocus);
         const channelId = chatList[currentFocus][`channelId`];
@@ -60,17 +61,9 @@ const MessageInput = () => {
             value: { message, receiver: currentFocus, email, channelId },
           })
         );
-        dispatch(
-          newMessage({
-            receiverUserName: currentFocus,
-            message: { text: message, attachment: {}, received: true, sendAt },
-            senderName: "Self",
-          })
-        );
         setMessage("");
         console.log("Fired");
       }
-      success("Sended Successfully");
     } catch (error) {
       console.error(errors);
       errors("Error in sending message");
@@ -86,6 +79,7 @@ const MessageInput = () => {
         <div>
           <input
             type="text"
+            autoFocus
             className="form-control"
             onInput={(event: any) => setMessage(event.target.value)}
             value={message}

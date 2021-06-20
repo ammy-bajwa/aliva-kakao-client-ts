@@ -51,14 +51,15 @@ export const loginHandler = async (
           const data = JSON.parse(event.data);
           const { key } = data;
           if (key === "newMesssage") {
-            const { text, sender, receiverUser, sendAt, attachment } = data;
+            const { text, sender, receiverUser, logId, sendAt, attachment } =
+              data;
             console.log("newMesssage: ", data);
             const { nickname: receiverUserName, intId: receiverIntId } =
               receiverUser;
             const { nickname: senderName, intId: senderIntId } = sender;
             const newMessageObj = {
               receiverUserName,
-              message: { attachment, text, received: true, sendAt },
+              message: { attachment, text, received: true, sendAt, logId },
               senderName,
             };
             const { currentFocus } = await store.getState();
@@ -69,6 +70,7 @@ export const loginHandler = async (
             ) {
               dispatch(newMessage(newMessageObj));
               scrollToEndMessages();
+              console.log("Should Fire");
             } else {
               info(`New Message From ${senderName} to ${receiverUserName}`);
             }
