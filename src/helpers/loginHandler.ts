@@ -52,6 +52,7 @@ export const loginHandler = async (
           const { key } = data;
           if (key === "newMesssage") {
             const { text, sender, receiverUser, sendAt, attachment } = data;
+            console.log("newMesssage: ", data);
             const { nickname: receiverUserName, intId: receiverIntId } =
               receiverUser;
             const { nickname: senderName, intId: senderIntId } = sender;

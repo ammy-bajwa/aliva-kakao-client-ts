@@ -1,6 +1,10 @@
 import { port } from "../helpers/config";
 import { errors } from "../helpers/errorCodes";
 import { handleContacts } from "../idb/contacts";
+import {
+  updatedLastMessageTimeStamp,
+  updateUserMessages,
+} from "../idb/messages";
 import { store } from "../redux";
 import { startLoading, stopLoading } from "../utils/loading";
 
@@ -50,8 +54,13 @@ export const tryLoginApi = async (
           console.log("result errorMessage: ", errorMessage);
           reject(errorMessage);
         } else {
-          console.log("result: ", result);
           await handleContacts(result.chatList, result.loggedInUserId);
+          await updateUserMessages(result.loggedInUserId, result.chatList);
+          console.log("result: ", result);
+          await updatedLastMessageTimeStamp(
+            result.email,
+            result.largestTimeStamp
+          );
           resolve(result);
         }
       }
