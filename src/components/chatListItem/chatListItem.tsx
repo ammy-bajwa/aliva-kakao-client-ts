@@ -3,7 +3,12 @@ import profile from "../../assets/images/profile.png";
 
 import "./chatListItem.css";
 
-const ChatListItem = ({ name, profileImage, onClickHandler }: any) => {
+const ChatListItem = ({
+  name,
+  profileImage,
+  newChatCount,
+  onClickHandler,
+}: any) => {
   const currentFocus = useSelector((state: any) => state.currentFocus);
   return (
     <div
@@ -12,12 +17,19 @@ const ChatListItem = ({ name, profileImage, onClickHandler }: any) => {
       }`}
       onClick={onClickHandler}
     >
-      <img
-        src={profileImage ? profileImage : profile}
-        className="rounded-circle profileWidth"
-        alt="profileImage"
-      />
-      <h3 className="d-inline contactName">{name}</h3>
+      <div>
+        <img
+          src={profileImage ? profileImage : profile}
+          className="rounded-circle profileWidth"
+          alt="profileImage"
+        />
+        <h3 className="d-inline contactName">{name}</h3>
+      </div>
+      {/* {newChatCount > 0 && currentFocus !== name && (
+        <div>
+          <h3 className="d-inline contactName text-danger">({newChatCount})</h3>
+        </div>
+      )} */}
     </div>
   );
 };

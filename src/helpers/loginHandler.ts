@@ -9,7 +9,7 @@ import { store } from "../redux";
 import { loginUser, newMessage, setSending, setWs } from "../redux/action/user";
 import { startLoading, stopLoading } from "../utils/loading";
 import { port } from "./config";
-import { handleContactList, isInContact } from "./contact";
+import { handleContactList, isInContact, refreshContactList } from "./contact";
 import { scrollToEndMessages } from "./scroll";
 import { info } from "./toast";
 
@@ -83,6 +83,7 @@ export const loginHandler = async (
               scrollToEndMessages();
             } else {
               info(`New Message From ${senderName} to ${receiverUserName}`);
+              await refreshContactList();
             }
             const isInContactExists = await isInContact(senderName);
             if (isInContactExists) {

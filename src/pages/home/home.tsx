@@ -2,6 +2,7 @@ import { connect } from "react-redux";
 
 import ChatListItem from "../../components/chatListItem/chatListItem";
 import Messages from "../../components/messages/messages";
+import { refreshContactList } from "../../helpers/contact";
 import { refreshMessages } from "../../helpers/messages";
 
 import "./home.css";
@@ -9,6 +10,7 @@ import "./home.css";
 const Home = (props: any) => {
   const onClickHandler = async (name: string) => {
     await refreshMessages(name);
+    await refreshContactList();
   };
 
   const getChatListItems = () => {
@@ -22,6 +24,7 @@ const Home = (props: any) => {
           <ChatListItem
             profileImage={item.displayUserList[0].profileURL}
             name={item.displayUserList[0].nickname}
+            newChatCount={item.newChatCount}
             key={index}
             onClickHandler={() => {
               return onClickHandler(item.displayUserList[0].nickname);

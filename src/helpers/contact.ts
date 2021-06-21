@@ -29,3 +29,12 @@ export const isInContact = async (name: any) => {
   });
   return await isInContactPromise;
 };
+
+export const refreshContactList = async () => {
+  const {
+    user: { email },
+  } = await store.getState();
+  const contactList = await getChatList(email);
+  store.dispatch(setContactList(contactList));
+  await handleContacts(contactList, email);
+};
