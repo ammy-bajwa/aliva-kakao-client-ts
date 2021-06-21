@@ -54,7 +54,7 @@ export const tryLoginApi = async (
           console.log("result errorMessage: ", errorMessage);
           reject(errorMessage);
         } else {
-          await handleContacts(result.chatList, result.loggedInUserId);
+          await handleContacts(result.chatList, result.email);
           await updateUserMessages(result.loggedInUserId, result.chatList);
           console.log("result: ", result);
           await updatedLastMessageTimeStamp(

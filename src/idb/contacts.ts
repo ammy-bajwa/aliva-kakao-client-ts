@@ -1,10 +1,10 @@
 import { SHA256 } from "crypto-js";
 import { openDB } from "idb";
 
-export const handleContacts = async (contacts: any, loggedInUserId: number) => {
+export const handleContacts = async (contacts: any, email: number) => {
   const contactsHandlerPromise = new Promise(async (resolve, reject) => {
     try {
-      const dbName = SHA256(`KAKAOCONTACTS${loggedInUserId}`).toString();
+      const dbName = SHA256(`KAKAOCONTACTS${email}`).toString();
       const storeName = "ContactStore";
       const key = "contacts";
       const db = await openDB(dbName, 1, {
