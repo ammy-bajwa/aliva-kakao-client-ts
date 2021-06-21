@@ -10,9 +10,8 @@ export const handleContactList = async (
 ) => {
   const {
     user: { chatList, email },
-    loggedInUserId,
   } = await store.getState();
-  if (!chatList[senderName] || !chatList[receiverUserName]) {
+  if (!chatList[senderName] && !chatList[receiverUserName]) {
     const contactList = await getChatList(loggedInUserEmail);
     store.dispatch(setContactList(contactList));
     await handleContacts(chatList, email);
