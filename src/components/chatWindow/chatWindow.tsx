@@ -24,7 +24,7 @@ const ChatWindow = (props: any) => {
         //   mode: "no-cors",
         // });
         // const blob = await result.blob();
-        // const result64 = await convertFileToBase64(blob);
+        // const result64: any = await convertFileToBase64(blob);
         // console.log("result64: ", result64.length);
       }
     });

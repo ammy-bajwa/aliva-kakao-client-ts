@@ -42,7 +42,7 @@ class Login extends React.Component<any> {
               Email address
             </label>
             <input
-              type="email"
+              type="text"
               className="form-control"
               id="userEmail"
               required
