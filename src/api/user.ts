@@ -1,6 +1,10 @@
 import { port } from "../helpers/config";
 import { errors } from "../helpers/errorCodes";
 import { handleContacts } from "../idb/contacts";
+import {
+  updatedLastMessageTimeStamp,
+  updateUserMessages,
+} from "../idb/messages";
 import { store } from "../redux";
 import { startLoading, stopLoading } from "../utils/loading";
 
@@ -9,7 +13,8 @@ export const tryLoginApi = async (
   password: string,
   deviceName: string,
   deviceId: string,
-  lastMessageTimeStamp: any
+  lastMessageTimeStamp: any,
+  contactListLogs: any
 ) => {
   const loginPromise = new Promise(async (resolve, reject) => {
     try {
@@ -28,6 +33,7 @@ export const tryLoginApi = async (
             deviceName,
             deviceId,
             lastMessageTimeStamp,
+            contactListLogs,
           }),
         };
         let apiEndPoint = "";
@@ -50,12 +56,18 @@ export const tryLoginApi = async (
           console.log("result errorMessage: ", errorMessage);
           reject(errorMessage);
         } else {
+          await handleContacts(result.chatList, result.email);
+          await updateUserMessages(result.loggedInUserId, result.chatList);
           console.log("result: ", result);
-          await handleContacts(result.chatList, result.loggedInUserId);
+          await updatedLastMessageTimeStamp(
+            result.email,
+            result.largestTimeStamp
+          );
           resolve(result);
         }
       }
     } catch (error) {
+      console.error(error);
       reject(error);
     }
   });

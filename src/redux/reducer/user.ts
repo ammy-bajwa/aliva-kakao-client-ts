@@ -9,6 +9,7 @@ const initialState = {
   currentFocus: "",
   ws: null,
   loading: false,
+  isSending: false,
 };
 
 export const userReducer = function (state: any = initialState, action: any) {
@@ -54,11 +55,14 @@ export const userReducer = function (state: any = initialState, action: any) {
     case "SET_CONTACT_LIST":
       state = { ...state, user: { ...state.user, chatList: action.payload } };
       return state;
+    case "SET_SENDING":
+      state = { ...state, isSending: action.payload };
+      return state;
     case "NEW_MESSAGE":
       const { receiverUserName, message, senderName } = action.payload;
       state = {
         ...state,
-        chat: [...state.chat, { receiverUserName, ...message, senderName }],
+        chat: state.chat.concat([{ receiverUserName, ...message, senderName }]),
       };
       return state;
     default:

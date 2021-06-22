@@ -1,14 +1,15 @@
 import { tryLoginApi } from "../api/user";
+import { getContactListLogs, updateContactLogid } from "../idb/contacts";
 import {
   addNewMessageIdb,
   getLastMessageTimeStamp,
   updatedLastMessageTimeStamp,
 } from "../idb/messages";
 import { store } from "../redux";
-import { loginUser, newMessage, setWs } from "../redux/action/user";
+import { loginUser, newMessage, setSending, setWs } from "../redux/action/user";
 import { startLoading, stopLoading } from "../utils/loading";
 import { port } from "./config";
-import { handleContactList, isInContact } from "./contact";
+import { handleContactList, isInContact, refreshContactList } from "./contact";
 import { scrollToEndMessages } from "./scroll";
 import { info } from "./toast";
 
@@ -24,13 +25,16 @@ export const loginHandler = async (
     try {
       startLoading();
       const { deviceName, deviceId } = JSON.parse(deviceData);
+      const contactListLogs = await getContactListLogs(email);
+      console.log("contactListLogs: ", contactListLogs);
       const lastMessageTimeStamp = await getLastMessageTimeStamp(email);
       const user: any = await tryLoginApi(
         email,
         password,
         deviceName,
         deviceId,
-        lastMessageTimeStamp
+        lastMessageTimeStamp,
+        contactListLogs
       );
       let wsEndPoint = "";
       if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
@@ -51,25 +55,35 @@ export const loginHandler = async (
           const data = JSON.parse(event.data);
           const { key } = data;
           if (key === "newMesssage") {
-            const { text, sender, receiverUser, sendAt, attachment } = data;
+            const { text, sender, receiverUser, logId, sendAt, attachment } =
+              data;
+            console.log("newMesssage: ", data);
             const { nickname: receiverUserName, intId: receiverIntId } =
               receiverUser;
             const { nickname: senderName, intId: senderIntId } = sender;
             const newMessageObj = {
               receiverUserName,
-              message: { attachment, text, received: true, sendAt },
+              message: { attachment, text, received: true, sendAt, logId },
               senderName,
             };
-            const { currentFocus } = await store.getState();
             await handleContactList(senderName, receiverUserName, email);
+            await updateContactLogid(
+              email,
+              senderName,
+              receiverUserName,
+              logId
+            );
+            const { currentFocus } = await store.getState();
             if (
               currentFocus === senderName ||
               currentFocus === receiverUserName
             ) {
               dispatch(newMessage(newMessageObj));
+              dispatch(setSending(false));
               scrollToEndMessages();
             } else {
               info(`New Message From ${senderName} to ${receiverUserName}`);
+              await refreshContactList();
             }
             const isInContactExists = await isInContact(senderName);
             if (isInContactExists) {

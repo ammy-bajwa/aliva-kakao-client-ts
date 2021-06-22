@@ -13,8 +13,8 @@ export const refreshMessages = async (focusedName: string) => {
     dispatch(setFocusUser(focusedName));
     const { allMessages, lastMessageTimeStamp, logId }: any =
       await lastDbMessageTime(loggedInUserId, focusedUserId);
-    console.log("Fired");
-    console.log(lastMessageTimeStamp);
+    // console.log("Fired");
+    // console.log(lastMessageTimeStamp);
     const { messages }: any = await getUserChat(
       user.email,
       focusedName,

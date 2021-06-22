@@ -61,8 +61,6 @@ export const addNewMessageIdb = async (
   otherUserId: number,
   newMessage: any
 ) => {
-  console.log("loggedInUserId: ", loggedInUserId);
-  console.log("otherUserId: ", otherUserId);
   const dbName = SHA256(`KAKAOCHAT${loggedInUserId}${otherUserId}`).toString();
   const storeName = "MessageStore";
   const key = "messages";
@@ -179,4 +177,45 @@ export const getLastMessageTimeStamp = async (email: string) => {
   });
 
   return await updatedTimePromise;
+};
+
+export const updateUserMessages = async (
+  loggedInUserId: number,
+  newMessages: any
+) => {
+  const myTaskPromise = new Promise(async (resolve, reject) => {
+    try {
+      for (const key in newMessages) {
+        if (Object.prototype.hasOwnProperty.call(newMessages, key)) {
+          const { intId, messages } = newMessages[key];
+          const dbName = SHA256(
+            `KAKAOCHAT${loggedInUserId}${intId}`
+          ).toString();
+          const storeName = "MessageStore";
+          const dbItemKey = "messages";
+          let dbNotExists = false;
+          const db = await openDB(dbName, 1, {
+            upgrade(db) {
+              dbNotExists = true;
+              db.createObjectStore(storeName);
+            },
+          });
+          if (dbNotExists) {
+            await db.put(storeName, messages, dbItemKey);
+            db.close();
+          } else {
+            const data = await db.get(storeName, dbItemKey);
+            const value = data.concat(messages);
+            await db.put(storeName, value, dbItemKey);
+            db.close();
+          }
+        }
+      }
+      resolve(true);
+    } catch (error) {
+      console.error(error);
+      reject(error);
+    }
+  });
+  return await myTaskPromise;
 };

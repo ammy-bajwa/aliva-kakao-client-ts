@@ -3,14 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { uploadFile } from "../../api/file";
 import { errors } from "../../helpers/errorCodes";
 import { success } from "../../helpers/toast";
-import { newMessage } from "../../redux/action/user";
+import { newMessage, setSending } from "../../redux/action/user";
 import "./messageInput.css";
 
 const MessageInput = () => {
   const currentFocus = useSelector((state: any) => state.currentFocus);
   const email = useSelector((state: any) => state.user.email);
-  const loggedInUserId = useSelector((state: any) => state.loggedInUserId);
+  // const loggedInUserId = useSelector((state: any) => state.loggedInUserId);
   const chatList = useSelector((state: any) => state.user.chatList);
+  const isSending = useSelector((state: any) => state.isSending);
   const ws = useSelector((state: any) => state.ws);
   const dispatch = useDispatch();
   const [message, setMessage] = useState("");
@@ -29,6 +30,7 @@ const MessageInput = () => {
         alert("Plase select a file or type some message");
         return;
       }
+      dispatch(setSending(true));
       if (userFileUpload.files.length > 0) {
         for (const file in userFileUpload.files) {
           if (
@@ -60,20 +62,12 @@ const MessageInput = () => {
             value: { message, receiver: currentFocus, email, channelId },
           })
         );
-        dispatch(
-          newMessage({
-            receiverUserName: currentFocus,
-            message: { text: message, attachment: {}, received: true, sendAt },
-            senderName: "Self",
-          })
-        );
         setMessage("");
-        console.log("Fired");
       }
-      success("Sended Successfully");
     } catch (error) {
       console.error(errors);
       errors("Error in sending message");
+      dispatch(setSending(false));
     }
   };
   return (
@@ -86,6 +80,7 @@ const MessageInput = () => {
         <div>
           <input
             type="text"
+            autoFocus
             className="form-control"
             onInput={(event: any) => setMessage(event.target.value)}
             value={message}
@@ -99,8 +94,20 @@ const MessageInput = () => {
             accept="image/*"
           />
         </div>
-        <button className="btn btn-outline-light mt-2" type="submit">
-          Send
+        <button
+          disabled={isSending ? true : false}
+          className="btn btn-outline-light mt-2"
+          type="submit"
+        >
+          {isSending ? (
+            <span
+              className="spinner-grow spinner-grow-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+          ) : (
+            "Send"
+          )}
         </button>
       </form>
     </div>

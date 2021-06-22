@@ -8,11 +8,13 @@ export const handleContactList = async (
   receiverUserName: string,
   loggedInUserEmail: string
 ) => {
-  const { user: chatList, loggedInUserId } = await store.getState();
-  if (!chatList[senderName] || !chatList[receiverUserName]) {
+  const {
+    user: { chatList, email },
+  } = await store.getState();
+  if (!chatList[senderName] && !chatList[receiverUserName]) {
     const contactList = await getChatList(loggedInUserEmail);
     store.dispatch(setContactList(contactList));
-    await handleContacts(chatList, loggedInUserId);
+    await handleContacts(chatList, email);
   }
 };
 
@@ -26,4 +28,13 @@ export const isInContact = async (name: any) => {
     }
   });
   return await isInContactPromise;
+};
+
+export const refreshContactList = async () => {
+  const {
+    user: { email },
+  } = await store.getState();
+  const contactList = await getChatList(email);
+  store.dispatch(setContactList(contactList));
+  await handleContacts(contactList, email);
 };
