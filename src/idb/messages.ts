@@ -219,3 +219,32 @@ export const updateUserMessages = async (
   });
   return await myTaskPromise;
 };
+
+export const updateMessageLogs = async (
+  email: string,
+  userName: string,
+  userId: number,
+  message: any,
+  logId: number
+) => {
+  const updatedTimePromise = new Promise(async (resolve, reject) => {
+    try {
+      const dbName = `${email}_message_logs`;
+      const storeName = "myLogsData";
+      const key = `${userName}__${userId}__${logId}`;
+      const db = await openDB(dbName, 1, {
+        upgrade(db) {
+          db.createObjectStore(storeName);
+        },
+      });
+      await db.put(storeName, message, key);
+      db.close();
+      resolve(true);
+    } catch (error) {
+      reject(error);
+      console.error(error);
+    }
+  });
+
+  return await updatedTimePromise;
+};

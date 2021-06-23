@@ -14,30 +14,30 @@ const ChatWindow = (props: any) => {
     chat.sort((a: any, b: any) => {
       return a.sendAt - b.sendAt;
     });
-    // chat.forEach(async (messageObj: any) => {
-    //   console.log("fired");
-    //   if (
-    //     messageObj.text === "photo" &&
-    //     messageObj.attachment &&
-    //     messageObj.attachment.thumbnailUrl
-    //   ) {
-    //     console.log("messageObj: ", messageObj);
-    //     const result = await fetch(messageObj.attachment.thumbnailUrl, {
-    //       mode: "no-cors",
-    //     });
-    //     const blob = await result.blob();
-    //     // const result64 = await convertFileToBase64(blob);
-    //     const db = await openDB(messageObj.attachment.thumbnailUrl, 1, {
-    //       upgrade(db) {
-    //         db.createObjectStore("blob");
-    //       },
-    //     });
-    //     await db.put("blob", blob, 1);
-    //     db.close();
-    //     console.log("BlobImage123", blob);
-    //     // console.log("result64: ", result64.length);
-    //   }
-    // });
+    chat.forEach(async (messageObj: any) => {
+      console.log("fired");
+      if (
+        messageObj.text === "photo" &&
+        messageObj.attachment &&
+        messageObj.attachment.thumbnailUrl
+      ) {
+        console.log("messageObj: ", messageObj);
+        const result = await fetch(messageObj.attachment.thumbnailUrl, {
+          mode: "no-cors",
+        });
+        const blob = await result.blob();
+        // const result64 = await convertFileToBase64(blob);
+        const db = await openDB(messageObj.attachment.thumbnailUrl, 1, {
+          upgrade(db) {
+            db.createObjectStore("blob");
+          },
+        });
+        await db.put("blob", blob, 1);
+        db.close();
+        console.log("BlobImage123", blob);
+        // console.log("result64: ", result64.length);
+      }
+    });
 
     return { chat, currentFocus };
   });

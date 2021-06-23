@@ -4,6 +4,7 @@ import {
   addNewMessageIdb,
   getLastMessageTimeStamp,
   updatedLastMessageTimeStamp,
+  updateMessageLogs,
 } from "../idb/messages";
 import { store } from "../redux";
 import { loginUser, newMessage, setSending, setWs } from "../redux/action/user";
@@ -83,6 +84,13 @@ export const loginHandler = async (
             await refreshContactList();
             const isInContactExists = await isInContact(senderName);
             if (isInContactExists) {
+              await updateMessageLogs(
+                email,
+                receiverUserName,
+                receiverIntId,
+                newMessageObj,
+                logId
+              );
               await addNewMessageIdb(
                 user.loggedInUserId,
                 receiverIntId,
@@ -90,12 +98,26 @@ export const loginHandler = async (
               );
             } else {
               if (senderIntId === user.loggedInUserId) {
+                await updateMessageLogs(
+                  email,
+                  receiverUserName,
+                  receiverIntId,
+                  newMessageObj,
+                  logId
+                );
                 await addNewMessageIdb(
                   user.loggedInUserId,
                   receiverIntId,
                   newMessageObj
                 );
               } else {
+                await updateMessageLogs(
+                  email,
+                  senderName,
+                  senderIntId,
+                  newMessageObj,
+                  logId
+                );
                 await addNewMessageIdb(
                   user.loggedInUserId,
                   senderIntId,
