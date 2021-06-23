@@ -74,12 +74,14 @@ const ChatWindow = (props: any) => {
                       alt="userImages"
                       src={message.attachment.thumbnailUrl}
                       onClick={() => imageOnClickHandler(message)}
-                      className="hoverPointer"
+                      className="hoverPointer p-1"
                       width="90"
                       height="90"
                     />
                   )}
-                <span className="m-1 text-wrap">{message.text} </span>
+                {message.text !== "photo" && !message.attachment && (
+                  <span className="m-1 text-wrap">{message.text} </span>
+                )}
                 <span className="small bg-secondary makeItLight rounded p-1">
                   {moment(message.sendAt).format("hh:mm:ss A DD/MM/YYYY")}
                 </span>
