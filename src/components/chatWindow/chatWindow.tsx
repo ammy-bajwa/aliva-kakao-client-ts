@@ -14,27 +14,30 @@ const ChatWindow = (props: any) => {
     chat.sort((a: any, b: any) => {
       return a.sendAt - b.sendAt;
     });
-    chat.forEach(async (messageObj: any) => {
-      if (
-        messageObj.text === "photo" &&
-        messageObj.attachment &&
-        messageObj.attachment.thumbnailUrl
-      ) {
-        console.log("messageObj: ", messageObj);
-        const result = await fetch(messageObj.attachment.thumbnailUrl);
-        const blob = await result.blob();
-        // const result64 = await convertFileToBase64(blob);
-        const db = await openDB(messageObj.attachment.thumbnailUrl, 1, {
-          upgrade(db) {
-            db.createObjectStore("blob");
-          },
-        });
-        await db.put("blob", blob, 1);
-        db.close();
-        console.log("BlobImage123", blob);
-        // console.log("result64: ", result64.length);
-      }
-    });
+    // chat.forEach(async (messageObj: any) => {
+    //   console.log("fired");
+    //   if (
+    //     messageObj.text === "photo" &&
+    //     messageObj.attachment &&
+    //     messageObj.attachment.thumbnailUrl
+    //   ) {
+    //     console.log("messageObj: ", messageObj);
+    //     const result = await fetch(messageObj.attachment.thumbnailUrl, {
+    //       mode: "no-cors",
+    //     });
+    //     const blob = await result.blob();
+    //     // const result64 = await convertFileToBase64(blob);
+    //     const db = await openDB(messageObj.attachment.thumbnailUrl, 1, {
+    //       upgrade(db) {
+    //         db.createObjectStore("blob");
+    //       },
+    //     });
+    //     await db.put("blob", blob, 1);
+    //     db.close();
+    //     console.log("BlobImage123", blob);
+    //     // console.log("result64: ", result64.length);
+    //   }
+    // });
 
     return { chat, currentFocus };
   });
@@ -86,9 +89,11 @@ const ChatWindow = (props: any) => {
                       height="90"
                     />
                   )}
-                {message.text !== "photo" && !message.attachment && (
-                  <span className="m-1 text-wrap">{message.text} </span>
-                )}
+                {message.text !== "photo" &&
+                  (!message?.attachment ||
+                    !message.attachment?.thumbnailUrl) && (
+                    <span className="m-1 text-wrap">{message.text} </span>
+                  )}
                 <span className="small bg-secondary makeItLight rounded p-1">
                   {moment(message.sendAt).format("hh:mm:ss A DD/MM/YYYY")}
                 </span>
