@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadFile } from "../../api/file";
 import { errors } from "../../helpers/errorCodes";
-import { success } from "../../helpers/toast";
+import { success, error } from "../../helpers/toast";
 import { newMessage, setSending } from "../../redux/action/user";
 import "./messageInput.css";
 
@@ -64,9 +64,9 @@ const MessageInput = () => {
         );
         setMessage("");
       }
-    } catch (error) {
-      console.error(errors);
-      errors("Error in sending message");
+    } catch (err) {
+      console.error(err);
+      error("Error in sending message");
       dispatch(setSending(false));
     }
   };
