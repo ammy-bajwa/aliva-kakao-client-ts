@@ -6,13 +6,17 @@ export const handleContacts = async (contacts: any, email: number) => {
     try {
       const dbName = SHA256(`KAKAOCONTACTS${email}`).toString();
       const storeName = "ContactStore";
-      const key = "contacts";
       const db = await openDB(dbName, 1, {
         upgrade(db) {
           db.createObjectStore(storeName);
         },
       });
-      await db.put(storeName, contacts, key);
+      for (const key in contacts) {
+        if (Object.prototype.hasOwnProperty.call(contacts, key)) {
+          const element = contacts[key];
+          await db.put(storeName, element, element.intId);
+        }
+      }
       db.close();
       resolve(true);
     } catch (error) {
@@ -29,7 +33,6 @@ export const getContactListLogs = async (email: number) => {
     try {
       const dbName = SHA256(`KAKAOCONTACTS${email}`).toString();
       const storeName = "ContactStore";
-      const key = "contacts";
       let isExists = true;
       const db = await openDB(dbName, 1, {
         upgrade(db) {
@@ -42,14 +45,12 @@ export const getContactListLogs = async (email: number) => {
         await deleteDB(dbName);
         resolve([]);
       } else {
-        const storedContactList = await db.get(storeName, key);
+        const storeKeys = await db.getAllKeys(storeName);
         let contactList: any = {};
-        for (const key in storedContactList) {
-          if (Object.prototype.hasOwnProperty.call(storedContactList, key)) {
-            const { lastChatLogId } = storedContactList[key];
-            contactList[key] = { lastChatLogId };
-          }
-        }
+        storeKeys.forEach(async (element) => {
+          const { lastChatLogId } = await db.get(storeName, element);
+          contactList[lastChatLogId] = { lastChatLogId };
+        });
         db.close();
         resolve(contactList);
       }
