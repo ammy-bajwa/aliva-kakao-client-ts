@@ -53,6 +53,7 @@ const MessageInput = () => {
             );
           }
         }
+        userFileUpload.value = "";
       } else {
         console.log(currentFocus);
         const channelId = chatList[currentFocus][`channelId`];

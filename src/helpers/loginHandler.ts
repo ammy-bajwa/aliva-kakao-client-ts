@@ -79,8 +79,8 @@ export const loginHandler = async (
               scrollToEndMessages();
             } else {
               info(`New Message From ${senderName} to ${receiverUserName}`);
-              await refreshContactList();
             }
+            await refreshContactList();
             const isInContactExists = await isInContact(senderName);
             if (isInContactExists) {
               await addNewMessageIdb(
