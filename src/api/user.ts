@@ -1,6 +1,6 @@
 import { port } from "../helpers/config";
 import { errors } from "../helpers/errorCodes";
-import { handleContacts } from "../idb/contacts";
+import { handleContacts, updateContactLogid } from "../idb/contacts";
 import {
   updatedLastMessageTimeStamp,
   updateUserMessages,
@@ -14,7 +14,7 @@ export const tryLoginApi = async (
   deviceName: string,
   deviceId: string,
   lastMessageTimeStamp: any,
-  contactListLogs: any
+  latestLogId: any
 ) => {
   const loginPromise = new Promise(async (resolve, reject) => {
     try {
@@ -33,7 +33,7 @@ export const tryLoginApi = async (
             deviceName,
             deviceId,
             lastMessageTimeStamp,
-            contactListLogs,
+            latestLogId,
           }),
         };
         let apiEndPoint = "";
@@ -58,6 +58,7 @@ export const tryLoginApi = async (
         } else {
           await handleContacts(result.chatList, result.email);
           await updateUserMessages(result.loggedInUserId, result.chatList);
+          await updateContactLogid(email, result.biggestChatLog);
           console.log("result: ", result);
           await updatedLastMessageTimeStamp(
             result.email,

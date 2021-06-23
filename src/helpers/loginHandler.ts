@@ -1,5 +1,5 @@
 import { tryLoginApi } from "../api/user";
-import { getContactListLogs, updateContactLogid } from "../idb/contacts";
+import { getLatestContactLogid, updateContactLogid } from "../idb/contacts";
 import {
   addNewMessageIdb,
   getLastMessageTimeStamp,
@@ -25,16 +25,17 @@ export const loginHandler = async (
     try {
       startLoading();
       const { deviceName, deviceId } = JSON.parse(deviceData);
-      const contactListLogs = await getContactListLogs(email);
-      console.log("contactListLogs: ", contactListLogs);
+      // const contactListLogs = await getContactListLogs(email);
+      // console.log("contactListLogs: ", contactListLogs);
       const lastMessageTimeStamp = await getLastMessageTimeStamp(email);
+      const latestLogId = await getLatestContactLogid(email);
       const user: any = await tryLoginApi(
         email,
         password,
         deviceName,
         deviceId,
         lastMessageTimeStamp,
-        contactListLogs
+        latestLogId
       );
       let wsEndPoint = "";
       if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
@@ -67,12 +68,7 @@ export const loginHandler = async (
               senderName,
             };
             await handleContactList(senderName, receiverUserName, email);
-            await updateContactLogid(
-              email,
-              senderName,
-              receiverUserName,
-              logId
-            );
+            await updateContactLogid(email, logId);
             const { currentFocus } = await store.getState();
             if (
               currentFocus === senderName ||
