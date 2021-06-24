@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadFile } from "../../api/file";
-import { errors } from "../../helpers/errorCodes";
-import { success, error } from "../../helpers/toast";
-import { newMessage, setSending } from "../../redux/action/user";
+// import { errors } from "../../helpers/errorCodes";
+import { error } from "../../helpers/toast";
+import { setSending } from "../../redux/action/user";
 import "./messageInput.css";
 
 const MessageInput = () => {
@@ -18,7 +18,7 @@ const MessageInput = () => {
   const sendMessageHandler = async (event: any) => {
     try {
       event.preventDefault();
-      const sendAt = new Date().getTime();
+      // const sendAt = new Date().getTime();
       const userFileUpload: any = document.getElementById(
         "userFileUpload"
       ) as HTMLInputElement;

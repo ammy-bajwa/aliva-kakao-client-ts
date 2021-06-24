@@ -1,6 +1,6 @@
 import moment from "moment";
 import { useEffect } from "react";
-import { deleteDB, openDB } from "idb";
+// import { deleteDB, openDB } from "idb";
 
 import { useSelector } from "react-redux";
 // import { convertFileToBase64 } from "../../helpers/file";
@@ -9,6 +9,23 @@ import { scrollToEndMessages } from "../../helpers/scroll";
 import "./chatWindow.css";
 
 const ChatWindow = (props: any) => {
+  function convertImgToBase64URL(url: any, callback: any) {
+    var img = document.createElement("img");
+    img.crossOrigin = "Anonymous";
+    img.onload = function () {
+      var canvas: any = document.createElement("CANVAS"),
+        ctx = canvas.getContext("2d"),
+        dataURL;
+      canvas.height = img.height;
+      canvas.width = img.width;
+      ctx.drawImage(img, 0, 0);
+      dataURL = canvas.toDataURL();
+      callback(dataURL);
+      canvas = null;
+    };
+    img.src = url;
+  }
+
   const { chat, currentFocus } = useSelector((state: any) => {
     const { chat, currentFocus } = state;
     chat.sort((a: any, b: any) => {
@@ -21,20 +38,34 @@ const ChatWindow = (props: any) => {
         messageObj.attachment &&
         messageObj.attachment.thumbnailUrl
       ) {
-        console.log("messageObj: ", messageObj);
-        const result = await fetch(messageObj.attachment.thumbnailUrl, {
-          mode: "no-cors",
-        });
-        const blob = await result.blob();
+        // console.log("messageObj: ", messageObj);
+        convertImgToBase64URL(
+          messageObj.attachment.thumbnailUrl,
+          function (base64Img: any) {
+            console.log("Called");
+            console.log(base64Img);
+          }
+        );
+        // const result = await fetch(messageObj.attachment.thumbnailUrl, {
+        //   headers: {
+        //     "Access-Control-Allow-Origin": "*",
+        //     Accept: "img/jpg",
+        //     "Content-Type": "img/jpg",
+        //   },
+        //   mode: "no-cors",
+        // });
+        // const blob = await result.blob();
+        // console.log("img blob: ", await result);
+        // console.log("img blob: ", blob.type);
         // const result64 = await convertFileToBase64(blob);
-        const db = await openDB(messageObj.attachment.thumbnailUrl, 1, {
-          upgrade(db) {
-            db.createObjectStore("blob");
-          },
-        });
-        await db.put("blob", blob, 1);
-        db.close();
-        console.log("BlobImage123", blob);
+        // const db = await openDB(messageObj.attachment.thumbnailUrl, 1, {
+        //   upgrade(db) {
+        //     db.createObjectStore("blob");
+        //   },
+        // });
+        // await db.put("blob", blob, 1);
+        // db.close();
+        // console.log("BlobImage123", blob);
         // console.log("result64: ", result64.length);
       }
     });
@@ -85,6 +116,19 @@ const ChatWindow = (props: any) => {
                       src={message.attachment.thumbnailUrl}
                       onClick={() => imageOnClickHandler(message)}
                       className="hoverPointer p-1"
+                      // onLoad={
+                      // (event: any) => {
+                      // var canvas = document.createElement("canvas");
+                      // canvas.width = event.target.width;
+                      // canvas.height = event.target.height;
+                      // var ctx: any = canvas.getContext("2d");
+                      // ctx.drawImage(event.target, 0, 0);
+                      // var dataURL = canvas.toDataURL("image/png");
+                      // console.log(
+                      //   dataURL.replace(/^data:image\/(png|jpg);base64,/, "")
+                      // );
+                      // }
+                      // }
                       width="90"
                       height="90"
                     />

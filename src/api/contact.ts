@@ -1,5 +1,4 @@
 import { port } from "../helpers/config";
-import { startLoading, stopLoading } from "../utils/loading";
 
 export const getChatList = async (email: string) => {
   const setCodePromise = new Promise(async (resolve, reject) => {

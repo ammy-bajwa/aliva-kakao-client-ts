@@ -1,6 +1,5 @@
 import { port } from "../helpers/config";
 import { store } from "../redux";
-import { startLoading, stopLoading } from "../utils/loading";
 
 export const uploadFile = async (file: any) => {
   const fileUploadPromise = new Promise(async (resolve, reject) => {
