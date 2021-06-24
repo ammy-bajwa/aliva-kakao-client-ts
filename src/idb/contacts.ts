@@ -15,6 +15,16 @@ export const handleContacts = async (contacts: any, email: number) => {
         if (Object.prototype.hasOwnProperty.call(contacts, key)) {
           const element = contacts[key];
           await db.put(storeName, element, element.intId);
+          const messageDb = await openDB(`${email}_message_logs`, 1, {
+            upgrade(db) {
+              db.createObjectStore(storeName);
+            },
+          });
+          element.messages.forEach(async (message: any) => {
+            const key = `${element.displayUserList[0].nickname}__${element.intId}__${message.logId}`;
+            await messageDb.put(storeName, message, key);
+          });
+          messageDb.close();
         }
       }
       db.close();
