@@ -29,9 +29,9 @@ const ChatWindow = (props: any) => {
 
   const { chat, currentFocus } = useSelector((state: any) => {
     const { chat, currentFocus } = state;
-    // chat.sort((a: any, b: any) => {
-    //   return a.sendAt - b.sendAt;
-    // });
+    chat.sort((a: any, b: any) => {
+      return a.sendAt - b.sendAt;
+    });
     // chat.map(async (messageObj: any) => {
     //   console.log("fired");
     //   if (
