@@ -1,9 +1,10 @@
 import moment from "moment";
+import axios from "axios";
 import { useEffect } from "react";
 // import { deleteDB, openDB } from "idb";
 
 import { useSelector } from "react-redux";
-// import { convertFileToBase64 } from "../../helpers/file";
+import { convertFileToBase64 } from "../../helpers/file";
 import { scrollToEndMessages } from "../../helpers/scroll";
 
 import "./chatWindow.css";
@@ -28,47 +29,64 @@ const ChatWindow = (props: any) => {
 
   const { chat, currentFocus } = useSelector((state: any) => {
     const { chat, currentFocus } = state;
-    chat.sort((a: any, b: any) => {
-      return a.sendAt - b.sendAt;
-    });
-    chat.forEach(async (messageObj: any) => {
-      console.log("fired");
-      if (
-        messageObj.text === "photo" &&
-        messageObj.attachment &&
-        messageObj.attachment.thumbnailUrl
-      ) {
-        // console.log("messageObj: ", messageObj);
-        convertImgToBase64URL(
-          messageObj.attachment.thumbnailUrl,
-          function (base64Img: any) {
-            console.log("Called");
-            console.log(base64Img);
-          }
-        );
-        // const result = await fetch(messageObj.attachment.thumbnailUrl, {
-        //   headers: {
-        //     "Access-Control-Allow-Origin": "*",
-        //     Accept: "img/jpg",
-        //     "Content-Type": "img/jpg",
-        //   },
-        //   mode: "no-cors",
-        // });
-        // const blob = await result.blob();
-        // console.log("img blob: ", await result);
-        // console.log("img blob: ", blob.type);
-        // const result64 = await convertFileToBase64(blob);
-        // const db = await openDB(messageObj.attachment.thumbnailUrl, 1, {
-        //   upgrade(db) {
-        //     db.createObjectStore("blob");
-        //   },
-        // });
-        // await db.put("blob", blob, 1);
-        // db.close();
-        // console.log("BlobImage123", blob);
-        // console.log("result64: ", result64.length);
-      }
-    });
+    // chat.sort((a: any, b: any) => {
+    //   return a.sendAt - b.sendAt;
+    // });
+    // chat.map(async (messageObj: any) => {
+    //   console.log("fired");
+    //   if (
+    //     messageObj.text === "photo" &&
+    //     messageObj.attachment &&
+    //     messageObj.attachment.thumbnailUrl
+    // ) {
+    // console.log("messageObj: ", messageObj);
+    // convertImgToBase64URL(
+    //   messageObj.attachment.thumbnailUrl,
+    //   function (base64Img: any) {
+    //     console.log("Called");
+    //     console.log(base64Img);
+    //   }
+    // );
+    // const result = await fetch(
+    //   `https://cors-anywhere.herokuapp.com/${messageObj.attachment.thumbnailUrl}`
+    // );
+    // const reader = result.body?.getReader();
+    // // const blob = await result.blob();
+    // while (true) {
+    //   const { value, done }: any = await reader?.read();
+    //   // console.log("value: ", value);
+    //   console.log("value: ", value);
+    //   const myBlob = new Blob([value]);
+    //   var decoder = new TextDecoder("utf8");
+    //   var base64String = btoa(decoder.decode(value));
+
+    //   messageObj.data = base64String;
+    //   // console.log("reader: ", messageObj.data);
+    //   console.log("value2: ", URL.createObjectURL(myBlob));
+
+    //   if (done) {
+    //     break;
+    //   }
+    // }
+    // console.log("img blob: ", await result.body);
+    // const result64 = await convertFileToBase64(blob);
+    // const db = await openDB(messageObj.attachment.thumbnailUrl, 1, {
+    //   upgrade(db) {
+    //     db.createObjectStore("blob");
+    //   },
+    // });
+    // await db.put("blob", blob, 1);
+    // db.close();
+    // console.log("BlobImage123", blob);
+    // console.log("result64: ", result64.length);
+    // const { data } = await axios({
+    //   method: "get",
+    //   url: `https://cors-anywhere.herokuapp.com/${messageObj.attachment.thumbnailUrl}`,
+    //   headers: {},
+    // });
+    //   }
+    //   return messageObj;
+    // });
 
     return { chat, currentFocus };
   });
@@ -113,7 +131,8 @@ const ChatWindow = (props: any) => {
                     <img
                       loading="lazy"
                       alt="userImages"
-                      src={message.attachment.thumbnailUrl}
+                      // src={message.attachment.thumbnailUrl}
+                      src={message.data}
                       onClick={() => imageOnClickHandler(message)}
                       className="hoverPointer p-1"
                       // onLoad={
@@ -139,6 +158,7 @@ const ChatWindow = (props: any) => {
                     <span className="m-1 text-wrap">{message.text} </span>
                   )}
                 <span className="small bg-secondary makeItLight rounded p-1">
+                  {console.log(message.sendAt)}
                   {moment(message.sendAt).format("hh:mm:ss A DD/MM/YYYY")}
                 </span>
               </div>

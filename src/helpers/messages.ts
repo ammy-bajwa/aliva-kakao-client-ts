@@ -16,28 +16,20 @@ export const refreshMessages = async (focusedName: string) => {
       await lastDbMessageTime(loggedInUserId, focusedUserId);
     // console.log("Fired");
     // console.log(lastMessageTimeStamp);
-    if (lastChatLogId > logId) {
-      const { messages }: any = await getUserChat(
-        user.email,
-        focusedName,
-        lastMessageTimeStamp,
-        lastChatLogId,
-        logId
-      );
-      dispatch(loadChat([...allMessages, ...messages]));
-      await handleIncommingMessages(
-        [...allMessages, ...messages],
-        loggedInUserId,
-        focusedUserId
-      );
-    } else {
-      dispatch(loadChat([...allMessages]));
-      await handleIncommingMessages(
-        [...allMessages],
-        loggedInUserId,
-        focusedUserId
-      );
-    }
+    const { messages }: any = await getUserChat(
+      user.email,
+      focusedName,
+      lastMessageTimeStamp,
+      lastChatLogId,
+      logId
+    );
+    console.log("allMessages", allMessages);
+    dispatch(loadChat([...messages, ...allMessages]));
+    await handleIncommingMessages(
+      [...messages, ...allMessages],
+      loggedInUserId,
+      focusedUserId
+    );
     scrollToEndMessages();
   } catch (error) {
     console.error(error);

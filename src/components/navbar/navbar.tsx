@@ -6,6 +6,7 @@ import PrivateNavItems from "./privateNavItems/privateNavItems";
 import PublicNavItems from "./publicNavItems/publicNavItems";
 
 import { loginHandler } from "../../helpers/loginHandler";
+// import { getImg } from "../../api/media";
 
 class Navbar extends React.Component<any> {
   async componentDidMount() {
@@ -37,6 +38,9 @@ class Navbar extends React.Component<any> {
             </Link>
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               {token ? <PrivateNavItems email={email} /> : <PublicNavItems />}
+              {/* <li>
+                <button onClick={getImg}>getImg</button>
+              </li> */}
             </ul>
           </div>
         </div>
