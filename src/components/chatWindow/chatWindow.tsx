@@ -132,7 +132,7 @@ const ChatWindow = (props: any) => {
                       loading="lazy"
                       alt="userImages"
                       // src={message.attachment.thumbnailUrl}
-                      src={message.data}
+                      src={`data:image/png;base64,${message.attachment.thumbnailUrlBase64}`}
                       onClick={() => imageOnClickHandler(message)}
                       className="hoverPointer p-1"
                       // onLoad={
