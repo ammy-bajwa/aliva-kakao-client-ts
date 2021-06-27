@@ -1,31 +1,31 @@
 import moment from "moment";
-import axios from "axios";
+// import axios from "axios";
 import { useEffect } from "react";
 // import { deleteDB, openDB } from "idb";
 
 import { useSelector } from "react-redux";
-import { convertFileToBase64 } from "../../helpers/file";
+// import { convertFileToBase64 } from "../../helpers/file";
 import { scrollToEndMessages } from "../../helpers/scroll";
 
 import "./chatWindow.css";
 
 const ChatWindow = (props: any) => {
-  function convertImgToBase64URL(url: any, callback: any) {
-    var img = document.createElement("img");
-    img.crossOrigin = "Anonymous";
-    img.onload = function () {
-      var canvas: any = document.createElement("CANVAS"),
-        ctx = canvas.getContext("2d"),
-        dataURL;
-      canvas.height = img.height;
-      canvas.width = img.width;
-      ctx.drawImage(img, 0, 0);
-      dataURL = canvas.toDataURL();
-      callback(dataURL);
-      canvas = null;
-    };
-    img.src = url;
-  }
+  // function convertImgToBase64URL(url: any, callback: any) {
+  //   var img = document.createElement("img");
+  //   img.crossOrigin = "Anonymous";
+  //   img.onload = function () {
+  //     var canvas: any = document.createElement("CANVAS"),
+  //       ctx = canvas.getContext("2d"),
+  //       dataURL;
+  //     canvas.height = img.height;
+  //     canvas.width = img.width;
+  //     ctx.drawImage(img, 0, 0);
+  //     dataURL = canvas.toDataURL();
+  //     callback(dataURL);
+  //     canvas = null;
+  //   };
+  //   img.src = url;
+  // }
 
   const { chat, currentFocus } = useSelector((state: any) => {
     const { chat, currentFocus } = state;
