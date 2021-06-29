@@ -32,9 +32,11 @@ export const handleContacts = async (contacts: any, email: number) => {
               const dbName = SHA256("KakaoUserImages").toString();
               const storeName = "imgStore";
               const thumbnailKey = SHA256(
-                message.attachment.thumbnailUrlBase64
+                message.attachment.thumbnailUrl
               ).toString();
-              const urlKey = SHA256(message.attachment.urlBase64).toString();
+              message.attachment.thumbnailKey = thumbnailKey;
+              const urlKey = SHA256(message.attachment.url).toString();
+              message.attachment.urlKey = urlKey;
               const myImgDb = await openDB(dbName, 1, {
                 async upgrade(myImgDb) {
                   myImgDb.createObjectStore(storeName);
@@ -46,16 +48,21 @@ export const handleContacts = async (contacts: any, email: number) => {
               );
               const isurlAlreadyExists = await myImgDb.get(storeName, urlKey);
               if (!isThumbnailAlreadyExists) {
+                console.log("Img message: ", message);
                 await myImgDb.put(
                   storeName,
-                  new Blob([message.attachment.thumbnailUrlBase64]),
+                  new Blob([message.attachment.thumbnailUrlBase64], {
+                    type: message.attachment.mt,
+                  }),
                   thumbnailKey
                 );
               }
               if (!isurlAlreadyExists) {
                 await myImgDb.put(
                   storeName,
-                  new Blob([message.attachment.urlBase64]),
+                  new Blob([message.attachment.urlBase64], {
+                    type: message.attachment.mt,
+                  }),
                   urlKey
                 );
               }
