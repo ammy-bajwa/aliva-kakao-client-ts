@@ -57,7 +57,11 @@ const ChatWindow = () => {
                   <img
                     loading="lazy"
                     alt="userImages"
-                    src={message.thumbnail}
+                    src={
+                      message.attachment.thumbnail
+                        ? message.attachment.thumbnail
+                        : message.attachment.thumbnailUrl
+                    }
                     onClick={() => imageOnClickHandler(message)}
                     className="hoverPointer p-1"
                     width="90"

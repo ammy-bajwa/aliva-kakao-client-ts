@@ -30,12 +30,14 @@ export const refreshMessages = async (focusedName: string) => {
     let imgPromisesChat = messagesToSet.map(async (message: any) => {
       if (message.text === "photo") {
         const imgBlob = await getImgBlobFromIdb(
-          message.attachment.thumbnailKey
+          message.attachment.thumbnailKey || ""
         );
-        const base64 = await readBlobText(imgBlob);
-        message.thumbnail = `data:${message.attachment.mt};base64,${base64}`;
-        console.log("imgBlob: ", imgBlob);
-        console.log("base64: ", message.thumbnail);
+        if (imgBlob) {
+          const base64 = await readBlobText(imgBlob);
+          message.thumbnail = `data:${message.attachment.mt};base64,${base64}`;
+          console.log("imgBlob: ", imgBlob);
+          console.log("base64: ", message.thumbnail);
+        }
       }
       return message;
     });
