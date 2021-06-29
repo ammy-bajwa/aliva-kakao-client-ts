@@ -5,7 +5,6 @@ import Messages from "../../components/messages/messages";
 import { refreshContactList } from "../../helpers/contact";
 import { refreshMessages } from "../../helpers/messages";
 import {
-  loadChat,
   setStartChatLoading,
   setStopChatLoading,
 } from "../../redux/action/user";
@@ -16,7 +15,6 @@ const Home = (props: any) => {
   const dispatch = useDispatch();
   const onClickHandler = async (name: string) => {
     dispatch(setStartChatLoading());
-    dispatch(loadChat([]));
     await refreshMessages(name);
     await refreshContactList();
     dispatch(setStopChatLoading());

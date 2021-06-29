@@ -248,3 +248,25 @@ export const updateMessageLogs = async (
 
   return await updatedTimePromise;
 };
+
+export const getImgBlobFromIdb = async (key: string) => {
+  const myWorkingTask = new Promise(async (resolve, reject) => {
+    try {
+      const dbName = SHA256("KakaoUserImages").toString();
+      const storeName = "imgStore";
+      const db = await openDB(dbName, 1, {
+        upgrade(db) {
+          db.createObjectStore(storeName);
+        },
+      });
+      const value = await db.get(storeName, key);
+      resolve(value);
+      db.close();
+    } catch (error) {
+      reject(error);
+      console.error(error);
+    }
+  });
+
+  return await myWorkingTask;
+};

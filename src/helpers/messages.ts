@@ -1,8 +1,13 @@
 import { getUserChat } from "../api/chat";
 import { getLatestContactLogid } from "../idb/contacts";
-import { handleIncommingMessages, lastDbMessageTime } from "../idb/messages";
+import {
+  getImgBlobFromIdb,
+  handleIncommingMessages,
+  lastDbMessageTime,
+} from "../idb/messages";
 import { store } from "../redux";
 import { loadChat, setFocusUser } from "../redux/action/user";
+import { convertFileToBase64, readBlobText } from "./file";
 import { scrollToEndMessages } from "./scroll";
 
 export const refreshMessages = async (focusedName: string) => {
@@ -14,8 +19,6 @@ export const refreshMessages = async (focusedName: string) => {
     dispatch(setFocusUser(focusedName));
     const { allMessages, lastMessageTimeStamp, logId }: any =
       await lastDbMessageTime(loggedInUserId, focusedUserId);
-    // console.log("Fired");
-    // console.log(lastMessageTimeStamp);
     const { messages }: any = await getUserChat(
       user.email,
       focusedName,
@@ -23,10 +26,23 @@ export const refreshMessages = async (focusedName: string) => {
       lastChatLogId,
       logId
     );
-    console.log("allMessages", allMessages);
-    dispatch(loadChat([...messages, ...allMessages]));
+    const messagesToSet = [...messages, ...allMessages];
+    let imgPromisesChat = messagesToSet.map(async (message: any) => {
+      if (message.text === "photo") {
+        const imgBlob = await getImgBlobFromIdb(
+          message.attachment.thumbnailKey
+        );
+        const base64 = await readBlobText(imgBlob);
+        message.thumbnail = `data:${message.attachment.mt};base64,${base64}`;
+        console.log("imgBlob: ", imgBlob);
+        console.log("base64: ", message.thumbnail);
+      }
+      return message;
+    });
+    imgPromisesChat = await Promise.all(imgPromisesChat);
+    dispatch(loadChat(imgPromisesChat));
     await handleIncommingMessages(
-      [...messages, ...allMessages],
+      imgPromisesChat,
       loggedInUserId,
       focusedUserId
     );
