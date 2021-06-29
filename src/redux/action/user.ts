@@ -37,6 +37,14 @@ export const setStopLoading = () => ({
   type: "STOP_LOADING",
 });
 
+export const setStartChatLoading = () => ({
+  type: "START_CHAT_LOADING",
+});
+
+export const setStopChatLoading = () => ({
+  type: "STOP_CHAT_LOADING",
+});
+
 export const setContactList = (contactList: any) => ({
   type: "SET_CONTACT_LIST",
   payload: contactList,

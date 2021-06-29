@@ -1,16 +1,25 @@
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 
 import ChatListItem from "../../components/chatListItem/chatListItem";
 import Messages from "../../components/messages/messages";
 import { refreshContactList } from "../../helpers/contact";
 import { refreshMessages } from "../../helpers/messages";
+import {
+  loadChat,
+  setStartChatLoading,
+  setStopChatLoading,
+} from "../../redux/action/user";
 
 import "./home.css";
 
 const Home = (props: any) => {
+  const dispatch = useDispatch();
   const onClickHandler = async (name: string) => {
+    dispatch(loadChat([]));
+    setStartChatLoading();
     await refreshMessages(name);
     await refreshContactList();
+    setStopChatLoading();
   };
 
   const getChatListItems = () => {

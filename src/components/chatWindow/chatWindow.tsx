@@ -27,8 +27,8 @@ const ChatWindow = (props: any) => {
   //   img.src = url;
   // }
 
-  const { chat, currentFocus } = useSelector((state: any) => {
-    const { chat, currentFocus } = state;
+  const { chat, currentFocus, chatLoading } = useSelector((state: any) => {
+    const { chat, currentFocus, chatLoading } = state;
     chat.sort((a: any, b: any) => {
       return a.sendAt - b.sendAt;
     });
@@ -88,7 +88,7 @@ const ChatWindow = (props: any) => {
     //   return messageObj;
     // });
 
-    return { chat, currentFocus };
+    return { chat, currentFocus, chatLoading };
   });
 
   const imageOnClickHandler = async (message: any) => {
@@ -103,68 +103,67 @@ const ChatWindow = (props: any) => {
 
   useEffect(() => {
     scrollToEndMessages();
-  }, [chat]);
+  }, [chat, chatLoading]);
 
   return (
     <div className="m-2" id="chatWindowContainer">
       <h1>Chat Window</h1>
-      {chat.length > 0
-        ? chat.map((message: any, index: number) => (
+      {(chatLoading || chat.length <= 0) && "Loading....."}
+      {chat.length > 0 &&
+        chat.map((message: any, index: number) => (
+          <div
+            key={index}
+            className={`text-light p-1 w-100 d-flex flex-row ${
+              currentFocus === message.receiverUserName
+                ? "justify-content-end"
+                : "justify-content-start"
+            }`}
+          >
             <div
-              key={index}
-              className={`text-light p-1 w-100 d-flex flex-row ${
+              className={`border border-dark rounded p-1 ${
                 currentFocus === message.receiverUserName
-                  ? "justify-content-end"
-                  : "justify-content-start"
+                  ? "receiverMessage"
+                  : "senderMessage"
               }`}
             >
-              <div
-                className={`border border-dark rounded p-1 ${
-                  currentFocus === message.receiverUserName
-                    ? "receiverMessage"
-                    : "senderMessage"
-                }`}
-              >
-                {message.text === "photo" &&
-                  message.attachment &&
-                  message.attachment.thumbnailUrl && (
-                    <img
-                      loading="lazy"
-                      alt="userImages"
-                      // src={message.attachment.thumbnailUrl}
-                      src={`data:image/png;base64,${message.attachment.thumbnailUrlBase64}`}
-                      onClick={() => imageOnClickHandler(message)}
-                      className="hoverPointer p-1"
-                      // onLoad={
-                      // (event: any) => {
-                      // var canvas = document.createElement("canvas");
-                      // canvas.width = event.target.width;
-                      // canvas.height = event.target.height;
-                      // var ctx: any = canvas.getContext("2d");
-                      // ctx.drawImage(event.target, 0, 0);
-                      // var dataURL = canvas.toDataURL("image/png");
-                      // console.log(
-                      //   dataURL.replace(/^data:image\/(png|jpg);base64,/, "")
-                      // );
-                      // }
-                      // }
-                      width="90"
-                      height="90"
-                    />
-                  )}
-                {message.text !== "photo" &&
-                  (!message?.attachment ||
-                    !message.attachment?.thumbnailUrl) && (
-                    <span className="m-1 text-wrap">{message.text} </span>
-                  )}
-                <span className="small bg-secondary makeItLight rounded p-1">
-                  {console.log(message.sendAt)}
-                  {moment(message.sendAt).format("hh:mm:ss A DD/MM/YYYY")}
-                </span>
-              </div>
+              {message.text === "photo" &&
+                message.attachment &&
+                message.attachment.thumbnailUrl && (
+                  <img
+                    loading="lazy"
+                    alt="userImages"
+                    // src={message.attachment.thumbnailUrl}
+                    src={`data:image/png;base64,${message.attachment.thumbnailUrlBase64}`}
+                    onClick={() => imageOnClickHandler(message)}
+                    className="hoverPointer p-1"
+                    // onLoad={
+                    // (event: any) => {
+                    // var canvas = document.createElement("canvas");
+                    // canvas.width = event.target.width;
+                    // canvas.height = event.target.height;
+                    // var ctx: any = canvas.getContext("2d");
+                    // ctx.drawImage(event.target, 0, 0);
+                    // var dataURL = canvas.toDataURL("image/png");
+                    // console.log(
+                    //   dataURL.replace(/^data:image\/(png|jpg);base64,/, "")
+                    // );
+                    // }
+                    // }
+                    width="90"
+                    height="90"
+                  />
+                )}
+              {message.text !== "photo" &&
+                (!message?.attachment || !message.attachment?.thumbnailUrl) && (
+                  <span className="m-1 text-wrap">{message.text} </span>
+                )}
+              <span className="small bg-secondary makeItLight rounded p-1">
+                {console.log(message.sendAt)}
+                {moment(message.sendAt).format("hh:mm:ss A DD/MM/YYYY")}
+              </span>
             </div>
-          ))
-        : "Message Will Be Here"}
+          </div>
+        ))}
     </div>
   );
 };

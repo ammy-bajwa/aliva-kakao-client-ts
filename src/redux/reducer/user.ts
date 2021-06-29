@@ -10,6 +10,7 @@ const initialState = {
   ws: null,
   loading: false,
   isSending: false,
+  chatLoading: false,
 };
 
 export const userReducer = function (state: any = initialState, action: any) {
@@ -45,6 +46,12 @@ export const userReducer = function (state: any = initialState, action: any) {
       return state;
     case "STOP_LOADING":
       state = { ...state, loading: false };
+      return state;
+    case "START_CHAT_LOADING":
+      state = { ...state, chatLoading: true };
+      return state;
+    case "STOP_CHAT_LOADING":
+      state = { ...state, chatLoading: false };
       return state;
     case "SET_FOCUSED_USER":
       state = { ...state, currentFocus: action.payload };
