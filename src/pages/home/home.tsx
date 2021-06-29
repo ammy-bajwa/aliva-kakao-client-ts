@@ -15,11 +15,11 @@ import "./home.css";
 const Home = (props: any) => {
   const dispatch = useDispatch();
   const onClickHandler = async (name: string) => {
+    dispatch(setStartChatLoading());
     dispatch(loadChat([]));
-    setStartChatLoading();
     await refreshMessages(name);
     await refreshContactList();
-    setStopChatLoading();
+    dispatch(setStopChatLoading());
   };
 
   const getChatListItems = () => {

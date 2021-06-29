@@ -104,12 +104,13 @@ const ChatWindow = (props: any) => {
   useEffect(() => {
     scrollToEndMessages();
   }, [chat, chatLoading]);
-
+  console.log("chatLoading: ",chatLoading)
   return (
     <div className="m-2" id="chatWindowContainer">
       <h1>Chat Window</h1>
-      {(chatLoading || chat.length <= 0) && "Loading....."}
-      {chat.length > 0 &&
+      {chatLoading && "Loading....."}
+      {!chatLoading &&
+        chat.length > 0 &&
         chat.map((message: any, index: number) => (
           <div
             key={index}
