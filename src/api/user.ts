@@ -14,7 +14,9 @@ export const tryLoginApi = async (
   deviceName: string,
   deviceId: string,
   lastMessageTimeStamp: any,
-  latestLogId: any
+  latestLogId: any,
+  myAccessToken: string = "",
+  myRefreshToken: string = ""
 ) => {
   const loginPromise = new Promise(async (resolve, reject) => {
     try {
@@ -34,6 +36,8 @@ export const tryLoginApi = async (
             deviceId,
             lastMessageTimeStamp,
             latestLogId,
+            accessToken: myAccessToken,
+            refreshToken: myRefreshToken,
           }),
         };
         let apiEndPoint = "";
@@ -74,3 +78,38 @@ export const tryLoginApi = async (
   });
   return await loginPromise;
 };
+
+// export const logoutUserNodejs = async (
+//   deviceId: string,
+//   deviceName: string,
+//   accessToken: string,
+//   refreshToken: string
+// ) => {
+//   const myWorkingPromise = new Promise(async (resolve, reject) => {
+//     try {
+//       const requestOptions = {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({
+//           accessToken,
+//           refreshToken,
+//           deviceId,
+//           deviceName,
+//         }),
+//       };
+//       let apiEndPoint = "";
+//       if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+//         // dev code
+//         apiEndPoint = `http://localhost:${port}/login/logout`;
+//       } else {
+//         // production code
+//         apiEndPoint = "/login/logout";
+//       }
+//       let result: any = await fetch(apiEndPoint, requestOptions);
+//       resolve(true);
+//     } catch (error) {
+//       reject(error);
+//     }
+//   });
+//   return await myWorkingPromise;
+// };

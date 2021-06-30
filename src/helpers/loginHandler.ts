@@ -22,7 +22,8 @@ export const loginHandler = async (
 ) => {
   const myWorkingPromise = await new Promise(async (resolve, reject) => {
     if (isKeepLogin && !token) {
-      const { email, password } = JSON.parse(isKeepLogin);
+      const { email, password, accessToken, refreshToken } =
+        JSON.parse(isKeepLogin);
       const deviceData: any = localStorage.getItem(email);
       try {
         startLoading();
@@ -37,7 +38,9 @@ export const loginHandler = async (
           deviceName,
           deviceId,
           lastMessageTimeStamp,
-          latestLogId
+          latestLogId,
+          accessToken,
+          refreshToken
         );
         let wsEndPoint = "";
         if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
