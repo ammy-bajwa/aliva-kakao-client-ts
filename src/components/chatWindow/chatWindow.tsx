@@ -69,9 +69,14 @@ const ChatWindow = () => {
                   />
                 )}
               {message.text !== "photo" &&
+                !message.attachment.name &&
                 (!message?.attachment || !message.attachment?.thumbnailUrl) && (
-                  <span className="m-1 text-wrap">{message.text} </span>
+                  <span className="m-1 text-wrap">{message.text}</span>
                 )}
+              {console.log(message)}
+              {message.attachment.name && (
+                <span className="m-1 text-wrap">{message.attachment.alt}</span>
+              )}
               <span className="small bg-secondary makeItLight rounded p-1">
                 {moment(message.sendAt).format("hh:mm:ss A DD/MM/YYYY")}
               </span>
