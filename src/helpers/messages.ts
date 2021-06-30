@@ -7,7 +7,7 @@ import {
 } from "../idb/messages";
 import { store } from "../redux";
 import { loadChat, setFocusUser } from "../redux/action/user";
-import { convertFileToBase64, readBlobText } from "./file";
+import { readBlobText } from "./file";
 import { scrollToEndMessages } from "./scroll";
 
 export const refreshMessages = async (focusedName: string) => {
