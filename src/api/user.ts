@@ -24,52 +24,62 @@ export const tryLoginApi = async (
         user: { accessToken },
       } = store.getState();
       console.log("accessToken: ", accessToken);
+      let loginResult, loginErrorMessage;
       if (!accessToken) {
         startLoading();
-        const requestOptions = {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email,
-            password,
-            deviceName,
-            deviceId,
-            lastMessageTimeStamp,
-            latestLogId,
-            accessToken: myAccessToken,
-            refreshToken: myRefreshToken,
-          }),
-        };
-        let apiEndPoint = "";
-        if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
-          // dev code
-          apiEndPoint = `http://localhost:${port}/login`;
-        } else {
-          // production code
-          apiEndPoint = "/login";
-        }
-        let result: any = await fetch(apiEndPoint, requestOptions);
-        result = await result.json();
-        stopLoading();
-        if (result.error) {
-          let errorMessage = errors[`${result.error}`];
-          if (!errorMessage) {
-            errorMessage = result.message;
+        for (let index = 0; index < 10; index++) {
+          const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email,
+              password,
+              deviceName,
+              deviceId,
+              lastMessageTimeStamp,
+              latestLogId,
+              accessToken: myAccessToken,
+              refreshToken: myRefreshToken,
+            }),
+          };
+          let apiEndPoint = "";
+          if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+            // dev code
+            apiEndPoint = `http://localhost:${port}/login`;
+          } else {
+            // production code
+            apiEndPoint = "/login";
           }
-          alert(errorMessage);
-          console.log("result errorMessage: ", errorMessage);
-          reject(errorMessage);
-        } else {
-          await handleContacts(result.chatList, result.email);
-          await updateUserMessages(result.loggedInUserId, result.chatList);
-          await updateContactLogid(email, result.biggestChatLog);
-          console.log("result: ", result);
-          await updatedLastMessageTimeStamp(
-            result.email,
-            result.largestTimeStamp
-          );
-          resolve(result);
+          let result: any = await fetch(apiEndPoint, requestOptions);
+          result = await result.json();
+          if (result.error) {
+            let errorMessage = errors[`${result.error}`];
+            if (!errorMessage) {
+              errorMessage = result.message;
+            }
+            loginErrorMessage = errorMessage;
+            console.log("result errorMessage: ", errorMessage);
+            continue;
+          } else {
+            loginResult = result;
+            await handleContacts(result.chatList, result.email);
+            await updateUserMessages(result.loggedInUserId, result.chatList);
+            await updateContactLogid(email, result.biggestChatLog);
+            console.log("result: ", result);
+            await updatedLastMessageTimeStamp(
+              result.email,
+              result.largestTimeStamp
+            );
+            break;
+          }
         }
+      }
+      stopLoading();
+      if (loginResult) {
+        resolve(loginResult);
+      } else {
+        alert(loginErrorMessage);
+        reject(loginErrorMessage);
       }
     } catch (error) {
       console.error(error);
