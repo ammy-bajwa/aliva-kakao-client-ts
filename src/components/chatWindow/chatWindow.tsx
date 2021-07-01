@@ -1,10 +1,12 @@
 import moment from "moment";
+// import blobToSHA1 from "blob-to-sha1";
 // import axios from "axios";
 import { useEffect } from "react";
 // import { deleteDB, openDB } from "idb";
 
 import { useSelector } from "react-redux";
 import { scrollToEndMessages } from "../../helpers/scroll";
+// import { getImgBlobFromIdb } from "../../idb/messages";
 
 import "./chatWindow.css";
 
@@ -25,6 +27,14 @@ const ChatWindow = () => {
     w.document.body.appendChild(image);
     w.location.href = message.attachment.url;
   };
+
+  // const getSha1 = async (p1: any) => {
+  //   if (p1) {
+  //     const blob: any = await getImgBlobFromIdb(p1);
+  //     const hash = await blobToSHA1(blob);
+  //     console.log(hash);
+  //   }
+  // };
 
   useEffect(() => {
     scrollToEndMessages();

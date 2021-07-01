@@ -13,7 +13,7 @@ const Loading = () => (
     />
     <h1 className="m-3">Loading.....</h1>
     <br />
-    <h2 id="loginTryMessage"></h2>
+    <h2 id="loginTryMessage">{""}</h2>
   </div>
 );
 
