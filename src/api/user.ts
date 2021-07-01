@@ -1,5 +1,7 @@
 import { port } from "../helpers/config";
+import { causeDelay } from "../helpers/delay";
 import { errors } from "../helpers/errorCodes";
+import { setLoginLoadingMessage } from "../helpers/loading";
 import { handleContacts, updateContactLogid } from "../idb/contacts";
 import {
   updatedLastMessageTimeStamp,
@@ -27,7 +29,8 @@ export const tryLoginApi = async (
       let loginResult, loginErrorMessage;
       if (!accessToken) {
         startLoading();
-        for (let index = 0; index < 10; index++) {
+        for (let index = 0; index < 15; index++) {
+          setLoginLoadingMessage(`Try No ${index + 1}`);
           const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -59,6 +62,7 @@ export const tryLoginApi = async (
             }
             loginErrorMessage = errorMessage;
             console.log("result errorMessage: ", errorMessage);
+            await causeDelay(5000);
             continue;
           } else {
             loginResult = result;

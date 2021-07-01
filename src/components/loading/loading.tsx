@@ -12,6 +12,8 @@ const Loading = () => (
       width={"2%"}
     />
     <h1 className="m-3">Loading.....</h1>
+    <br />
+    <h2 id="loginTryMessage"></h2>
   </div>
 );
 
