@@ -51,7 +51,7 @@ const ChatWindow = () => {
                   : "senderMessage"
               }`}
             >
-              {message.text === "photo" &&
+              {(message.text === "photo" || message.text === "사진") &&
                 message.attachment &&
                 message.attachment.thumbnailUrl && (
                   <img

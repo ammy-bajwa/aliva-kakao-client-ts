@@ -28,7 +28,7 @@ export const refreshMessages = async (focusedName: string) => {
     );
     const messagesToSet = [...messages, ...allMessages];
     let imgPromisesChat = messagesToSet.map(async (message: any) => {
-      if (message.text === "photo") {
+      if (message.text === "photo"|| message.text === "사진") {
         const imgBlob = await getImgBlobFromIdb(
           message.attachment.thumbnailKey || ""
         );

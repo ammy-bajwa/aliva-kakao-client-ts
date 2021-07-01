@@ -23,7 +23,7 @@ export const handleContacts = async (contacts: any, email: number) => {
           element.messages.forEach(async (message: any) => {
             const key = `${element.displayUserList[0].nickname}__${element.intId}__${message.logId}`;
             if (
-              message?.text === "photo" &&
+              (message?.text === "photo" || message?.text === "사진") &&
               message?.attachment &&
               message?.attachment?.thumbnailUrlBase64 &&
               message?.attachment?.urlBase64
