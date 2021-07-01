@@ -68,7 +68,11 @@ const ChatWindow = () => {
                     height="90"
                   />
                 )}
+              {message.text === "voice note" && (
+                <audio controls src={message.attachment.url}></audio>
+              )}
               {message.text !== "photo" &&
+                message.text !== "voice note" &&
                 !message?.attachment?.name &&
                 (!message?.attachment || !message.attachment?.thumbnailUrl) && (
                   <span className="m-1 text-wrap">{message.text}</span>
