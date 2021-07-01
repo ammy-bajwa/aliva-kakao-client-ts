@@ -7,6 +7,7 @@ import { setSending } from "../../redux/action/user";
 import "./messageInput.css";
 
 const MessageInput = () => {
+  const [currentSelectedFile, setSelectedFile] = useState({ name: "" });
   const currentFocus = useSelector((state: any) => state.currentFocus);
   const email = useSelector((state: any) => state.user.email);
   // const loggedInUserId = useSelector((state: any) => state.loggedInUserId);
@@ -15,6 +16,17 @@ const MessageInput = () => {
   const ws = useSelector((state: any) => state.ws);
   const dispatch = useDispatch();
   const [message, setMessage] = useState("");
+  const handlePaste = async (e: any) => {
+    if (e.clipboardData.files.length) {
+      const fileObject = e.clipboardData.files[0];
+      setSelectedFile(fileObject);
+      console.log(currentSelectedFile);
+    } else {
+      alert(
+        "No image data was found in your clipboard. Copy an image first or take a screenshot."
+      );
+    }
+  };
   const sendMessageHandler = async (event: any) => {
     try {
       event.preventDefault();
@@ -26,34 +38,58 @@ const MessageInput = () => {
         alert("Please a contact first");
         return;
       }
-      if (!message && userFileUpload.files.length <= 0) {
+      if (
+        !message &&
+        userFileUpload.files.length <= 0 &&
+        !currentSelectedFile
+      ) {
         alert("Plase select a file or type some message");
         return;
       }
       dispatch(setSending(true));
-      if (userFileUpload.files.length > 0) {
-        for (const file in userFileUpload.files) {
-          if (
-            Object.prototype.hasOwnProperty.call(userFileUpload.files, file)
-          ) {
-            const selectedFile: any = userFileUpload.files[file];
-            const { path }: any = await uploadFile(selectedFile);
-            const channelId = chatList[currentFocus][`channelId`];
-            ws.send(
-              JSON.stringify({
-                key: "newMessageFile",
-                value: {
-                  message,
-                  receiver: currentFocus,
-                  filePath: path,
-                  email,
-                  channelId,
-                },
-              })
-            );
+      if (userFileUpload.files.length > 0 || currentSelectedFile) {
+        if (currentSelectedFile) {
+          const { path }: any = await uploadFile(currentSelectedFile);
+          const channelId = chatList[currentFocus][`channelId`];
+          ws.send(
+            JSON.stringify({
+              key: "newMessageFile",
+              value: {
+                message,
+                receiver: currentFocus,
+                filePath: path,
+                email,
+                channelId,
+              },
+            })
+          );
+          setSelectedFile({ name: "" });
+        } else {
+          for (const file in userFileUpload.files) {
+            if (
+              Object.prototype.hasOwnProperty.call(userFileUpload.files, file)
+            ) {
+              const selectedFile: any = userFileUpload.files[file];
+              setSelectedFile(selectedFile);
+              const { path }: any = await uploadFile(currentSelectedFile);
+              const channelId = chatList[currentFocus][`channelId`];
+              ws.send(
+                JSON.stringify({
+                  key: "newMessageFile",
+                  value: {
+                    message,
+                    receiver: currentFocus,
+                    filePath: path,
+                    email,
+                    channelId,
+                  },
+                })
+              );
+            }
           }
         }
         userFileUpload.value = "";
+        setSelectedFile({ name: "" });
       } else {
         console.log(currentFocus);
         const channelId = chatList[currentFocus][`channelId`];
@@ -73,6 +109,10 @@ const MessageInput = () => {
   };
   return (
     <div className="messageInputContainer">
+      <span className="m-2">
+        Selected file{" "}
+        <span className="text-danger">{currentSelectedFile.name}</span>
+      </span>
       <form
         className="m-2"
         onSubmit={sendMessageHandler}
@@ -85,6 +125,7 @@ const MessageInput = () => {
             className="form-control"
             onInput={(event: any) => setMessage(event.target.value)}
             value={message}
+            onPaste={handlePaste}
           />
         </div>
         <div className="form-group mt-2">
