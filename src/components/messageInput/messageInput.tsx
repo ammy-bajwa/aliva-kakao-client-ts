@@ -48,7 +48,8 @@ const MessageInput = () => {
       }
       dispatch(setSending(true));
       if (userFileUpload.files.length > 0 || currentSelectedFile) {
-        if (currentSelectedFile) {
+        if (currentSelectedFile.name) {
+          console.log("this. should not call: ", currentSelectedFile);
           const { path }: any = await uploadFile(currentSelectedFile);
           const channelId = chatList[currentFocus][`channelId`];
           ws.send(
@@ -70,8 +71,7 @@ const MessageInput = () => {
               Object.prototype.hasOwnProperty.call(userFileUpload.files, file)
             ) {
               const selectedFile: any = userFileUpload.files[file];
-              setSelectedFile(selectedFile);
-              const { path }: any = await uploadFile(currentSelectedFile);
+              const { path }: any = await uploadFile(selectedFile);
               const channelId = chatList[currentFocus][`channelId`];
               ws.send(
                 JSON.stringify({
