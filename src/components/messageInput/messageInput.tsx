@@ -47,9 +47,8 @@ const MessageInput = () => {
         return;
       }
       dispatch(setSending(true));
-      if (userFileUpload.files.length > 0 || currentSelectedFile) {
+      if (userFileUpload.files.length > 0 || currentSelectedFile.name) {
         if (currentSelectedFile.name) {
-          console.log("this. should not call: ", currentSelectedFile);
           const { path }: any = await uploadFile(currentSelectedFile);
           const channelId = chatList[currentFocus][`channelId`];
           ws.send(
@@ -91,7 +90,6 @@ const MessageInput = () => {
         userFileUpload.value = "";
         setSelectedFile({ name: "" });
       } else {
-        console.log(currentFocus);
         const channelId = chatList[currentFocus][`channelId`];
         ws.send(
           JSON.stringify({
@@ -101,6 +99,7 @@ const MessageInput = () => {
         );
         setMessage("");
       }
+      dispatch(setSending(false));
     } catch (err) {
       console.error(err);
       error("Error in sending message");
