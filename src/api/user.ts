@@ -93,37 +93,30 @@ export const tryLoginApi = async (
   return await loginPromise;
 };
 
-// export const logoutUserNodejs = async (
-//   deviceId: string,
-//   deviceName: string,
-//   accessToken: string,
-//   refreshToken: string
-// ) => {
-//   const myWorkingPromise = new Promise(async (resolve, reject) => {
-//     try {
-//       const requestOptions = {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({
-//           accessToken,
-//           refreshToken,
-//           deviceId,
-//           deviceName,
-//         }),
-//       };
-//       let apiEndPoint = "";
-//       if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
-//         // dev code
-//         apiEndPoint = `http://localhost:${port}/login/logout`;
-//       } else {
-//         // production code
-//         apiEndPoint = "/login/logout";
-//       }
-//       let result: any = await fetch(apiEndPoint, requestOptions);
-//       resolve(true);
-//     } catch (error) {
-//       reject(error);
-//     }
-//   });
-//   return await myWorkingPromise;
-// };
+export const logoutUserNodejs = async (email: string) => {
+  const myWorkingPromise = new Promise(async (resolve, reject) => {
+    try {
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+        }),
+      };
+      let apiEndPoint = "";
+      if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+        // dev code
+        apiEndPoint = `http://localhost:${port}/login/logout`;
+      } else {
+        // production code
+        apiEndPoint = "/login/logout";
+      }
+      let result: any = await fetch(apiEndPoint, requestOptions);
+      console.log(await result.json());
+      resolve(true);
+    } catch (error) {
+      reject(error);
+    }
+  });
+  return await myWorkingPromise;
+};
