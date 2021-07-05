@@ -44,20 +44,16 @@ const ChatWindow = () => {
                   : "senderMessage"
               }`}
             >
-              {(message.text === "photo" || message.text === "사진") &&
-                message.attachment &&
-                message.attachment.thumbnailUrl && (
-                  <ImgMessageHandler
-                    source={message.attachment.thumbnailUrl}
-                    url={message.attachment.url}
-                  />
-                )}
+              {message.attachment && message.attachment.thumbnailUrl && (
+                <ImgMessageHandler
+                  source={message.attachment.thumbnailUrl}
+                  url={message.attachment.url}
+                />
+              )}
               {message.text === "voice note" && (
                 <audio
                   controls
-                  src={
-                    message?.audio ? message?.audio : message?.attachment.url
-                  }
+                  src={message?.audio ? message.audio : message?.attachment.url}
                 ></audio>
               )}
               {message.text !== "photo" &&
@@ -82,7 +78,6 @@ const ChatWindow = () => {
                     />
                   )
                 )}
-
               {message?.thumbnails &&
                 message.thumbnails.map((imgUrl: string, index: number) => (
                   <ImgMessageHandler

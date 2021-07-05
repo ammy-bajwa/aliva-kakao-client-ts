@@ -3,12 +3,17 @@ import profile from "../../assets/images/profile.png";
 
 import "./chatListItem.css";
 
+interface ChatListItemProps {
+  name: string;
+  profileImage: string;
+  onClickHandler: React.MouseEventHandler<HTMLDivElement>;
+}
+
 const ChatListItem = ({
   name,
   profileImage,
-  newChatCount,
   onClickHandler,
-}: any) => {
+}: ChatListItemProps) => {
   const currentFocus = useSelector((state: any) => state.currentFocus);
   return (
     <div

@@ -31,7 +31,6 @@ const Home = (props: any) => {
           <ChatListItem
             profileImage={item.displayUserList[0].profileURL}
             name={item.displayUserList[0].nickname}
-            newChatCount={item.newChatCount}
             key={index}
             onClickHandler={() => {
               return onClickHandler(item.displayUserList[0].nickname);
@@ -47,14 +46,6 @@ const Home = (props: any) => {
   return (
     <div className="d-flex rounded" id="homeMainContainer">
       <div className="chatListContainer border rounded d-flex flex-column flex-wrap m-2 justify-content-center">
-        {/* <ChatListItem
-          profileImage="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-          name="amir"
-        />{" "}
-        <ChatListItem
-          profileImage="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-          name="ali"
-        /> */}
         {props.user.chatList ? getChatListItems() : ""}
       </div>
       <div className="border m-2 rounded" id="messageContainer">
