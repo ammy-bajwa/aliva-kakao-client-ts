@@ -67,6 +67,63 @@ export const handleContacts = async (contacts: any, email: number) => {
                 );
               }
               myImgDb.close();
+            } else if (
+              message.attachment?.thumbnailUrlsBase64 &&
+              message.attachment?.urlsBase64
+            ) {
+              const dbName = SHA256("KakaoUserImages").toString();
+              const storeName = "imgStore";
+              const myImgDb = await openDB(dbName, 1, {
+                async upgrade(myImgDb) {
+                  myImgDb.createObjectStore(storeName);
+                },
+              });
+              message.attachment.thumbnailKeys = [];
+              message.attachment.urlKeys = [];
+              for (
+                let index = 0;
+                index < message.attachment.thumbnailUrlsBase64.length;
+                index++
+              ) {
+                const thumbnailKey = SHA256(
+                  message.attachment.thumbnailUrls[index]
+                ).toString();
+                message.attachment.thumbnailKeys.push(thumbnailKey);
+                console.log(message.attachment.thumbnailKeys);
+                const urlKey = SHA256(
+                  message.attachment.imageUrls[index]
+                ).toString();
+                message.attachment.urlKeys.push(urlKey);
+                const thumbnailBase64 =
+                  message.attachment.thumbnailUrlsBase64[index];
+                const imgBase64 = message.attachment.urlsBase64[index];
+
+                const isThumbnailAlreadyExists = await myImgDb.get(
+                  storeName,
+                  thumbnailKey
+                );
+                const isurlAlreadyExists = await myImgDb.get(storeName, urlKey);
+
+                if (!isThumbnailAlreadyExists) {
+                  await myImgDb.put(
+                    storeName,
+                    new Blob([thumbnailBase64], {
+                      type: message.attachment.mtl[index],
+                    }),
+                    thumbnailKey
+                  );
+                }
+                if (!isurlAlreadyExists) {
+                  await myImgDb.put(
+                    storeName,
+                    new Blob([imgBase64], {
+                      type: message.attachment.mtl[index],
+                    }),
+                    urlKey
+                  );
+                }
+              }
+              myImgDb.close();
             }
             await messageDb.put("myLogsData", message, key);
           });

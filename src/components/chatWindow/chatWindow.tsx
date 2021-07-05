@@ -18,14 +18,15 @@ const ChatWindow = () => {
     });
     return { chat, currentFocus, chatLoading };
   });
-  const imageOnClickHandler = async (message: any) => {
+  const imageOnClickHandler = async (url: string) => {
+    console.log("called");
     let image = document.createElement("img");
-    image.src = message.attachment.url;
+    image.src = url;
     let w: any = window.open("", "_blank");
     w.document.title = "AlivaKakaoClient";
     w.document.title = "AlivaKakaoClient";
     w.document.body.appendChild(image);
-    w.location.href = message.attachment.url;
+    w.location.href = url;
   };
 
   // const getSha1 = async (p1: any) => {
@@ -37,6 +38,7 @@ const ChatWindow = () => {
   // };
 
   useEffect(() => {
+    console.log("chat: ", chat);
     scrollToEndMessages();
   }, [chatLoading, chat]);
   return (
@@ -72,7 +74,13 @@ const ChatWindow = () => {
                         ? message.attachment.thumbnail
                         : message.attachment.thumbnailUrl
                     }
-                    onClick={() => imageOnClickHandler(message)}
+                    onClick={() =>
+                      imageOnClickHandler(
+                        message.attachment.thumbnail
+                          ? message.attachment.thumbnail
+                          : message.attachment.thumbnailUrl
+                      )
+                    }
                     className="hoverPointer p-1"
                     width="90"
                     height="90"
@@ -84,6 +92,7 @@ const ChatWindow = () => {
               {message.text !== "photo" &&
                 message.text !== "voice note" &&
                 !message?.attachment?.name &&
+                !message?.attachment?.thumbnailUrls &&
                 (!message?.attachment || !message.attachment?.thumbnailUrl) && (
                   <span className="m-1 text-wrap">{message.text}</span>
                 )}
@@ -92,6 +101,40 @@ const ChatWindow = () => {
                   {message?.attachment?.alt}
                 </span>
               )}
+              {!message?.thumbnails &&
+                message?.attachment?.thumbnailUrls &&
+                message.attachment.thumbnailUrls.map(
+                  (imgUrl: string, index: number) => (
+                    <img
+                      loading="lazy"
+                      key={index}
+                      alt="userImages"
+                      src={imgUrl}
+                      onClick={() =>
+                        imageOnClickHandler(message.attachment.imageUrls[index])
+                      }
+                      className="hoverPointer p-1"
+                      width="90"
+                      height="90"
+                    />
+                  )
+                )}
+
+              {message?.thumbnails &&
+                message.thumbnails.map((imgUrl: string, index: number) => (
+                  <img
+                    loading="lazy"
+                    key={index}
+                    alt="userImages"
+                    src={imgUrl}
+                    onClick={() =>
+                      imageOnClickHandler(message.attachment.imageUrls[index])
+                    }
+                    className="hoverPointer p-1"
+                    width="90"
+                    height="90"
+                  />
+                ))}
               <span className="small bg-secondary makeItLight rounded p-1">
                 {moment(message.sendAt).format("hh:mm:ss A DD/MM/YYYY")}
               </span>

@@ -1,3 +1,4 @@
+import { SHA256 } from "crypto-js";
 import { getUserChat } from "../api/chat";
 import { getLatestContactLogid } from "../idb/contacts";
 import {
@@ -28,7 +29,10 @@ export const refreshMessages = async (focusedName: string) => {
     );
     const messagesToSet = [...messages, ...allMessages];
     let imgPromisesChat = messagesToSet.map(async (message: any) => {
-      if (message.text === "photo"|| message.text === "사진") {
+      if (
+        message.text === "photo" ||
+        (message.text === "사진" && message.attachment?.thumbnailUrl)
+      ) {
         const imgBlob = await getImgBlobFromIdb(
           message.attachment.thumbnailKey || ""
         );
@@ -37,6 +41,21 @@ export const refreshMessages = async (focusedName: string) => {
           message.thumbnail = `data:${message.attachment.mt};base64,${base64}`;
           console.log("imgBlob: ", imgBlob);
           console.log("base64: ", message.thumbnail);
+        }
+      } else if (message?.attachment?.thumbnailUrls) {
+        message.thumbnails = [];
+        for (
+          let index = 0;
+          index < message?.attachment.thumbnailUrls.length;
+          index++
+        ) {
+          const thumbnailUrl = message?.attachment.thumbnailUrls[index];
+          const key = SHA256(thumbnailUrl).toString();
+          const imgBlob = await getImgBlobFromIdb(key);
+          const base64 = await readBlobText(imgBlob);
+          message.thumbnails.push(
+            `data:${message.attachment.mtl[index]};base64,${base64}`
+          );
         }
       }
       return message;
