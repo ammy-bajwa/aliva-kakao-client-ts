@@ -1,6 +1,6 @@
 import { port } from "../helpers/config";
 // import { startLoading, stopLoading } from "../utils/loading";
-import { resultType, newResultType } from "../interphases/chat";
+import { resultType, newResultType } from "../Interfaces/chat";
 
 export const getUserChat = async (
   email: string,

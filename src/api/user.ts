@@ -6,7 +6,7 @@ import { handleContacts, updateContactLogid } from "../idb/contacts";
 import { updateUserMessages } from "../idb/messages";
 import { store } from "../redux";
 import { startLoading, stopLoading } from "../utils/loading";
-import { FetchType, resultIn } from "../interphases/api";
+import { FetchType, resultIn } from "../Interfaces/api";
 
 export const tryLoginApi = async (
   email: string,

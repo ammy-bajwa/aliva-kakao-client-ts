@@ -1,6 +1,6 @@
 import { port } from "../helpers/config";
 import { errors } from "../helpers/errorCodes";
-import { resultType } from "../interphases/chat";
+import { resultType } from "../Interfaces/chat";
 
 export const trySendDeviceRegisterApi = async (
   deviceName: string,
