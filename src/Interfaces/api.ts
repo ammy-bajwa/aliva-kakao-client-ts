@@ -20,7 +20,7 @@ export interface resultIn {
   message: string | undefined;
 }
 
-export interface FetchType {
+export interface LoginFetchType {
   bodyUsed: boolean;
   body: ReadableStream<any> | null;
   json(): Promise<any>;

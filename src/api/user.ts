@@ -6,7 +6,7 @@ import { handleContacts, updateContactLogid } from "../idb/contacts";
 import { updateUserMessages } from "../idb/messages";
 import { store } from "../redux";
 import { startLoading, stopLoading } from "../utils/loading";
-import { FetchType, resultIn } from "../Interfaces/api";
+import { LoginFetchType, resultIn } from "../Interfaces/api";
 
 export const tryLoginApi = async (
   email: string,
@@ -52,7 +52,10 @@ export const tryLoginApi = async (
             // production code
             apiEndPoint = "/login";
           }
-          const result: FetchType = await fetch(apiEndPoint, requestOptions);
+          const result: LoginFetchType = await fetch(
+            apiEndPoint,
+            requestOptions
+          );
           console.log(typeof result);
           const resultJson: resultIn = await result.json();
 
@@ -68,6 +71,7 @@ export const tryLoginApi = async (
           } else {
             loginResult = resultJson;
             await handleContacts(resultJson.chatList, resultJson.email);
+            await updateContactLogid(email, resultJson.biggestChatLog);
             await updateUserMessages(
               resultJson.loggedInUserId,
               resultJson.chatList
@@ -110,7 +114,7 @@ export const logoutUserNodejs = async (email: string) => {
         apiEndPoint = "/login/logout";
       }
       let result: any = await fetch(apiEndPoint, requestOptions);
-      console.log(await result.json() , typeof result);
+      console.log(await result.json(), typeof result);
       resolve(true);
     } catch (error) {
       reject(error);
