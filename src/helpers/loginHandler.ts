@@ -30,8 +30,10 @@ export const loginHandler = async (
         const { deviceName, deviceId } = JSON.parse(deviceData);
         // const contactListLogs = await getContactListLogs(email);
         // console.log("contactListLogs: ", contactListLogs);
-        const lastMessageTimeStamp = await getLastMessageTimeStamp(email);
-        const latestLogId = await getLatestContactLogid(email);
+        const lastMessageTimeStamp: number = await getLastMessageTimeStamp(
+          email
+        );
+        const latestLogId: number = await getLatestContactLogid(email);
         const user: any = await tryLoginApi(
           email,
           password,

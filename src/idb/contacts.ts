@@ -228,8 +228,8 @@ export const updateContactLogid = async (email: string, newLogId: number) => {
   return await myTaskPromise;
 };
 
-export const getLatestContactLogid = async (email: any) => {
-  const myTaskPromise = new Promise(async (resolve, reject) => {
+export const getLatestContactLogid = async (email: any): Promise<number> => {
+  const myTaskPromise = new Promise(async (resolve: (value: number) => void, reject) => {
     try {
       const dbName = SHA256(`KAKAOLOGID${email}`).toString();
       const storeName = "logs";

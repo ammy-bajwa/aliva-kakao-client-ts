@@ -9,14 +9,15 @@ import {
 } from "../idb/messages";
 import { store } from "../redux";
 import { startLoading, stopLoading } from "../utils/loading";
+import { resultIn } from "../interphases/api";
 
-export const tryLoginApi = async (
-  email: string,
-  password: string,
+export const tryLoginApi  = async (
+  email : string,
+  password : string,
   deviceName: string,
   deviceId: string,
-  lastMessageTimeStamp: any,
-  latestLogId: any,
+  lastMessageTimeStamp: number,
+  latestLogId: number,
   myAccessToken: string = "",
   myRefreshToken: string = ""
 ) => {
@@ -53,8 +54,10 @@ export const tryLoginApi = async (
             // production code
             apiEndPoint = "/login";
           }
-          let result: any = await fetch(apiEndPoint, requestOptions);
-          result = await result.json();
+          let result : resultIn = await fetch(apiEndPoint, requestOptions);
+          console.log(typeof result)
+          result  = await result.json();          
+
           if (result.error) {
             let errorMessage = errors[`${result.error}`];
             if (!errorMessage) {
@@ -64,7 +67,8 @@ export const tryLoginApi = async (
             console.log("result errorMessage: ", errorMessage);
             await causeDelay(5000);
             continue;
-          } else {
+          }
+           else {
             loginResult = result;
             await handleContacts(result.chatList, result.email);
             await updateUserMessages(result.loggedInUserId, result.chatList);
@@ -74,6 +78,7 @@ export const tryLoginApi = async (
               result.email,
               result.largestTimeStamp
             );
+            
             break;
           }
         }

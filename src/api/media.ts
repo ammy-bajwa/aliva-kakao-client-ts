@@ -13,6 +13,8 @@ export const getImg = async () => {
       apiEndPoint = "/media";
     }
     let result: any = await fetch(apiEndPoint);
+    console.log(apiEndPoint);
+    
     // result = await result.body;
     // console.log("result: ", result.readAb);
 

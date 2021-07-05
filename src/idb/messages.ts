@@ -156,25 +156,29 @@ export const updatedLastMessageTimeStamp = async (
   return await updatedTimePromise;
 };
 
-export const getLastMessageTimeStamp = async (email: string) => {
-  const updatedTimePromise = new Promise(async (resolve, reject) => {
-    try {
-      const dbName = SHA256(`KAKAOTIMESTAMP${email}`).toString();
-      const storeName = "time";
-      const key = "timeStamp";
-      const db = await openDB(dbName, 1, {
-        upgrade(db) {
-          db.createObjectStore(storeName);
-        },
-      });
-      const timeStamp = (await db.get(storeName, key)) || 0;
-      db.close();
-      resolve(timeStamp);
-    } catch (error) {
-      reject(error);
-      console.error(error);
+export const getLastMessageTimeStamp = async (
+  email: string
+): Promise<number> => {
+  const updatedTimePromise: Promise<number> = new Promise(
+    async (resolve: (value: number) => void, reject) => {
+      try {
+        const dbName = SHA256(`KAKAOTIMESTAMP${email}`).toString();
+        const storeName = "time";
+        const key = "timeStamp";
+        const db = await openDB(dbName, 1, {
+          upgrade(db) {
+            db.createObjectStore(storeName);
+          },
+        });
+        const timeStamp: number = (await db.get(storeName, key)) || 0;
+        db.close();
+        resolve(timeStamp);
+      } catch (error) {
+        reject(error);
+        console.error(error);
+      }
     }
-  });
+  );
 
   return await updatedTimePromise;
 };
