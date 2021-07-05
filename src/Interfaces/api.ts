@@ -19,11 +19,3 @@ export interface resultIn {
   error: string | undefined | null;
   message: string | undefined;
 }
-
-export interface LoginFetchType {
-  bodyUsed: boolean;
-  body: ReadableStream<any> | null;
-  json(): Promise<any>;
-  json<T>(): Promise<T>;
-  text(): Promise<string>;
-}

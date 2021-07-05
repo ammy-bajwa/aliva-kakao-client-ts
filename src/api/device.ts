@@ -1,6 +1,7 @@
 import { port } from "../helpers/config";
 import { errors } from "../helpers/errorCodes";
-import { resultType } from "../Interfaces/chat";
+import { FetchType } from "../Interfaces/common";
+import { deviceCodeResponseType } from "../Interfaces/device";
 
 export const trySendDeviceRegisterApi = async (
   deviceName: string,
@@ -21,15 +22,15 @@ export const trySendDeviceRegisterApi = async (
     // production code
     apiEndPoint = "/device/sendCode";
   }
-  let result: any = await fetch(apiEndPoint, requestOptions);
-  result = await result.json();
-  if (result.error) {
-    const errorMessage = result.message;
+  let result: FetchType = await fetch(apiEndPoint, requestOptions);
+  let resultJson: deviceCodeResponseType = await result.json();
+  if (resultJson.error) {
+    const errorMessage = resultJson.message;
     alert(errorMessage);
     console.log("result: ", errorMessage);
   } else {
-    alert(result.message);
-    console.log(result.message);
+    alert(resultJson.message);
+    console.log(resultJson.message);
   }
 };
 
@@ -52,14 +53,10 @@ export const trySetDeviceRegisterApi = async (
       // production code
       apiEndPoint = "/device/setCode";
     }
-    let result: resultType = await fetch(apiEndPoint, requestOptions);
-    interface newResultType {
-    error : string | undefined,
-    message : string | undefined
-          
-    }
+    let result: FetchType = await fetch(apiEndPoint, requestOptions);
 
-    let newResult = await result.json();
+    let newResult: deviceCodeResponseType = await result.json();
+
     if (newResult.error) {
       let errorMessage = errors[`${newResult.error}`];
       if (!errorMessage) {
@@ -72,7 +69,6 @@ export const trySetDeviceRegisterApi = async (
     } else {
       resolve(newResult.message);
       alert(newResult.message);
-      console.log(result);
     }
   });
 

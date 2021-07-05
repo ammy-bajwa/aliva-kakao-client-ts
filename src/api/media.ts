@@ -1,5 +1,6 @@
 import { port } from "../helpers/config";
 import { convertFileToBase64 } from "../helpers/file";
+import { FetchType } from "../Interfaces/common";
 // import { startLoading, stopLoading } from "../utils/loading";
 
 export const getImg = async () => {
@@ -12,13 +13,9 @@ export const getImg = async () => {
       // production code
       apiEndPoint = "/media";
     }
-    let result: any = await fetch(apiEndPoint);
-    console.log(apiEndPoint);
-    
-    // result = await result.body;
-    // console.log("result: ", result.readAb);
+    let result: FetchType = await fetch(apiEndPoint);
 
-    const reader = await result.body?.getReader();
+    const reader: any = await result.body?.getReader();
     let myBlobs = [];
     while (true) {
       const { value, done } = await reader?.read();

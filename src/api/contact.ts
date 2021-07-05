@@ -1,4 +1,6 @@
 import { port } from "../helpers/config";
+import { FetchType } from "../Interfaces/common";
+import { ContactJsonResponse } from "../Interfaces/contact";
 
 export const getChatList = async (email: string) => {
   const setCodePromise = new Promise(async (resolve, reject) => {
@@ -16,17 +18,16 @@ export const getChatList = async (email: string) => {
       // production code
       apiEndPoint = "/contact";
     }
-    let result: any = await fetch(apiEndPoint, requestOptions);
-    result = await result.json();
+    let result: FetchType = await fetch(apiEndPoint, requestOptions);
+    let resultJson: ContactJsonResponse = await result.json();
     // stopLoading();
-    if (result.error) {
-      let errorMessage = result.message;
+    if (resultJson.error) {
+      let errorMessage = resultJson.message;
       alert(errorMessage);
-      console.log("result: ", result);
       console.log("errorMessage: ", errorMessage);
       reject(errorMessage);
     } else {
-      const { chatList } = result.data;
+      const { chatList } = resultJson.data;
       resolve(chatList);
       console.log(result);
     }

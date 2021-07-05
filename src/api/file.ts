@@ -1,4 +1,5 @@
 import { port } from "../helpers/config";
+import { FetchType } from "../Interfaces/common";
 import { store } from "../redux";
 
 export const uploadFile = async (file: any) => {
@@ -23,7 +24,7 @@ export const uploadFile = async (file: any) => {
           // production code
           apiEndPoint = "/uploadfile";
         }
-        let result: any = await fetch(apiEndPoint, requestOptions);
+        let result: FetchType = await fetch(apiEndPoint, requestOptions);
         result = await result.json();
         console.log("result: ", result);
         resolve(result);

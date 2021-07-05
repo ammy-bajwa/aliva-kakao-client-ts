@@ -15,7 +15,7 @@ export const refreshMessages = async (focusedName: string) => {
   try {
     const { loggedInUserId, user }: any = await store.getState();
     const { dispatch } = store;
-    const lastChatLogId = getLatestContactLogid(user.email);
+    const lastChatLogId = await getLatestContactLogid(user.email);
     const focusedUserId = user.chatList[focusedName]?.intId;
     dispatch(setFocusUser(focusedName));
     const { allMessages, lastMessageTimeStamp, logId }: any =

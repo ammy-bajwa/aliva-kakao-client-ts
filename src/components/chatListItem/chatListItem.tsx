@@ -25,11 +25,6 @@ const ChatListItem = ({
         />
         <h3 className="d-inline contactName">{name}</h3>
       </div>
-      {/* {newChatCount > 0 && currentFocus !== name && (
-        <div>
-          <h3 className="d-inline contactName text-danger">({newChatCount})</h3>
-        </div>
-      )} */}
     </div>
   );
 };
