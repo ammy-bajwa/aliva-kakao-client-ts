@@ -1,5 +1,6 @@
 import { port } from "../helpers/config";
 import { errors } from "../helpers/errorCodes";
+import { resultType } from "../interphases/chat";
 
 export const trySendDeviceRegisterApi = async (
   deviceName: string,
@@ -51,20 +52,26 @@ export const trySetDeviceRegisterApi = async (
       // production code
       apiEndPoint = "/device/setCode";
     }
-    let result: any = await fetch(apiEndPoint, requestOptions);
-    result = await result.json();
-    if (result.error) {
-      let errorMessage = errors[`${result.error}`];
+    let result: resultType = await fetch(apiEndPoint, requestOptions);
+    interface newResultType {
+    error : string | undefined,
+    message : string | undefined
+          
+    }
+
+    let newResult = await result.json();
+    if (newResult.error) {
+      let errorMessage = errors[`${newResult.error}`];
       if (!errorMessage) {
-        errorMessage = result.message;
+        errorMessage = newResult.message;
       }
       alert(errorMessage);
-      console.log("result: ", result);
+      console.log("result: ", newResult);
       console.log("errorMessage: ", errorMessage);
       reject(errorMessage);
     } else {
-      resolve(result.message);
-      alert(result.message);
+      resolve(newResult.message);
+      alert(newResult.message);
       console.log(result);
     }
   });

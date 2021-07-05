@@ -72,8 +72,6 @@ export const tryLoginApi = async (
               resultJson.loggedInUserId,
               resultJson.chatList
             );
-            await updateContactLogid(email, resultJson.biggestChatLog);
-            console.log("resultJson: ", resultJson);
             break;
           }
         }
@@ -112,7 +110,7 @@ export const logoutUserNodejs = async (email: string) => {
         apiEndPoint = "/login/logout";
       }
       let result: any = await fetch(apiEndPoint, requestOptions);
-      console.log(await result.json());
+      console.log(await result.json() , typeof result);
       resolve(true);
     } catch (error) {
       reject(error);

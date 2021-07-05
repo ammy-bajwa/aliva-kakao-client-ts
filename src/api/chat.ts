@@ -1,12 +1,13 @@
 import { port } from "../helpers/config";
 // import { startLoading, stopLoading } from "../utils/loading";
+import { resultType, newResultType } from "../interphases/chat";
 
 export const getUserChat = async (
   email: string,
   nickNameToGetChat: string,
-  lastMessageTimeStamp: any,
-  lastChatLogId: any,
-  logId: any
+  lastMessageTimeStamp: number,
+  lastChatLogId: string,
+  logId: string
 ) => {
   const setCodePromise = new Promise(async (resolve, reject) => {
     const requestOptions = {
@@ -28,18 +29,19 @@ export const getUserChat = async (
       // production code
       apiEndPoint = "/chat";
     }
-    let result: any = await fetch(apiEndPoint, requestOptions);
-    result = await result.json();
-    if (result.error) {
-      let errorMessage = result.message;
+
+    let result: resultType = await fetch(apiEndPoint, requestOptions);
+    let newResult: newResultType = await result.json();
+    if (newResult.error) {
+      let errorMessage = newResult.message;
       alert(errorMessage);
-      console.log("result: ", result);
+      console.log("result: ", newResult);
       console.log("errorMessage: ", errorMessage);
       reject(errorMessage);
     } else {
-      const { userId, messages } = result.data;
+      const { userId, messages } = newResult.data;
       resolve({ userId, messages });
-      console.log(result);
+      console.log(newResult);
     }
   });
 
