@@ -1,6 +1,8 @@
 import moment from "moment";
 import { useEffect } from "react";
 
+import { ImgMessageHandler } from "./imgMessageHandler/imgMessageHandler";
+
 import { useSelector } from "react-redux";
 import { scrollToEndMessages } from "../../helpers/scroll";
 
@@ -14,21 +16,12 @@ const ChatWindow = () => {
     });
     return { chat, currentFocus, chatLoading };
   });
-  const imageOnClickHandler = async (url: string) => {
-    console.log("called");
-    let image = document.createElement("img");
-    image.src = url;
-    let w: any = window.open("", "_blank");
-    w.document.title = "AlivaKakaoClient";
-    w.document.title = "AlivaKakaoClient";
-    w.document.body.appendChild(image);
-    w.location.href = url;
-  };
 
   useEffect(() => {
     console.log("chat: ", chat);
     scrollToEndMessages();
   }, [chatLoading, chat]);
+
   return (
     <div className="m-2" id="chatWindowContainer">
       <h1>Chat Window</h1>
@@ -54,24 +47,9 @@ const ChatWindow = () => {
               {(message.text === "photo" || message.text === "사진") &&
                 message.attachment &&
                 message.attachment.thumbnailUrl && (
-                  <img
-                    loading="lazy"
-                    alt="userImages"
-                    src={
-                      message.attachment.thumbnail
-                        ? message.attachment.thumbnail
-                        : message.attachment.thumbnailUrl
-                    }
-                    onClick={() =>
-                      imageOnClickHandler(
-                        message.attachment.thumbnail
-                          ? message.attachment.thumbnail
-                          : message.attachment.thumbnailUrl
-                      )
-                    }
-                    className="hoverPointer p-1"
-                    width="90"
-                    height="90"
+                  <ImgMessageHandler
+                    source={message.attachment.thumbnailUrl}
+                    url={message.attachment.url}
                   />
                 )}
               {message.text === "voice note" && (
@@ -98,34 +76,18 @@ const ChatWindow = () => {
                 message?.attachment?.thumbnailUrls &&
                 message.attachment.thumbnailUrls.map(
                   (imgUrl: string, index: number) => (
-                    <img
-                      loading="lazy"
-                      key={index}
-                      alt="userImages"
-                      src={imgUrl}
-                      onClick={() =>
-                        imageOnClickHandler(message.attachment.imageUrls[index])
-                      }
-                      className="hoverPointer p-1"
-                      width="90"
-                      height="90"
+                    <ImgMessageHandler
+                      source={imgUrl}
+                      url={message.attachment.imageUrls[index]}
                     />
                   )
                 )}
 
               {message?.thumbnails &&
                 message.thumbnails.map((imgUrl: string, index: number) => (
-                  <img
-                    loading="lazy"
-                    key={index}
-                    alt="userImages"
-                    src={imgUrl}
-                    onClick={() =>
-                      imageOnClickHandler(message.attachment.imageUrls[index])
-                    }
-                    className="hoverPointer p-1"
-                    width="90"
-                    height="90"
+                  <ImgMessageHandler
+                    source={imgUrl}
+                    url={message.attachment.imageUrls[index]}
                   />
                 ))}
               <span className="small bg-secondary makeItLight rounded p-1">
