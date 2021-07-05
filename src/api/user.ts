@@ -3,17 +3,14 @@ import { causeDelay } from "../helpers/delay";
 import { errors } from "../helpers/errorCodes";
 import { setLoginLoadingMessage } from "../helpers/loading";
 import { handleContacts, updateContactLogid } from "../idb/contacts";
-import {
-  updatedLastMessageTimeStamp,
-  updateUserMessages,
-} from "../idb/messages";
+import { updateUserMessages } from "../idb/messages";
 import { store } from "../redux";
 import { startLoading, stopLoading } from "../utils/loading";
-import { resultIn } from "../interphases/api";
+import { FetchType, resultIn } from "../interphases/api";
 
-export const tryLoginApi  = async (
-  email : string,
-  password : string,
+export const tryLoginApi = async (
+  email: string,
+  password: string,
   deviceName: string,
   deviceId: string,
   lastMessageTimeStamp: number,
@@ -27,7 +24,8 @@ export const tryLoginApi  = async (
         user: { accessToken },
       } = store.getState();
       console.log("accessToken: ", accessToken);
-      let loginResult, loginErrorMessage;
+      let loginResult: resultIn | undefined | null;
+      let loginErrorMessage: string = "";
       if (!accessToken) {
         startLoading();
         for (let index = 0; index < 15; index++) {
@@ -54,31 +52,28 @@ export const tryLoginApi  = async (
             // production code
             apiEndPoint = "/login";
           }
-          let result : resultIn = await fetch(apiEndPoint, requestOptions);
-          console.log(typeof result)
-          result  = await result.json();          
+          const result: FetchType = await fetch(apiEndPoint, requestOptions);
+          console.log(typeof result);
+          const resultJson: resultIn = await result.json();
 
-          if (result.error) {
-            let errorMessage = errors[`${result.error}`];
+          if (resultJson.error) {
+            let errorMessage = errors[`${resultJson.error}`];
             if (!errorMessage) {
-              errorMessage = result.message;
+              errorMessage = resultJson.message;
             }
             loginErrorMessage = errorMessage;
             console.log("result errorMessage: ", errorMessage);
             await causeDelay(5000);
             continue;
-          }
-           else {
-            loginResult = result;
-            await handleContacts(result.chatList, result.email);
-            await updateUserMessages(result.loggedInUserId, result.chatList);
-            await updateContactLogid(email, result.biggestChatLog);
-            console.log("result: ", result);
-            await updatedLastMessageTimeStamp(
-              result.email,
-              result.largestTimeStamp
+          } else {
+            loginResult = resultJson;
+            await handleContacts(resultJson.chatList, resultJson.email);
+            await updateUserMessages(
+              resultJson.loggedInUserId,
+              resultJson.chatList
             );
-            
+            await updateContactLogid(email, resultJson.biggestChatLog);
+            console.log("resultJson: ", resultJson);
             break;
           }
         }

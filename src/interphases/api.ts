@@ -1,21 +1,29 @@
 export interface tryLoginApiIN {
-  email: string,
-  password: string,
-  deviceName: string,
-  deviceId: string,
-  lastMessageTimeStamp: Object,
-  latestLogId: Date,
-  myAccessToken: string ,
-  myRefreshToken: string 
+  email: string;
+  password: string;
+  deviceName: string;
+  deviceId: string;
+  lastMessageTimeStamp: Object;
+  latestLogId: Date;
+  myAccessToken: string;
+  myRefreshToken: string;
 }
 
 export interface resultIn {
-  json : Function,
-  error : string | undefined,
-  message : string,
-  chatList : object,
-  email : string ,
-  loggedInUserId : number,
-  biggestChatLog : number , 
-  largestTimeStamp : number,
+  email: string;
+  loggedInUserId: number;
+  accessToken: string;
+  refreshToken: string;
+  chatList: object;
+  biggestChatLog: number;
+  error: string | undefined | null;
+  message: string | undefined;
+}
+
+export interface FetchType {
+  bodyUsed: boolean;
+  body: ReadableStream<any> | null;
+  json(): Promise<any>;
+  json<T>(): Promise<T>;
+  text(): Promise<string>;
 }
