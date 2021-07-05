@@ -29,8 +29,8 @@ export const handleContacts = async (contacts: any, email: number) => {
               message?.attachment?.urlBase64
             ) {
               // open the db and check if data already exists
-              const dbName = SHA256("KakaoUserImages").toString();
-              const storeName = "imgStore";
+              const dbName = SHA256("KakaoUserMedia").toString();
+              const storeName = "mediaStore";
               const thumbnailKey = SHA256(
                 message.attachment.thumbnailUrl
               ).toString();
@@ -71,8 +71,8 @@ export const handleContacts = async (contacts: any, email: number) => {
               message.attachment?.thumbnailUrlsBase64 &&
               message.attachment?.urlsBase64
             ) {
-              const dbName = SHA256("KakaoUserImages").toString();
-              const storeName = "imgStore";
+              const dbName = SHA256("KakaoUserMedia").toString();
+              const storeName = "mediaStore";
               const myImgDb = await openDB(dbName, 1, {
                 async upgrade(myImgDb) {
                   myImgDb.createObjectStore(storeName);
@@ -122,6 +122,33 @@ export const handleContacts = async (contacts: any, email: number) => {
                     urlKey
                   );
                 }
+              }
+              myImgDb.close();
+            } else if (
+              message.text === "voice note" &&
+              message.attachment?.url
+            ) {
+              const dbName = SHA256("KakaoUserMedia").toString();
+              const storeName = "mediaStore";
+              const audioKey = SHA256(message.attachment?.url).toString();
+              const myImgDb = await openDB(dbName, 1, {
+                async upgrade(myImgDb) {
+                  myImgDb.createObjectStore(storeName);
+                },
+              });
+              const isAudioAlreadyExists = await myImgDb.get(
+                storeName,
+                audioKey
+              );
+              if (!isAudioAlreadyExists) {
+                console.log("Img message: ", message);
+                await myImgDb.put(
+                  storeName,
+                  new Blob([message.attachment.audioBase64], {
+                    type: "audio/mpeg",
+                  }),
+                  audioKey
+                );
               }
               myImgDb.close();
             }

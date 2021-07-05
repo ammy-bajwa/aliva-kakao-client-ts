@@ -252,8 +252,8 @@ export const updateMessageLogs = async (
 export const getImgBlobFromIdb = async (key: string) => {
   const myWorkingTask = new Promise(async (resolve, reject) => {
     try {
-      const dbName = SHA256("KakaoUserImages").toString();
-      const storeName = "imgStore";
+      const dbName = SHA256("KakaoUserMedia").toString();
+      const storeName = "mediaStore";
       const db = await openDB(dbName, 1, {
         upgrade(db) {
           db.createObjectStore(storeName);

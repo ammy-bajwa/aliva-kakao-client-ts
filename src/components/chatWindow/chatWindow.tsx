@@ -87,7 +87,12 @@ const ChatWindow = () => {
                   />
                 )}
               {message.text === "voice note" && (
-                <audio controls src={message.attachment.url}></audio>
+                <audio
+                  controls
+                  src={
+                    message?.audio ? message?.audio : message?.attachment.url
+                  }
+                ></audio>
               )}
               {message.text !== "photo" &&
                 message.text !== "voice note" &&

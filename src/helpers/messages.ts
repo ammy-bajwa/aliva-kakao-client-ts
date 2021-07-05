@@ -57,6 +57,13 @@ export const refreshMessages = async (focusedName: string) => {
             `data:${message.attachment.mtl[index]};base64,${base64}`
           );
         }
+      } else if (message.text === "voice note" && message.attachment?.url) {
+        const key = SHA256(message.attachment?.url).toString();
+        const mediaBlob = await getImgBlobFromIdb(key);
+        if (mediaBlob) {
+          const base64 = await readBlobText(mediaBlob);
+          message.audio = `data:audio/mpeg;base64,${base64}`;
+        }
       }
       return message;
     });
