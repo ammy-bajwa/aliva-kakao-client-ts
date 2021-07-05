@@ -90,11 +90,11 @@ const MessageInput = () => {
         userFileUpload.value = "";
         setSelectedFile({ name: "" });
       } else {
-        const channelId = chatList[currentFocus][`channelId`];
+        const receiverIntId = chatList[currentFocus][`intId`];
         ws.send(
           JSON.stringify({
             key: "newMessage",
-            value: { message, receiver: currentFocus, email, channelId },
+            value: { message, receiver: currentFocus, email, receiverIntId },
           })
         );
         setMessage("");
