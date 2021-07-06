@@ -8,10 +8,7 @@ import { scrollToEndMessages } from "../../helpers/scroll";
 
 import "./chatWindow.css";
 import { ReduxStore } from "../../Interfaces/store";
-
-interface MessageType {
-  sendAt: number;
-}
+import { MessageType } from "../../Interfaces/common";
 
 const ChatWindow = () => {
   const {
@@ -24,7 +21,46 @@ const ChatWindow = () => {
       chat.sort((a: any, b: any) => {
         return a.sendAt - b.sendAt;
       });
-      return { chat, currentFocus, chatLoading };
+      // Handle deleted message here
+      // index all messages
+      let chatIndexes: any = {};
+      let deletedIndexes: any = {};
+      let deletedIndicatorIndexes: any = {};
+      chat.map((message: any) => {
+        const isDeleteIndicator = message.text.includes(
+          `{"feedType":14,"logId":`
+        );
+        if (isDeleteIndicator) {
+          deletedIndexes[message.text.substring(23, 38)] = "Deleted";
+          deletedIndicatorIndexes[`${message.logId}`.substring(0, 15)] =
+            "DeletedIndicator";
+        }
+        const key = `${message.logId}`.substring(0, 15);
+        chatIndexes[key] = message;
+      });
+      // filter deleted using indexes
+      const updatedChat: any = [];
+      if (Object.keys(deletedIndexes).length > 0) {
+        for (const key in chatIndexes) {
+          if (Object.prototype.hasOwnProperty.call(chatIndexes, key)) {
+            const myMessage = chatIndexes[key];
+            const isDeleted = deletedIndexes[key];
+            const isDeletedIndicator = deletedIndicatorIndexes[key];
+
+            if (isDeleted) {
+              const message = chatIndexes[key];
+              message.text = "This message is deleted";
+              message.attachment = {};
+              updatedChat.push(message);
+              continue;
+            } else if (isDeletedIndicator) {
+            } else {
+              updatedChat.push(myMessage);
+            }
+          }
+        }
+      }
+      return { chat: updatedChat, currentFocus, chatLoading };
     });
 
   useEffect(() => {

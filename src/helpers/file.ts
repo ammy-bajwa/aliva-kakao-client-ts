@@ -1,5 +1,3 @@
-import { SyntheticEvent } from "react";
-
 export const convertFileToBase64 = async (file: Blob) => {
   const base64Promise = new Promise((resolve, reject) => {
     try {

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { logoutUserNodejs } from "../../../api/user";
 import { ReduxStore } from "../../../Interfaces/store";
 import { logoutUser } from "../../../redux/action/user";

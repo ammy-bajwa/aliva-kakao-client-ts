@@ -15,7 +15,7 @@ export const tryLoginApi = async (
   deviceName: string,
   deviceId: string,
   lastMessageTimeStamp: number,
-  latestLogId: number,
+  latestLogId: number = 0,
   myAccessToken: string = "",
   myRefreshToken: string = ""
 ) => {

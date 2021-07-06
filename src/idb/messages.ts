@@ -131,8 +131,8 @@ export const lastDbMessageTime = async (
           const data = await db.get(storeName, key);
           resolve({
             allMessages: data || [],
-            lastMessageTimeStamp: data[data.length - 1].sendAt || 0,
-            logId: data[data.length - 1].logId || 0,
+            lastMessageTimeStamp: data[data.length - 1]?.sendAt || 0,
+            logId: data[data.length - 1]?.logId || 0,
           });
         }
       } catch (error) {
