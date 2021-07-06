@@ -1,22 +1,23 @@
-import { useState } from "react";
+import { ReactEventHandler, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadFile } from "../../api/file";
 // import { errors } from "../../helpers/errorCodes";
 import { error } from "../../helpers/toast";
+import { ReduxStore } from "../../Interfaces/store";
 import { setSending } from "../../redux/action/user";
 import "./messageInput.css";
 
 const MessageInput = () => {
   const [currentSelectedFile, setSelectedFile] = useState({ name: "" });
-  const currentFocus = useSelector((state: any) => state.currentFocus);
-  const email = useSelector((state: any) => state.user.email);
-  // const loggedInUserId = useSelector((state: any) => state.loggedInUserId);
-  const chatList = useSelector((state: any) => state.user.chatList);
-  const isSending = useSelector((state: any) => state.isSending);
-  const ws = useSelector((state: any) => state.ws);
+  const currentFocus = useSelector((state: ReduxStore) => state.currentFocus);
+  const email = useSelector((state: ReduxStore) => state.user.email);
+  // const loggedInUserId = useSelector((state: ReduxStore) => state.loggedInUserId);
+  const chatList: any = useSelector((state: ReduxStore) => state.user.chatList);
+  const isSending = useSelector((state: ReduxStore) => state.isSending);
+  const ws = useSelector((state: ReduxStore) => state.ws);
   const dispatch = useDispatch();
   const [message, setMessage] = useState("");
-  const handlePaste = async (e: any) => {
+  const handlePaste = async (e: React.ClipboardEvent) => {
     if (e.clipboardData.files.length) {
       const fileObject = e.clipboardData.files[0];
       setSelectedFile(fileObject);
@@ -27,10 +28,8 @@ const MessageInput = () => {
       );
     }
   };
-  const sendMessageHandler = async (event: any) => {
+  const sendMessageHandler = async (): Promise<void> => {
     try {
-      event.preventDefault();
-      // const sendAt = new Date().getTime();
       const userFileUpload: any = document.getElementById(
         "userFileUpload"
       ) as HTMLInputElement;
@@ -49,41 +48,47 @@ const MessageInput = () => {
       dispatch(setSending(true));
       if (userFileUpload.files.length > 0 || currentSelectedFile.name) {
         if (currentSelectedFile.name) {
-          const { path }: any = await uploadFile(currentSelectedFile);
-          const channelId = chatList[currentFocus][`channelId`];
-          ws.send(
-            JSON.stringify({
-              key: "newMessageFile",
-              value: {
-                message,
-                receiver: currentFocus,
-                filePath: path,
-                email,
-                channelId,
-              },
-            })
+          const { path }: { path: string } = await uploadFile(
+            currentSelectedFile
           );
+          const channelId = chatList[currentFocus][`channelId`];
+          if (ws) {
+            ws.send(
+              JSON.stringify({
+                key: "newMessageFile",
+                value: {
+                  message,
+                  receiver: currentFocus,
+                  filePath: path,
+                  email,
+                  channelId,
+                },
+              })
+            );
+          }
           setSelectedFile({ name: "" });
         } else {
           for (const file in userFileUpload.files) {
             if (
               Object.prototype.hasOwnProperty.call(userFileUpload.files, file)
             ) {
-              const selectedFile: any = userFileUpload.files[file];
-              const { path }: any = await uploadFile(selectedFile);
+              const selectedFile: object = userFileUpload.files[file];
+              const { path }: { path: string } = await uploadFile(selectedFile);
               const channelId = chatList[currentFocus][`channelId`];
-              ws.send(
-                JSON.stringify({
-                  key: "newMessageFile",
-                  value: {
-                    message,
-                    receiver: currentFocus,
-                    filePath: path,
-                    email,
-                    channelId,
-                  },
-                })
-              );
+              if (ws) {
+                ws.send(
+                  JSON.stringify({
+                    key: "newMessageFile",
+                    value: {
+                      message,
+                      receiver: currentFocus,
+                      filePath: path,
+                      email,
+                      channelId,
+                    },
+                  })
+                );
+              }
             }
           }
         }
@@ -114,7 +119,10 @@ const MessageInput = () => {
       </span>
       <form
         className="m-2"
-        onSubmit={sendMessageHandler}
+        onSubmit={(event) => {
+          event.preventDefault();
+          sendMessageHandler();
+        }}
         encType="multipart/form-data"
       >
         <div>
@@ -122,7 +130,10 @@ const MessageInput = () => {
             type="text"
             autoFocus
             className="form-control"
-            onInput={(event: any) => setMessage(event.target.value)}
+            onInput={(event: React.FormEvent<HTMLInputElement>) => {
+              const currentElement = event.target as HTMLInputElement;
+              setMessage(currentElement.value);
+            }}
             value={message}
             onPaste={handlePaste}
           />

@@ -1,4 +1,4 @@
-export const loginUser = (user: any) => ({
+export const loginUser = (user: object) => ({
   type: "LOGIN",
   payload: user,
 });
@@ -12,40 +12,44 @@ export const setFocusUser = (name: string) => ({
   payload: name,
 });
 
-export const setWs = (ws: any) => ({
+export const setWs = (ws: object) => ({
   type: "SET_WS",
   payload: ws,
 });
 
-export const newMessage = (data: any) => {
+export const newMessage = (data: object) => {
   return {
     type: "NEW_MESSAGE",
     payload: data,
   };
 };
 
-export const loadChat = (messages: any) => ({
+export const loadChat = (messages: object[]) => ({
   type: "LOAD_CHAT",
   payload: messages,
 });
 
 export const setStartLoading = () => ({
   type: "START_LOADING",
+  payload: null,
 });
 
 export const setStopLoading = () => ({
   type: "STOP_LOADING",
+  payload: null,
 });
 
 export const setStartChatLoading = () => ({
   type: "START_CHAT_LOADING",
+  payload: null,
 });
 
 export const setStopChatLoading = () => ({
   type: "STOP_CHAT_LOADING",
+  payload: null,
 });
 
-export const setContactList = (contactList: any) => ({
+export const setContactList = (contactList: object[] | undefined) => ({
   type: "SET_CONTACT_LIST",
   payload: contactList,
 });

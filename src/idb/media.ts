@@ -1,5 +1,6 @@
 import { SHA256 } from "crypto-js";
 import { openDB } from "idb";
+import { MessageType } from "../Interfaces/common";
 
 export const handleSingleMessageImgInIdb = async (message: any) => {
   const workPromise = new Promise(async (resolve, reject) => {
@@ -110,31 +111,35 @@ export const handleMultipleMessagesImgInIdb = async (message: any) => {
   return await myWorkPromise;
 };
 
-export const handleVoiceMessageInIdb = async (message: any) => {
+export const handleVoiceMessageInIdb = async (message: MessageType) => {
   const myWorkPromise = new Promise(async (resolve, reject) => {
     try {
       const dbName = SHA256("KakaoUserMedia").toString();
       const storeName = "mediaStore";
-      const audioKey = SHA256(message.attachment?.url).toString();
-      const myImgDb = await openDB(dbName, 1, {
-        async upgrade(myImgDb) {
-          myImgDb.createObjectStore(storeName);
-        },
-      });
-      const isAudioAlreadyExists = await myImgDb.get(storeName, audioKey);
-      if (!isAudioAlreadyExists) {
-        console.log("Img message: ", message);
-        await myImgDb.put(
-          storeName,
-          new Blob([message.attachment.audioBase64], {
-            type: "audio/mpeg",
-          }),
-          audioKey
-        );
-      }
-      myImgDb.close();
+      if (message.attachment.url) {
+        const audioKey = SHA256(message.attachment.url).toString();
+        const myImgDb = await openDB(dbName, 1, {
+          async upgrade(myImgDb) {
+            myImgDb.createObjectStore(storeName);
+          },
+        });
+        const isAudioAlreadyExists = await myImgDb.get(storeName, audioKey);
+        if (!isAudioAlreadyExists) {
+          console.log("Img message: ", message);
+          if (message.attachment.audioBase64) {
+            await myImgDb.put(
+              storeName,
+              new Blob([message.attachment.audioBase64], {
+                type: "audio/mpeg",
+              }),
+              audioKey
+            );
+          }
+        }
+        myImgDb.close();
 
-      resolve(true);
+        resolve(true);
+      }
     } catch (error) {
       reject(error);
     }

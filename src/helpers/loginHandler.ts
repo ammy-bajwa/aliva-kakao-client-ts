@@ -6,6 +6,7 @@ import {
   updatedLastMessageTimeStamp,
   updateMessageLogs,
 } from "../idb/messages";
+import { MessageType } from "../Interfaces/common";
 import { store } from "../redux";
 import { loginUser, newMessage, setSending, setWs } from "../redux/action/user";
 import { startLoading, stopLoading } from "../utils/loading";
@@ -15,9 +16,9 @@ import { scrollToEndMessages } from "./scroll";
 import { info } from "./toast";
 
 export const loginHandler = async (
-  isKeepLogin: any,
-  token: any,
-  dispatch: any,
+  isKeepLogin: string,
+  token: string | undefined | null,
+  dispatch: Function,
   history: any
 ) => {
   const myWorkingPromise = await new Promise(async (resolve, reject) => {
@@ -63,15 +64,26 @@ export const loginHandler = async (
             const data = JSON.parse(event.data);
             const { key } = data;
             if (key === "newMesssage") {
-              const { text, sender, receiverUser, logId, sendAt, attachment } =
-                data;
+              const {
+                text,
+                sender,
+                receiverUser,
+                logId,
+                sendAt,
+                attachment,
+              }: MessageType = data;
               console.log("newMesssage: ", data);
-              const { nickname: receiverUserName, intId: receiverIntId } =
-                receiverUser;
-              const { nickname: senderName, intId: senderIntId } = sender;
-              const newMessageObj = {
-                receiverUserName,
+              const {
+                nickname: receiverUserName,
+                intId: receiverIntId,
+              }: { nickname: string; intId: number } = receiverUser;
+              const {
+                nickname: senderName,
+                intId: senderIntId,
+              }: { nickname: string; intId: number } = sender;
+              const newMessageObj: any = {
                 message: { attachment, text, received: true, sendAt, logId },
+                receiverUserName,
                 senderName,
               };
               await handleContactList(senderName, receiverUserName, email);

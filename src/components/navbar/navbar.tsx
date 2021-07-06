@@ -6,18 +6,20 @@ import PrivateNavItems from "./privateNavItems/privateNavItems";
 import PublicNavItems from "./publicNavItems/publicNavItems";
 
 import { loginHandler } from "../../helpers/loginHandler";
-// import { getImg } from "../../api/media";
+import { ReduxStore } from "../../Interfaces/store";
 
 class Navbar extends React.Component<any> {
   async componentDidMount() {
     const isKeepLogin = localStorage.getItem("token");
-    const { dispatch, history, token }: any = this.props;
+    const { dispatch, history, token } = this.props;
     try {
-      await loginHandler(isKeepLogin, token, dispatch, history);
+      if (isKeepLogin) {
+        await loginHandler(isKeepLogin, token, dispatch, history);
+      }
     } catch (error) {}
   }
   render() {
-    const { token, email }: any = this.props;
+    const { token, email } = this.props;
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container-fluid">
@@ -49,7 +51,7 @@ class Navbar extends React.Component<any> {
   }
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: ReduxStore) => {
   return {
     token: state.user.accessToken,
     email: state.user.email,

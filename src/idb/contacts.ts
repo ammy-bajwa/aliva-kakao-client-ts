@@ -121,7 +121,7 @@ export const updateContactLogid = async (email: string, newLogId: number) => {
   return await myTaskPromise;
 };
 
-export const getLatestContactLogid = async (email: any): Promise<number> => {
+export const getLatestContactLogid = async (email: string): Promise<number> => {
   const myTaskPromise = new Promise(
     async (resolve: (value: number) => void, reject) => {
       try {

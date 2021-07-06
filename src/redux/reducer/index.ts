@@ -1,3 +1,6 @@
+import { ReduxStore } from "../../Interfaces/store";
+import { ActionType } from "../../Interfaces/store/action";
+
 const initialState = {
   user: {
     email: "",
@@ -13,18 +16,21 @@ const initialState = {
   chatLoading: false,
 };
 
-export const userReducer = function (state: any = initialState, action: any) {
+export const rootReducer = function (
+  state: ReduxStore = initialState,
+  action: ActionType
+) {
   switch (action.type) {
     case "LOGIN":
       console.log(action);
       state = {
         ...state,
         user: {
-          email: action.payload.email,
-          chatList: action.payload.chatList,
-          accessToken: action.payload.accessToken,
+          email: action.payload?.email,
+          chatList: action.payload?.chatList,
+          accessToken: action.payload?.accessToken,
         },
-        loggedInUserId: action.payload.loggedInUserId,
+        loggedInUserId: action.payload?.loggedInUserId,
         chat: [],
       };
       return state;

@@ -1,13 +1,8 @@
 import { useSelector } from "react-redux";
 import profile from "../../assets/images/profile.png";
+import { ChatListItemProps } from "../../Interfaces/components/chatListItem";
 
 import "./chatListItem.css";
-
-interface ChatListItemProps {
-  name: string;
-  profileImage: string;
-  onClickHandler: React.MouseEventHandler<HTMLDivElement>;
-}
 
 const ChatListItem = ({
   name,

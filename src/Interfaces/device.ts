@@ -1,4 +1,5 @@
+
 export interface deviceCodeResponseType {
-  error: string | undefined;
+  error: string | undefined ;
   message: string | undefined;
 }

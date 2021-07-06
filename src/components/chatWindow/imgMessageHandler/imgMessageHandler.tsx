@@ -1,6 +1,6 @@
 import { imageOnClickHandler } from "../../../helpers/media";
 
-export const ImgMessageHandler = (props: any) => {
+export const ImgMessageHandler = (props: { source: string; url: string }) => {
   return (
     <img
       loading="lazy"

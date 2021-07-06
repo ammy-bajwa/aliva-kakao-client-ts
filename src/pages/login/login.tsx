@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
 import { loginHandler } from "../../helpers/loginHandler";
+import { ReduxStore } from "../../Interfaces/store";
 
 class Login extends React.Component<any> {
   loginFormHandler = async (event: any) => {
@@ -78,7 +79,7 @@ class Login extends React.Component<any> {
   }
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: ReduxStore) => {
   return {
     chatList: state.user.chatList,
     currentFocus: state.currentFocus,

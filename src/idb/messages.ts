@@ -1,9 +1,10 @@
 import { SHA256 } from "crypto-js";
 
 import { deleteDB, openDB } from "idb";
+import { MessageType } from "../Interfaces/common";
 
 export const handleIncommingMessages = async (
-  messages: any,
+  messages: MessageType[],
   loggedInUserId: number,
   otherUserId: number
 ) => {
@@ -59,7 +60,11 @@ export const getUserMessages = async (
 export const addNewMessageIdb = async (
   loggedInUserId: number,
   otherUserId: number,
-  newMessage: any
+  newMessage: {
+    message: MessageType;
+    senderName: string;
+    receiverUserName: string;
+  }
 ) => {
   const dbName = SHA256(`KAKAOCHAT${loggedInUserId}${otherUserId}`).toString();
   const storeName = "MessageStore";
@@ -93,40 +98,49 @@ export const lastDbMessageTime = async (
   loggedInUserId: number,
   otherUserId: number
 ) => {
-  const getLastMessagePromise = new Promise(async (resolve, reject) => {
-    try {
-      const dbName = SHA256(
-        `KAKAOCHAT${loggedInUserId}${otherUserId}`
-      ).toString();
-      const storeName = "MessageStore";
-      const key = "messages";
-      let dbNotExists = false;
-      const db = await openDB(dbName, 1, {
-        upgrade(db) {
-          dbNotExists = true;
-        },
-      });
-      if (dbNotExists) {
-        resolve({
-          allMessages: [],
-          lastMessageTimeStamp: 0,
-          logId: 0,
+  const getLastMessagePromise = new Promise(
+    async (
+      resolve: (value: {
+        allMessages: object[] | [];
+        lastMessageTimeStamp: number;
+        logId: number;
+      }) => void,
+      reject
+    ) => {
+      try {
+        const dbName = SHA256(
+          `KAKAOCHAT${loggedInUserId}${otherUserId}`
+        ).toString();
+        const storeName = "MessageStore";
+        const key = "messages";
+        let dbNotExists = false;
+        const db = await openDB(dbName, 1, {
+          upgrade(db) {
+            dbNotExists = true;
+          },
         });
-        db.close();
-        await deleteDB(dbName);
-      } else {
-        const data = await db.get(storeName, key);
-        resolve({
-          allMessages: data || [],
-          lastMessageTimeStamp: data[data.length - 1].sendAt || 0,
-          logId: data[data.length - 1].logId || 0,
-        });
+        if (dbNotExists) {
+          resolve({
+            allMessages: [],
+            lastMessageTimeStamp: 0,
+            logId: 0,
+          });
+          db.close();
+          await deleteDB(dbName);
+        } else {
+          const data = await db.get(storeName, key);
+          resolve({
+            allMessages: data || [],
+            lastMessageTimeStamp: data[data.length - 1].sendAt || 0,
+            logId: data[data.length - 1].logId || 0,
+          });
+        }
+      } catch (error) {
+        reject(error);
+        console.error(error);
       }
-    } catch (error) {
-      reject(error);
-      console.error(error);
     }
-  });
+  );
   return await getLastMessagePromise;
 };
 
@@ -228,7 +242,11 @@ export const updateMessageLogs = async (
   email: string,
   userName: string,
   userId: number,
-  message: any,
+  message: {
+    message: MessageType;
+    receiverUserName: string;
+    senderName: string;
+  },
   logId: number
 ) => {
   const updatedTimePromise = new Promise(async (resolve, reject) => {
@@ -254,23 +272,25 @@ export const updateMessageLogs = async (
 };
 
 export const getImgBlobFromIdb = async (key: string) => {
-  const myWorkingTask = new Promise(async (resolve, reject) => {
-    try {
-      const dbName = SHA256("KakaoUserMedia").toString();
-      const storeName = "mediaStore";
-      const db = await openDB(dbName, 1, {
-        upgrade(db) {
-          db.createObjectStore(storeName);
-        },
-      });
-      const value = await db.get(storeName, key);
-      resolve(value);
-      db.close();
-    } catch (error) {
-      reject(error);
-      console.error(error);
+  const myWorkingTask = new Promise(
+    async (resolve: (value: Blob | undefined) => void, reject) => {
+      try {
+        const dbName = SHA256("KakaoUserMedia").toString();
+        const storeName = "mediaStore";
+        const db = await openDB(dbName, 1, {
+          upgrade(db) {
+            db.createObjectStore(storeName);
+          },
+        });
+        const value = await db.get(storeName, key);
+        resolve(value);
+        db.close();
+      } catch (error) {
+        reject(error);
+        console.error(error);
+      }
     }
-  });
+  );
 
   return await myWorkingTask;
 };

@@ -10,17 +10,21 @@ export const handleContactList = async (
 ) => {
   const {
     user: { chatList, email },
-  } = await store.getState();
+  }: { user: { chatList: any; email: string } } = await store.getState();
   if (!chatList[senderName] && !chatList[receiverUserName]) {
-    const contactList = await getChatList(loggedInUserEmail);
+    const contactList: object[] | undefined = await getChatList(
+      loggedInUserEmail
+    );
     store.dispatch(setContactList(contactList));
     await handleContacts(chatList, email);
   }
 };
 
-export const isInContact = async (name: any) => {
+export const isInContact = async (name: string) => {
   const isInContactPromise = new Promise(async (resolve, reject) => {
-    const { user: chatList } = await store.getState();
+    const {
+      user: { chatList },
+    }: { user: { chatList: any } } = store.getState();
     if (!chatList[name]) {
       resolve(false);
     } else {

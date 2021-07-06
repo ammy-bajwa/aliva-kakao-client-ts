@@ -7,15 +7,25 @@ import { useSelector } from "react-redux";
 import { scrollToEndMessages } from "../../helpers/scroll";
 
 import "./chatWindow.css";
+import { ReduxStore } from "../../Interfaces/store";
+
+interface MessageType {
+  sendAt: number;
+}
 
 const ChatWindow = () => {
-  const { chat, currentFocus, chatLoading }: any = useSelector((state: any) => {
-    const { chat, currentFocus, chatLoading } = state;
-    chat.sort((a: any, b: any) => {
-      return a.sendAt - b.sendAt;
+  const {
+    chat,
+    currentFocus,
+    chatLoading,
+  }: { chat: object[]; currentFocus: string; chatLoading: boolean } =
+    useSelector((state: ReduxStore) => {
+      const { chat, currentFocus, chatLoading } = state;
+      chat.sort((a: any, b: any) => {
+        return a.sendAt - b.sendAt;
+      });
+      return { chat, currentFocus, chatLoading };
     });
-    return { chat, currentFocus, chatLoading };
-  });
 
   useEffect(() => {
     console.log("chat: ", chat);
@@ -74,6 +84,7 @@ const ChatWindow = () => {
                   (imgUrl: string, index: number) => (
                     <ImgMessageHandler
                       source={imgUrl}
+                      key={index}
                       url={message.attachment.imageUrls[index]}
                     />
                   )
@@ -82,6 +93,7 @@ const ChatWindow = () => {
                 message.thumbnails.map((imgUrl: string, index: number) => (
                   <ImgMessageHandler
                     source={imgUrl}
+                    key={index}
                     url={message.attachment.imageUrls[index]}
                   />
                 ))}

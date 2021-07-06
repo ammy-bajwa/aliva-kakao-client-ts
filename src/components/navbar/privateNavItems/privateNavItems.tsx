@@ -1,11 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { logoutUserNodejs } from "../../../api/user";
+import { ReduxStore } from "../../../Interfaces/store";
 import { logoutUser } from "../../../redux/action/user";
 import { startLoading, stopLoading } from "../../../utils/loading";
 
-const PrivateNavItems = ({ email }: any) => {
-  const ws = useSelector((state: any) => state.ws);
+const PrivateNavItems = ({ email }: { email: string }) => {
+  const ws = useSelector((state: ReduxStore) => state.ws);
   const dispatch = useDispatch();
   const history = useHistory();
   const logOutHandler = async () => {

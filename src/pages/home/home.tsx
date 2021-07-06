@@ -4,6 +4,7 @@ import ChatListItem from "../../components/chatListItem/chatListItem";
 import Messages from "../../components/messages/messages";
 import { refreshContactList } from "../../helpers/contact";
 import { refreshMessages } from "../../helpers/messages";
+import { ReduxStore } from "../../Interfaces/store";
 import {
   setStartChatLoading,
   setStopChatLoading,
@@ -55,7 +56,7 @@ const Home = (props: any) => {
   );
 };
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: ReduxStore) => {
   return {
     user: state.user,
     loggedInUserId: state.loggedInUserId,
