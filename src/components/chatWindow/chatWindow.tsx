@@ -8,7 +8,6 @@ import { scrollToEndMessages } from "../../helpers/scroll";
 
 import "./chatWindow.css";
 import { ReduxStore } from "../../Interfaces/store";
-import { MessageType } from "../../Interfaces/common";
 
 const ChatWindow = () => {
   const {
@@ -26,7 +25,7 @@ const ChatWindow = () => {
       let chatIndexes: any = {};
       let deletedIndexes: any = {};
       let deletedIndicatorIndexes: any = {};
-      chat.map((message: any) => {
+      chat.forEach((message: any) => {
         const isDeleteIndicator = message.text.includes(
           `{"feedType":14,"logId":`
         );
