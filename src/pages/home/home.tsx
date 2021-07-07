@@ -30,11 +30,11 @@ const Home = (props: any) => {
         const item = chatList[key];
         items.push(
           <ChatListItem
-            profileImage={item.displayUserList[0].profileURL}
-            name={item.displayUserList[0].nickname}
+            profileImage={item.profileURL}
+            name={item.nickname}
             key={index}
             onClickHandler={() => {
-              return onClickHandler(item.displayUserList[0].nickname);
+              return onClickHandler(item.nickname);
             }}
           />
         );
