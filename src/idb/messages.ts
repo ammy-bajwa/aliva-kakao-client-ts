@@ -128,11 +128,18 @@ export const lastDbMessageTime = async (
           db.close();
           await deleteDB(dbName);
         } else {
-          const data = await db.get(storeName, key);
+          const messageKeys = await db.getAllKeys(storeName);
+          let allIdbMessages = [];
+          for (let index = 0; index < messageKeys.length; index++) {
+            const messageKey = messageKeys[index];
+            const message = await db.get(storeName, messageKey);
+            allIdbMessages.push(message);
+          }
           resolve({
-            allMessages: data || [],
-            lastMessageTimeStamp: data[data.length - 1]?.sendAt || 0,
-            logId: data[data.length - 1]?.logId || 0,
+            allMessages: allIdbMessages,
+            lastMessageTimeStamp:
+              allIdbMessages[allIdbMessages.length - 1]?.sendAt || 0,
+            logId: allIdbMessages[allIdbMessages.length - 1]?.logId || 0,
           });
         }
       } catch (error) {
@@ -210,23 +217,16 @@ export const updateUserMessages = async (
             `KAKAOCHAT${loggedInUserId}${intId}`
           ).toString();
           const storeName = "MessageStore";
-          const dbItemKey = "messages";
-          let dbNotExists = false;
           const db = await openDB(dbName, 1, {
             upgrade(db) {
-              dbNotExists = true;
               db.createObjectStore(storeName);
             },
           });
-          if (dbNotExists) {
-            await db.put(storeName, messages, dbItemKey);
-            db.close();
-          } else {
-            const data = await db.get(storeName, dbItemKey);
-            const value = data.concat(messages);
-            await db.put(storeName, value, dbItemKey);
-            db.close();
+          for (let index = 0; index < messages.length; index++) {
+            const message = messages[index];
+            await db.put(storeName, message, message.logId);
           }
+          db.close();
         }
       }
       resolve(true);
@@ -253,7 +253,7 @@ export const updateMessageLogs = async (
     try {
       const dbName = `${email}_message_logs`;
       const storeName = "myLogsData";
-      const key = `${userName}__${userId}__${logId}`;
+      const key = logId;
       const db = await openDB(dbName, 1, {
         upgrade(db) {
           db.createObjectStore(storeName);

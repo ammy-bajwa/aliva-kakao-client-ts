@@ -26,7 +26,7 @@ export const handleContacts = async (contacts: any, email: string) => {
           const element = contacts[key];
           await db.put(storeName, element, element.intId);
           element.messages.forEach(async (message: any) => {
-            const key = `${message.logId}`;
+            const key = message.logId;
             if (
               (message?.text === "photo" || message?.text === "사진") &&
               message?.attachment &&
