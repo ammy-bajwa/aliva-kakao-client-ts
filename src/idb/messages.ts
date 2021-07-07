@@ -14,7 +14,6 @@ export const handleIncommingMessages = async (
         `KAKAOCHAT${loggedInUserId}${otherUserId}`
       ).toString();
       const storeName = "MessageStore";
-      const key = "messages";
       const db = await openDB(dbName, 1, {
         upgrade(db) {
           db.createObjectStore(storeName);
@@ -74,11 +73,8 @@ export const addNewMessageIdb = async (
 ) => {
   const dbName = SHA256(`KAKAOCHAT${loggedInUserId}${otherUserId}`).toString();
   const storeName = "MessageStore";
-  const key = "messages";
-  let dbNotExists = false;
   const db = await openDB(dbName, 1, {
     upgrade(db) {
-      dbNotExists = true;
       db.createObjectStore(storeName);
     },
   });
@@ -87,17 +83,8 @@ export const addNewMessageIdb = async (
     senderName: newMessage.senderName,
     ...newMessage.message,
   };
-  if (dbNotExists) {
-    await db.put(storeName, [newValue], key);
-    db.close();
-    return;
-  } else {
-    const data = await db.get(storeName, key);
-    const value = data.concat([newValue]);
-    await db.put(storeName, value, key);
-    db.close();
-    return data;
-  }
+  await db.put(storeName, newValue, newValue.logId);
+  db.close();
 };
 
 export const lastDbMessageTime = async (
@@ -118,7 +105,6 @@ export const lastDbMessageTime = async (
           `KAKAOCHAT${loggedInUserId}${otherUserId}`
         ).toString();
         const storeName = "MessageStore";
-        const key = "messages";
         let dbNotExists = false;
         const db = await openDB(dbName, 1, {
           upgrade(db) {
@@ -246,8 +232,6 @@ export const updateUserMessages = async (
 
 export const updateMessageLogs = async (
   email: string,
-  userName: string,
-  userId: number,
   message: {
     message: MessageType;
     receiverUserName: string;
