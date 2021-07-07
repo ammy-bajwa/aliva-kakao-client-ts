@@ -20,7 +20,13 @@ export const handleIncommingMessages = async (
           db.createObjectStore(storeName);
         },
       });
-      await db.put(storeName, messages, key);
+      for (let index = 0; index < messages.length; index++) {
+        const message = messages[index];
+        const isExists = await db.get(storeName, message.logId);
+        if (!isExists) {
+          await db.put(storeName, message, message.logId);
+        }
+      }
       db.close();
       resolve(true);
     } catch (error) {

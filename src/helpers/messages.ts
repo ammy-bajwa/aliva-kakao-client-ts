@@ -48,8 +48,6 @@ export const refreshMessages = async (focusedName: string) => {
           if (imgBlob) {
             const base64 = await readBlobText(imgBlob);
             message.thumbnail = `data:${message.attachment.mt};base64,${base64}`;
-            console.log("imgBlob: ", imgBlob);
-            console.log("base64: ", message.thumbnail);
           }
         } else if (message?.attachment?.thumbnailUrls) {
           message.thumbnails = [];
