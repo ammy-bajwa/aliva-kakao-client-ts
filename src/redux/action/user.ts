@@ -1,3 +1,5 @@
+import { MessageType } from "../../Interfaces/common";
+
 export const loginUser = (user: object) => ({
   type: "LOGIN",
   payload: user,
@@ -24,7 +26,7 @@ export const newMessage = (data: object) => {
   };
 };
 
-export const loadChat = (messages: object[]) => ({
+export const loadChat = (messages: MessageType[]) => ({
   type: "LOAD_CHAT",
   payload: messages,
 });

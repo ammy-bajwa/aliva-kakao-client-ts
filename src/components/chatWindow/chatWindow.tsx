@@ -58,8 +58,10 @@ const ChatWindow = () => {
             }
           }
         }
+        return { chat: updatedChat, currentFocus, chatLoading };
+      } else {
+        return { chat, currentFocus, chatLoading };
       }
-      return { chat: updatedChat, currentFocus, chatLoading };
     });
 
   useEffect(() => {
