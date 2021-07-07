@@ -65,7 +65,6 @@ const ChatWindow = () => {
     });
 
   useEffect(() => {
-    console.log("chat: ", chat);
     scrollToEndMessages();
   }, [chatLoading, chat]);
 
